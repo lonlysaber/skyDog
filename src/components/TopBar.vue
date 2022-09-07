@@ -5,8 +5,9 @@
         class="el-menu-demo"
         mode="horizontal"
         @select="handleSelect"
+        
       >
-        <el-submenu index="1" vv-bind="user">
+        <el-submenu index="1" style="margin-left:50px;">
             <template slot="title">{{user.username}}</template>
             <el-menu-item style="width:200px;height: 100px;" index="1-1">
                 <div class="userinfo">
@@ -25,7 +26,7 @@
           <el-menu-item index="2-1">已买到的宝贝</el-menu-item>
           <el-menu-item index="2-2">我的足迹</el-menu-item>
         </el-submenu>
-        <el-submenu index="3" style="float:right">
+        <el-submenu index="3" style="float:right;margin-right: 50px;">
             <template slot="title">收藏夹</template>
             <el-menu-item index="3-1">收藏的商品</el-menu-item>
             <el-menu-item index="3-2">收藏的商家</el-menu-item>
@@ -52,7 +53,7 @@ export default {
     },
     methods: {
         getUserinfo(){
-            
+
         },
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
