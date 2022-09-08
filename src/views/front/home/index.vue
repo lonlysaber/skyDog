@@ -3,6 +3,9 @@
     <div class="top">
       <topbar></topbar>
     </div>
+    <div class="searchBar">
+      <searchbar></searchbar>
+    </div>
     <div class="container">
       <!-- 顶部导航栏 -->
 
@@ -115,11 +118,13 @@
 
 <script >
 import topbar from "@/components/TopBar.vue";
+import searchbar from "@/components/searchBar.vue"
 
 export default {
   name: "",
   components: {
     topbar,
+    searchbar,
   },
   data() {
     return {
