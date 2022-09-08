@@ -94,14 +94,15 @@
         <div class="list">
             <div class="product" 
             v-for="item in products"
-            :key="item.key">
+            :key="item.key"
+            @click="gotoDetail(item)">
                 <div class="image">
                     <img :src="item.img" alt="">
                 </div>
                 <div class="info">
                     <div class="dec">{{item.dec}}</div>
                     <div class="price">
-                        <span>{{item.price}}</span>
+                        <span>￥{{item.price}}</span>
                     </div>
                 </div>
             </div>
@@ -165,6 +166,16 @@ export default {
             dec:'数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
             price:'5.8'
         },
+        {
+            img:'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
+            dec:'数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
+            price:'5.8'
+        },
+        {
+            img:'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
+            dec:'数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
+            price:'5.8'
+        },
       ],
       num: 1,
     };
@@ -173,6 +184,15 @@ export default {
     serchByName(it) {
       console.log(it);
     },
+    gotoDetail(item){
+      console.log(item)
+    },
+    gotoMe(user){
+      console.log(user)
+    },
+    gotoCart(user){
+      console.log(user)
+    }
   },
 };
 </script>
@@ -180,16 +200,22 @@ export default {
 <style>
 * {
   box-sizing: border-box;
+  
+}
+body{
+  background-color: rgb(234, 232, 235);
+
 }
 .inner {
   background-color: rgb(234, 232, 235);
+  
 }
 .container {
   font-size: 14px;
   background-color: #fff;
   margin: 5px 100px 5px 100px;
-  height: 100vh;
-  border-radius: 18px 18px 0 0;
+  /* height: 100vh; */
+  border-radius: 18px;
 }
 .middle {
   display: flex;
@@ -227,7 +253,7 @@ export default {
 /* 轮播图 */
 .middle .carousel {
   width: 564px;
-  /* height: 342px; */
+  height: 314px;
   overflow: hidden;
   border-radius: 12px;
   margin: 24px;
@@ -268,9 +294,7 @@ export default {
   display: flex;
   justify-content: space-around;
 }
-.middle .userInfo .orderInfo .item {
-  /* padding: 10px; */
-}
+
 .middle .userInfo .likeInfo{
     display: flex;
   justify-content: space-around;
@@ -284,13 +308,36 @@ export default {
 
 }
 /* 商品展示 */
-.bottom .product{
+.bottom .list{
     display: flex;
-    flex-direction: row;
-    width: 30%;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.bottom .list .product{
+  display: flex;
+  /* flex: 1; */
+  width: 31%;
+  text-align: left;
+  background-color: #f7f9fa;
+  padding: 10px;
+  margin: 12px 0 12px 0;
+  border-radius: 15px;
+  cursor: pointer;
 }
 .bottom .product img{
     width: 100px;
     height: 100px;
+}
+.bottom .product .info{
+  margin-left: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+}
+.bottom .product .info .price span{
+  font-size: 18px;
+  color: cornflowerblue;
+
 }
 </style>
