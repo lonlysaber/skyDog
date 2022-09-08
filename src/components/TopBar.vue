@@ -1,5 +1,5 @@
 <template>
-    <div class="inner">
+    <div class="TopBar">
         <el-menu
         :default-active="activeIndex"
         class="el-menu-demo"
@@ -63,15 +63,15 @@ export default {
 </script>
 
 <style>
-.userinfo{
+.TopBar .userinfo{
     display: flex;
     /* flex: */
     align-items: center;
 }
-.userinfo .avatar img{
+.TopBar .userinfo .avatar img{
     border-radius: 50%;
 }
-.userinfo .router{
+.TopBar .userinfo .router{
     margin-left: 20px;
 }
 

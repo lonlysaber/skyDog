@@ -44,7 +44,7 @@ export default {
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: space-around;
+        justify-content: center;
         margin: 10px 0 10px 0;
     }
     .searchBar .logo img{
@@ -53,20 +53,28 @@ export default {
     }
     .searchBar .search{
         display: flex;
+        /* flex:1; */
         align-items: center;
+
         border: 1px cornflowerblue solid;
         border-radius: 30px;
         width: 700px;
-        height: 40px;
+        height: 42px;
         background-color: #FFF;
     }
-    .el-input--suffix .el-input__inner{
+    .searchBar .search .el-input--suffix .el-input__inner{
         border:1px solid #ffffff;
         border-radius: 30px 0 0 30px;
         
     }
+    .searchBar .search .el-select:hover .el-input__inner{
+      border:1px solid #ffffff;
+    }
+    .searchBar .search .el-select:acitve .el-input__inner{
+      border:1px solid #ffffff;
+    }
     
-    .el-button--primary{
+    .searchBar .search .el-button--primary{
         border-radius: 0 30px 30px 0;
     }
 </style>

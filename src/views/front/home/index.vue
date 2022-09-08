@@ -1,9 +1,9 @@
 <template>
-  <div class="inner">
+  <div class="home">
     <div class="top">
       <topbar></topbar>
     </div>
-    <div class="searchBar">
+    <div class="searchbar">
       <searchbar></searchbar>
     </div>
     <div class="container">
@@ -211,29 +211,29 @@ body{
   background-color: rgb(234, 232, 235);
 
 }
-.inner {
+.home {
   background-color: rgb(234, 232, 235);
   
 }
-.container {
+.home .container {
   font-size: 14px;
   background-color: #fff;
   margin: 5px 100px 5px 100px;
   /* height: 100vh; */
   border-radius: 18px;
 }
-.middle {
+.home .middle {
   display: flex;
 }
 /* 分类 */
-.middle .sort {
+.home .middle .sort {
   background-color: #f7f9fa;
   border-radius: 12px;
   margin: 24px 0 0px 24px;
   padding: 0 24px 0px 24px;
   height: 314px;
 }
-.middle .sort .sName h2 {
+.home .middle .sort .sName h2 {
   font-size: 18px;
   color: #111;
   letter-spacing: 0;
@@ -241,22 +241,22 @@ body{
   /* float: left; */
   text-align: left;
 }
-.middle .sort .sortItem {
+.home .middle .sort .sortItem {
   display: flex;
   margin-top: 10px;
 }
-.middle .sort .sortItem .i {
+.home .middle .sort .sortItem .i {
   margin: 0 14px 0 14px;
 }
-.middle .sort .sortItem span {
+.home .middle .sort .sortItem span {
   margin: 24px 0px 24px 0px;
 }
-.middle .sort .sortItem .name:hover {
+.home .middle .sort .sortItem .name:hover {
   color: cornflowerblue;
   cursor: pointer;
 }
 /* 轮播图 */
-.middle .carousel {
+.home .middle .carousel {
   width: 564px;
   height: 314px;
   overflow: hidden;
@@ -265,60 +265,60 @@ body{
   display: block;
   visibility: visible;
 }
-.middle .carousel img {
+.home .middle .carousel img {
   width: 564px;
   height: 314px;
   display: block;
   border-radius: 12px;
 }
-.el-carousel__container {
+.home .el-carousel__container {
   position: relative;
   height: 314px;
 }
 /* 身份信息 */
-.middle .userInfo {
+.home .middle .userInfo {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   margin: 24px;
 }
-.middle .faceInfo {
+.home .middle .faceInfo {
   display: flex;
 }
-.middle .faceInfo img {
+.home .middle .faceInfo img {
   border-radius: 50px;
   margin-right: 20px;
 }
-.middle .faceInfo .hello {
+.home .middle .faceInfo .hello {
   text-align: left;
 }
-.middle .faceInfo .hello:hover {
+.home .middle .faceInfo .hello:hover {
   color: cornflowerblue;
 }
-.middle .userInfo .orderInfo {
+.home .middle .userInfo .orderInfo {
   display: flex;
   justify-content: space-around;
 }
 
-.middle .userInfo .likeInfo{
+.home .middle .userInfo .likeInfo{
     display: flex;
   justify-content: space-around;
 
 }
-.middle .userInfo .likeInfo .item{
+.home .middle .userInfo .likeInfo .item{
     width: 70px;
 }
-.middle .userInfo .likeInfo .item img{
+.home .middle .userInfo .likeInfo .item img{
     width: 25px;
 
 }
 /* 商品展示 */
-.bottom .list{
+.home .bottom .list{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
 }
-.bottom .list .product{
+.home .bottom .list .product{
   display: flex;
   /* flex: 1; */
   width: 31%;
@@ -329,18 +329,18 @@ body{
   border-radius: 15px;
   cursor: pointer;
 }
-.bottom .product img{
+.home .bottom .product img{
     width: 100px;
     height: 100px;
 }
-.bottom .product .info{
+.home .bottom .product .info{
   margin-left: 12px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 
 }
-.bottom .product .info .price span{
+.home .bottom .product .info .price span{
   font-size: 18px;
   color: cornflowerblue;
 

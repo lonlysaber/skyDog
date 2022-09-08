@@ -11,6 +11,11 @@ const routes = [
     component: ()=>import("@/views/front/home/index.vue")
   },
   {
+    path: '/frontlogin',
+    name: 'frontLogin',
+    component: ()=>import("@/views/front/login/index.vue")
+  },
+  {
     path: '/about',
     name: 'about',
     // route level code-splitting
