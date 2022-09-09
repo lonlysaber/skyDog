@@ -63,15 +63,14 @@ export default {
 </script>
 
 <style>
-.TopBar .userinfo{
+.userinfo{
     display: flex;
-    /* flex: */
     align-items: center;
 }
-.TopBar .userinfo .avatar img{
+.userinfo .avatar img{
     border-radius: 50%;
 }
-.TopBar .userinfo .router{
+.userinfo .router{
     margin-left: 20px;
 }
 

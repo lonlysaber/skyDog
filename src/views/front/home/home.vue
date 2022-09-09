@@ -28,7 +28,7 @@
         </div>
         <!-- 轮播图 -->
         <div class="carousel">
-          <el-carousel trigger="click" style="height: 342px">
+          <el-carousel trigger="click">
             <el-carousel-item v-for="item in advert" :key="item">
               <img :src="item" alt="" />
             </el-carousel-item>
@@ -119,6 +119,8 @@
 <script >
 import topbar from "@/components/TopBar.vue";
 import searchbar from "@/components/searchBar.vue"
+import { Message } from "element-ui";
+
 
 export default {
   name: "",
@@ -185,12 +187,25 @@ export default {
       num: 1,
     };
   },
+  created(){
+    // console.log(this.$cookies.isKey('token'))
+  },
   methods: {
     serchByName(it) {
       console.log(it);
     },
     gotoDetail(item){
-      console.log(item)
+      if(this.$cookies.isKey('token')){
+        this.$router.push('/productdetail')
+      }else{
+        this.$message({
+            message: "请先登录",
+            type: "error",
+            });
+            
+        this.$router.push('/frontlogin')
+      }
+      // console.log(item)
     },
     gotoMe(user){
       console.log(user)

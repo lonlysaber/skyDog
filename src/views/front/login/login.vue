@@ -40,6 +40,7 @@
 
 <script >
 import { Message } from "element-ui";
+
 export default {
   name: "",
   data() {
@@ -65,9 +66,11 @@ export default {
   },
   created() {
     this.randomKey();
+    this.$cookies.remove('token')
   },
   methods: {
     onSubmit(form) {
+      
       // 登录判断
       if (form.username == "" || form.password == "") {
         this.$message({
@@ -94,15 +97,23 @@ export default {
           message: "登录成功",
           type: "success",
         });
+        this.setCookie();
         this.$router.push("/");
       }
-      console.log(form);
+      // console.log(form);
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
     handleClick(tab, event) {
       // console.log(tab, event);
+    },
+    // 写cookie
+    setCookie(){
+
+      this.$cookies.set("token",'test');
+      
+      console.log(this.$cookies.keys()) ;
     },
     // 防抖
     throttle(cd,time = 1000){
@@ -147,6 +158,7 @@ export default {
         )
     },  
     onCheck(form){
+      this.setCookie()
         if(form.phone==''||form.checkKey==""){
             this.$message({
             message: "请输入手机号和验证码",
@@ -166,6 +178,7 @@ export default {
             message: "登录成功",
             type: "success",
             });
+            this.setCookie();
             this.$router.push("/");
         }
     },

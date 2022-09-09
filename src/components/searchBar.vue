@@ -2,7 +2,7 @@
   <div class="searchBar">
     <!-- logo -->
     <div class="logo">
-      <img src="@/assets/logo.png" alt="" />
+      <img src="@/assets/logo.png" @click="gotoHome" alt="" />
     </div>
     <div class="search">
       <el-select v-model="value" placeholder="请选择">
@@ -36,6 +36,11 @@ export default {
         input:''
     };
   },
+  methods:{
+    gotoHome(){
+      this.$router.push('/')
+    }
+  }
 };
 </script>
 
@@ -50,6 +55,9 @@ export default {
     .searchBar .logo img{
         width: 100px;
         margin-right: 20px;
+    }
+    .searchBar .logo img:hover{
+        cursor:pointer;
     }
     .searchBar .search{
         display: flex;
@@ -76,5 +84,8 @@ export default {
     
     .searchBar .search .el-button--primary{
         border-radius: 0 30px 30px 0;
+    }
+    .searchBar .search .el-input__inner{
+        border: 1px solid #fff;
     }
 </style>
