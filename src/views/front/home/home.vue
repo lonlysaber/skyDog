@@ -193,6 +193,12 @@ export default {
   methods: {
     serchByName(it) {
       console.log(it);
+      this.$router.push({
+        path:'search',
+        query:{
+          input:it
+        }
+      })
     },
     gotoDetail(item){
       if(this.$cookies.isKey('token')){
@@ -223,10 +229,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 * {
   box-sizing: border-box;
-  
 }
 body{
   background-color: rgb(234, 232, 235);

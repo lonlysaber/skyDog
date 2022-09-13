@@ -4,7 +4,7 @@
             <topBar></topBar>
         </div>
         <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
-            background-color="#FFbfbc" text-color="#fff" active-text-color="#ffd04b">
+            background-color="#FFbfb" text-color="#fff" active-text-color="#ffd04b">
             <el-menu-item></el-menu-item>
             <el-menu-item></el-menu-item>
             <el-menu-item index="0"></el-menu-item>

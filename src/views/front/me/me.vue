@@ -158,7 +158,7 @@
     </div>
 </template>
 
-<script >
+<script scoped>
 import topBar from '@/components/TopBar.vue';
 export default {
     name: "",
