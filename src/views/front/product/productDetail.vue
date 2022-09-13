@@ -145,9 +145,16 @@ export default {
     },
     buy(){
         let scale = this.checkEdScale || this.product.scales[0]
-        let feacture = this.checkEdFeature || this.product.features[0]
-
-        console.log(scale,feacture)
+        let feature = this.checkEdFeature || this.product.features[0]
+        this.$router.push({
+          path:'/payorder',
+          query:{
+            productId:this.productId,
+            scale:scale,
+            feature:feature,
+          }
+        })
+        console.log(scale,feature)
     },
     addCart(){
         let scale = this.checkEdScale || this.product.scales[0]

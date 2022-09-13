@@ -30,6 +30,11 @@ const routes = [
     name: 'search',
     component: () => import('@/views/front/search/search.vue')
   },
+  {
+    path: '/payorder',
+    name: 'payOrder',
+    component: () => import('@/views/front/order/payOrder.vue')
+  },
 ]
 
 const router = new VueRouter({
