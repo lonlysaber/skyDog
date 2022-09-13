@@ -1,7 +1,7 @@
 <template>
     <div class="inner">
         <TopBar/>
-        <SearchBar/>
+        <SearchBar :sel="select" :ipt="input"/>
         <!-- 筛选 -->
         <div class="sift">
             <el-tabs type="card" v-model="activeName" @tab-click="handleClick">
@@ -158,8 +158,17 @@ export default {
                     productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
                     price:4999,
                 }
-            ]
+            ],
+            select:'商品',
+            input:''
         };
+    },
+    created(){
+        // console.log(this.$route.query.select)
+        // console.log(this.$route.query.input)
+        this.select = this.$route.query.select
+        this.input = this.$route.query.input
+
     },
     methods: {
       handleClick(tab, event) {

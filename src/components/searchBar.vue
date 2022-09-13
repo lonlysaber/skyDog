@@ -5,7 +5,7 @@
       <img src="@/assets/logo.png" @click="gotoHome" alt="" />
     </div>
     <div class="search">
-      <el-select v-model="value" placeholder="请选择">
+      <el-select v-model="select" placeholder="请选择">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -15,7 +15,7 @@
         </el-option>
       </el-select>
       <el-input v-model="input" placeholder="输入内容搜索"></el-input>
-      <el-button type="primary">搜索</el-button>
+      <el-button type="primary" @click="toSearch">搜索</el-button>
     </div>
   </div>
 </template>
@@ -23,22 +23,35 @@
 <script >
 export default {
   name: "searchBar",
+  props:['sel','ipt'],
   data() {
     return {
         options:[{
-          value: '选项1',
+          value: '商品',
           label: '商品'
         }, {
-          value: '选项2',
+          value: '商家',
           label: '商家'
         }],
-        value:'商品',
-        input:''
+        select:this.sel||'商家',
+        input:this.ipt
     };
   },
+
   methods:{
     gotoHome(){
       this.$router.push('/')
+    },
+    toSearch(){
+      console.log(this.select,this.input);
+      let that = this;
+      this.$router.push({
+        path:'/search',
+        query:{
+          select:this.select,
+          input:this.input
+        }
+      })
     }
   }
 };
