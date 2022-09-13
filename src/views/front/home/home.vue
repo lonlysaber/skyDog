@@ -35,7 +35,7 @@
           </el-carousel>
         </div>
         <!-- 身份信息 -->
-        <div class="userInfo">
+        <div class="userInfo" @click="gotoMe(user)">
           <div class="faceInfo">
             <div class="avatar">
               <img :src="user.avatar" alt="" />
@@ -208,10 +208,16 @@ export default {
       // console.log(item)
     },
     gotoMe(user){
-      console.log(user)
+      console.log(user.username);
+      this.$router.push({
+        path: "/me",
+        query: {
+          userName: user.username,
+        }
+      })
     },
     gotoCart(user){
-      console.log(user)
+      console.log(user.name)
     }
   },
 };
