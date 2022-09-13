@@ -229,7 +229,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 * {
   box-sizing: border-box;
 }

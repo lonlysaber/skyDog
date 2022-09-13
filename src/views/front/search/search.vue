@@ -196,7 +196,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .sift{
     width: 80%;
     margin: auto;
