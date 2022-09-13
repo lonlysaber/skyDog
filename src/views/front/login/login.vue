@@ -187,7 +187,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 * {
   padding: 0;
   margin: 0;
@@ -198,7 +198,7 @@ export default {
   background-repeat: no-repeat;
   background-size: 100%;
 }
-.window {
+.frontLogin .window {
   padding: 30px 10px;
   background-color: #fff;
   border:1px gray solid;
@@ -208,26 +208,26 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.el-tabs {
+.window .el-tabs {
   width: 500px;
   background-color: #fff;
 }
-.el-input--suffix .el-input__inner {
+.window .el-input--suffix .el-input__inner {
     border-radius: 0;
 }
 ::v-deep .el-tabs__nav-scroll {
   width: 30% !important;
   margin: 0 auto !important;
 }
-.el-tab-pane:nth-child(2) .el-form .el-form-item:nth-child(2) .el-form-item__content{
+.window .el-tab-pane:nth-child(2) .el-form .el-form-item:nth-child(2) .el-form-item__content{
     /* border:1px red solid; */
     display:flex;
 }
-.frontLogin .el-button.el-button--primary{
+.window .frontLogin .el-button.el-button--primary{
     float: left;
     border-radius: 0;
 }
-.checkKey{
+.window .checkKey{
     background-color: black;
     color: #fff;
     margin: 0 5px;

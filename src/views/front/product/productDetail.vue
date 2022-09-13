@@ -94,8 +94,8 @@ export default {
   name: "",
   data() {
     return {
+      productId:'',
       product: {
-        
         name: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
         img: [
           "https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/368811398/O1CN01ljNbqt1MCKSkDZJPA_!!368811398.jpg_430x430q90.jpg",
@@ -117,6 +117,9 @@ export default {
       checkEdScale:'',
       checkEdFeature:'',
     };
+  },
+  created(){
+    this.productId =  this.$route.query.productId|| '10001'
   },
   methods: {
     handleChange(value) {
@@ -149,11 +152,8 @@ export default {
     addCart(){
         let scale = this.checkEdScale || this.product.scales[0]
         let feacture = this.checkEdFeature || this.product.features[0]
-        
         console.log(scale,feacture)
     }
-
-
   },
 };
 </script>
@@ -269,11 +269,17 @@ body {
 }
 .productDetail .detail .subBtn .buy button {
   background-color: aliceblue;
-  border: 1px solid cornflowerblue;
+  border: 1px solid cornflowerblue ;
+}
+.productDetail .detail .subBtn .buy button:active {
+  border:1px  gray ;
 }
 .productDetail .detail .subBtn .addCart button {
   background-color: cornflowerblue;
-  border: cornflowerblue;
+  border:1px white solid;
   color: white;
+}
+.productDetail .detail .subBtn .addCart button:active {
+  border: 1px black;
 }
 </style>
