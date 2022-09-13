@@ -46,7 +46,7 @@
             <div class="adds">
                 <div class="address"
                 v-for="item in adds"
-                :key="">
+                :key="item.key">
 
                 </div>
             </div>
