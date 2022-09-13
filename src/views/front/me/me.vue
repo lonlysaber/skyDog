@@ -6,13 +6,12 @@
         <el-container>
             <!-- 头部导航栏 -->
             <el-header>
+     
                 <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
-                    background-color="#FF4401" text-color="#fff" active-text-color="#ffd04b">         
-                     <el-menu-item ></el-menu-item>
-                     <el-menu-item ></el-menu-item>                    
-                    <el-menu-item index="0"></el-menu-item>
-                    <el-menu-item index="0" style="font-size:large">我的天狗</el-menu-item>  
-                    <el-menu-item ></el-menu-item>
+                    background-color="#FF4401" text-color="#fff" active-text-color="#ffd04b"
+                    style="text-align:center; padding-left: 130px;">
+                    <el-menu-item index="0" style="font-size:large">我的天狗</el-menu-item>
+                    <el-menu-item></el-menu-item>
                     <el-menu-item index="1">首页</el-menu-item>
                     <el-menu-item index="2">账号管理</el-menu-item>
                     <el-menu-item index="3" disabled>消息中心</el-menu-item>
@@ -21,39 +20,40 @@
                 </el-menu>
             </el-header>
 
-            <!-- 侧边导航 -->
 
             <el-container style="padding-left: 100px;">
-                <el-aside width="300px">
+                <!-- 侧边 -->
+                <el-aside width="250px">
 
                     <el-col :span="24">
                         <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen"
                             @close="handleClose" background-color="" text-color="#000000" active-text-color="#ffd04b">
-                            <el-menu-item index="1" @click="toOrderPage()">
-                                <i class="el-icon-menu"></i>
-                                <span slot="title">我的订单</span>
-                            </el-menu-item>
-                            <el-menu-item index="2" @click="toCartPage()">
-                                <i class="el-icon-menu"></i>
-                                <span slot="title">我的购物车</span>
-                            </el-menu-item>
-                            <el-menu-item index="3" @click="toCollectPage()">
-                                <i class="el-icon-document"></i>
-                                <span slot="title">我的收藏</span>
-                            </el-menu-item>
-                            <el-menu-item index="4" @click="toBaughtPage()">
-                                <i class="el-icon-setting"></i>
-                                <span slot="title">我的购买</span>
-                            </el-menu-item>
-                            <el-menu-item index="5" @click="toHistoryPage()">
-                                <i class="el-icon-setting"></i>
-                                <span slot="title">我的足迹</span>
-                            </el-menu-item>
-                            <el-menu-item index="6" @click="toEvaluatePage()">
-                                <i class="el-icon-setting"></i>
-                                <span slot="title">我的评价</span>
-                            </el-menu-item>
-
+                            <div class="menu">
+                                <el-menu-item index="1" @click="toOrderPage()">
+                                    <i class="el-icon-menu"></i>
+                                    <span slot="title">我的订单</span>
+                                </el-menu-item>
+                                <el-menu-item index="2" @click="toCartPage(user)">
+                                    <i class="el-icon-menu"></i>
+                                    <span slot="title">我的购物车</span>
+                                </el-menu-item>
+                                <el-menu-item index="3" @click="toCollectPage()">
+                                    <i class="el-icon-document"></i>
+                                    <span slot="title">我的收藏</span>
+                                </el-menu-item>
+                                <el-menu-item index="4" @click="toBaughtPage()">
+                                    <i class="el-icon-setting"></i>
+                                    <span slot="title">我的购买</span>
+                                </el-menu-item>
+                                <el-menu-item index="5" @click="toHistoryPage()">
+                                    <i class="el-icon-setting"></i>
+                                    <span slot="title">我的足迹</span>
+                                </el-menu-item>
+                                <el-menu-item index="6" @click="toEvaluatePage()">
+                                    <i class="el-icon-setting"></i>
+                                    <span slot="title">我评价的</span>
+                                </el-menu-item>
+                            </div>
                         </el-menu>
                     </el-col>
                 </el-aside>
@@ -133,9 +133,18 @@
                                 </div>
                             </div>
 
+                            <!-- 主体内容 -->
                             <div class="middle">
+                                <router-view></router-view>
+                            </div>
+                            <!-- 商品推荐/ -->
+                            <div class="buttom">
 
                             </div>
+
+                        </div>
+                        <!--  右侧广告  -->
+                        <div class="ads">
 
                         </div>
                     </div>
@@ -152,7 +161,7 @@
 <script >
 import topBar from '@/components/TopBar.vue';
 export default {
-    name:"",
+    name: "",
     components: { topBar },
     data() {
         return {
@@ -181,8 +190,13 @@ export default {
         toOrderPage() {
 
         },
-        toCartPage() {
-
+        toCartPage(user) {
+            this.$router.push({
+                path: "/cart",
+                query: {
+                    userName: user.username,
+                }
+            })
         },
         toCollectPage() {
 
@@ -196,23 +210,28 @@ export default {
 </script>
 
 <style>
-.el-header {
+.me .el-header {
     /* background-color: #B3C0D1; */
     color: #333;
     text-align: center;
     line-height: 60px;
 }
 
-.el-aside {
-    /* background-color: white; */
+.me .menu {
+    text-align: left;
+    margin-left: 50px;
+}
+
+.me .el-aside {
+    background-color: white;
     color: #333;
     text-align: center;
     line-height: 10px;
     margin-top: 20px;
-    height: 600px;
+    height: 700px;
 }
 
-.el-main {
+.m .el-main {
     /* background-color:; */
     color: #333;
     text-align: center;
@@ -221,39 +240,39 @@ export default {
     padding: 10px;
 }
 
-.mt-ml-c1 .mt-ml-shim {
+.me .mt-ml-c1 .mt-ml-shim {
     margin-bottom: -26px;
     margin-left: 10px;
     width: 726px;
     *position: relative;
 }
 
-.top-info {
+.me .top-info {
     height: auto;
     display: block;
     /* background-color: lightblue; */
     border: 1px solid #e4eaee;
-    margin-bottom: 23px;
+    margin-bottom: 20 px;
     /* font-size: 12px; */
     color: #4b4b4b;
     position: relative;
-    z-index: 3;
     font-family: tahoma, arial, 'Hiragino Sans GB', 'Microsoft YaHei', \5b8b\4f53, sans-serif;
 }
 
 
-.info-top {
+.me .info-top {
     height: 60px;
     background-color: #D3DCE6;
 
 }
 
-.info {
+.me .info {
     float: left;
     width: 35%;
+    padding-top: 3px;
 }
 
-.avatar {
+.me .avatar {
     float: left;
     display: block;
     width: 52px;
@@ -266,13 +285,13 @@ export default {
     overflow: hidden;
 }
 
-.name {
+.me .name {
     margin-top: 6px;
     display: block;
     color: #000;
 }
 
-.address {
+.me .address {
     float: left;
     width: 65%;
     height: 60px;
@@ -280,7 +299,7 @@ export default {
     /* padding-top: px; */
 }
 
-.address ul {
+.me .address ul {
     float: left;
     width: 61%;
     margin-right: -1px;
@@ -290,29 +309,28 @@ export default {
 
 }
 
-.address li {
+.me .address li {
     width: 40%;
     display: inline;
     float: right;
 }
 
-.info-bottom {
+.me .info-bottom {
     overflow: hidden;
 }
 
-.info-bottom ul {
+.me .info-bottom ul {
     height: 52px;
     list-style: none;
     padding-left: 5px;
 }
 
-.info-bottom li {
+.me .info-bottom li {
     width: 20%;
     float: left;
 }
 
-
-.info-bottom a {
+.me .info-bottom a {
     zoom: 1;
     padding: 17px 0;
     display: block;

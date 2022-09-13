@@ -5,21 +5,39 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
-  {  
+  {
     path: '/',
     name: 'home',
-    component: ()=>import("@/views/front/home/home.vue")
+    component: () => import("@/views/front/home/home.vue")
   },
   {
     path: '/frontlogin',
     name: 'frontLogin',
-    component: ()=>import("@/views/front/login/login.vue")
+    component: () => import("@/views/front/login/login.vue")
   },
   {
     path: '/me',
     name: 'me',
-    component: () => import("@/views/front/me/me.vue")
+    component: () => import("@/views/front/me/me.vue"),
+    children:
+      [{
+        path: "/collect",
+        name: "collect",
+        component: () => import("@/views/front/collect/collect.vue")
+      },
+      {
+        path: "/order",
+        name: "order",
+        component: () => import("@/views/front/order/order.vue")
+
+      },]
   },
+  {
+    path:"/cart",
+    name:"cart",
+    component:()=> import("@/views/front/cart/cart.vue")
+  },
+
   {
     path: '/productdetail',
     name: 'productDetail',
