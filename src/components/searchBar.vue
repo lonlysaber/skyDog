@@ -33,7 +33,7 @@ export default {
           value: '商家',
           label: '商家'
         }],
-        select:this.sel||'商家',
+        select:this.sel||'商品',
         input:this.ipt
     };
   },
