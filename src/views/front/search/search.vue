@@ -29,7 +29,8 @@
         </div>
         <!-- 商品内容 -->
         <div class="main">
-            <div class="product" v-for="p in products" :key="p.productId">
+            <div class="product" v-for="p in products" :key="p.productId"
+            @click="gotoDetail(p)">
                 <img src="../../../assets/product.jpg">
                 <div class="content">
                     <div class="row1">
@@ -176,7 +177,20 @@ export default {
       },
       getProductByPrice(){
         console.log(this.lowPrice,this.highPrice);
+      },
+      gotoDetail(item){
+      if(this.$cookies.isKey('token')){
+        this.$router.push('/productdetail')
+      }else{
+        this.$message({
+            message: "请先登录",
+            type: "error",
+            });
+            
+        this.$router.push('/frontlogin')
       }
+      // console.log(item)
+    },
     },
     components: { SearchBar, TopBar }
 }
@@ -218,7 +232,7 @@ export default {
 
     border: 2px #fdfdfd solid;
 }
-.product:hover{
+.main .product:hover{
  
     border: 2px #409eff solid;
 }

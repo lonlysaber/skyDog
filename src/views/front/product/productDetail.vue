@@ -95,6 +95,7 @@ export default {
   data() {
     return {
       product: {
+        
         name: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
         img: [
           "https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/368811398/O1CN01ljNbqt1MCKSkDZJPA_!!368811398.jpg_430x430q90.jpg",
