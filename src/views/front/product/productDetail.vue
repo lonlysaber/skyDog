@@ -102,6 +102,8 @@ export default {
           "https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/368811398/O1CN01ljNbqt1MCKSkDZJPA_!!368811398.jpg_430x430q90.jpg",
           "https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/368811398/O1CN01ljNbqt1MCKSkDZJPA_!!368811398.jpg_430x430q90.jpg",
           "https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/368811398/O1CN01ljNbqt1MCKSkDZJPA_!!368811398.jpg_430x430q90.jpg",
+          "https://img13.360buyimg.com/n5/s450x450_jfs/t1/84876/25/28265/194372/627b6b39E8fbe96d9/61b053d3c0a3cb99.jpg!cc_450x450.avif",
+          
         ],
         price: 29,
         scales: ["1m", "2m", "3m","4m","5m"],
@@ -165,7 +167,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 * {
   margin: 0;
   padding: 0;
@@ -197,6 +199,9 @@ body {
   text-align: center;
   position: relative;
   height: 314px;
+}
+.productDetail ul.el-carousel__indicators.el-carousel__indicators--horizontal{
+  width: 100%;
 }
 .productDetail .detail {
   margin: 24px;
