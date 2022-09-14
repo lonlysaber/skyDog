@@ -8,7 +8,7 @@
             <el-header>
      
                 <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
-                    background-color="#FF4401" text-color="#fff" active-text-color="#ffd04b"
+                    background-color="#246EDC" text-color="#fff" active-text-color="#ffd04b"
                     style="text-align:center; padding-left: 130px;">
                     <el-menu-item index="0" style="font-size:large">我的天狗</el-menu-item>
                     <el-menu-item></el-menu-item>
