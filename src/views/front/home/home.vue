@@ -233,10 +233,7 @@ export default {
 * {
   box-sizing: border-box;
 }
-body{
-  background-color: rgb(234, 232, 235);
 
-}
 .home {
   background-color: rgb(234, 232, 235);
   

@@ -172,8 +172,9 @@ export default {
   margin: 0;
   padding: 0;
 }
-body {
+.productDetail {
   background-color: rgb(234, 232, 235);
+  height: 100vh;
 }
 .productDetail .productInfo {
   display: flex;
