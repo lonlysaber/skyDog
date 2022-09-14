@@ -8,7 +8,7 @@
             <el-header>
      
                 <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
-                    background-color="#FF4401" text-color="#fff" active-text-color="#ffd04b"
+                    background-color="#246EDC" text-color="#fff" active-text-color="#ffd04b"
                     style="text-align:center; padding-left: 130px;">
                     <el-menu-item index="0" style="font-size:large">我的天狗</el-menu-item>
                     <el-menu-item></el-menu-item>
@@ -19,21 +19,20 @@
 
                 </el-menu>
             </el-header>
-
-
             <el-container style="padding-left: 100px;">
                 <!-- 侧边 -->
                 <el-aside width="250px">
 
                     <el-col :span="24">
-                        <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen"
-                            @close="handleClose" background-color="" text-color="#000000" active-text-color="#ffd04b">
+                        <el-menu default-active="/me/order" class="el-menu-vertical-demo" @open="handleOpen"
+                            @close="handleClose" background-color="" text-color="#000000" 
+                            active-text-color="#409eff" router="true">
                             <div class="menu">
-                                <el-menu-item index="1" @click="toOrderPage()">
+                                <el-menu-item index="/me/order" @click="toOrderPage()">
                                     <i class="el-icon-menu"></i>
                                     <span slot="title">我的订单</span>
-                                </el-menu-item>
-                                <el-menu-item index="2" @click="toCartPage(user)">
+                                </el-menu-item> 
+                                <el-menu-item @click="toCartPage(user)">
                                     <i class="el-icon-menu"></i>
                                     <span slot="title">我的购物车</span>
                                 </el-menu-item>
@@ -57,99 +56,7 @@
                         </el-menu>
                     </el-col>
                 </el-aside>
-
-                <!-- 内容 -->
-                <el-main>
-                    <div class="mt-ml-c1">
-                        <div class="mt-ml-shim">
-                            <div class="top-info">
-                                <div class="info-top" style="position: relative;">
-                                    <div class="info">
-                                        <div class="avatar">
-                                            <a href="" target="_blank">
-                                                <!-- <span class="s-edit-mask">编辑资料</span> -->
-                                                <img :src="user.avatar" />
-                                            </a>
-                                        </div>
-                                        <div class="name">
-                                            <a data-spm="d4912005" target="_blank" href="">
-                                                <em>EXPECT</em>{{username}}</a>
-                                        </div>
-                                    </div>
-
-                                    <div class="address">
-                                        <ul>
-                                            <li>
-                                                <a href="" target="_blank">我的收货地址</a>
-
-                                            </li>
-                                            <li>
-                                                <a href="" target="_blank">我的支付宝</a>
-
-                                            </li>
-
-
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="info-bottom">
-                                    <ul>
-                                        <li>
-                                            <a data-spm="d4919660" target="_blank" href="">
-                                                <span>待付款
-                                                    <em></em>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a data-spm="d4919661" target="_blank" href="">
-                                                <span>待发货
-                                                    <em></em>
-                                                </span></a>
-                                        </li>
-                                        <li>
-                                            <a data-spm="d4919662" target="_blank" href="">
-                                                <span>待收货
-                                                    <em></em>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a data-spm="d4919663" target="_blank" href=".">
-                                                <span>待评价
-                                                    <em></em>
-                                                </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a data-spm="d4919664" target="_blank" href="">
-                                                <span>退款
-                                                    <em></em>
-                                                </span>
-                                            </a>
-                                        </li>
-                                    </ul>
-
-                                </div>
-                            </div>
-
-                            <!-- 主体内容 -->
-                            <div class="middle">
-                                <router-view></router-view>
-                            </div>
-                            <!-- 商品推荐/ -->
-                            <div class="buttom">
-
-                            </div>
-
-                        </div>
-                        <!--  右侧广告  -->
-                        <div class="ads">
-
-                        </div>
-                    </div>
-
-                </el-main>
+                <router-view></router-view>
             </el-container>
         </el-container>
 
