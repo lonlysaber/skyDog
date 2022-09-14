@@ -197,10 +197,14 @@ export default {
 </script>
 
 <style scoped>
+.inner{
+    background-color: rgb(255, 255, 255);
+}
 .sift{
     width: 80%;
     margin: auto;
     padding-left: 60px;
+
 }
 .sift .el-input__inner {
     width: 100px;
