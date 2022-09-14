@@ -8,8 +8,9 @@
                 text-color="#fff" active-text-color="#ffd04b" style="text-align:center; padding-left: 130px;">
                 <el-menu-item index="0" style="font-size:large">我的购物车</el-menu-item>
 
-                <el-input v-model="input" placeholder="输入内容搜索">
+                <el-input class="input" v-model="input" placeholder="输入内容搜索">
                 </el-input>
+
                 <el-button type="primary" @click="toSearch">搜索</el-button>
             </el-menu>
         </div>
@@ -29,8 +30,10 @@
 
 
             <div class="myproduct">
+
                 <el-table ref="multipleTable" :data="products" tooltip-effect="dark"
                     style="width: 100%;text-align: center;" @selection-change="handleSelectionChange">
+
                     <el-table-column type="selection" width="45">
                     </el-table-column>
                     <el-table-column prop="dec" label="商品信息" width="500">
@@ -49,14 +52,15 @@
                         </div>
                     </el-table-column>
                     <el-table-column prop="" label="单价" width="120">
+
                     </el-table-column>
-
+                    
                     <el-table-column prop="" label="数量">
-
-                        <div class="count">
-                            <el-input-number v-model="num10" @change="handleChange" :min="1" label="hehe" size="mini">
+                        <template slot-scope="scope">
+                            <el-input-number v-model="scope.row.num" @change="handleChange" :min="1" :max="99"
+                                size="mini">
                             </el-input-number>
-                        </div>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="address" label="金额">
                     </el-table-column>
@@ -83,10 +87,10 @@ export default {
     data() {
         return {
             username: "",
-             input: "",
+            input: "",
             activeIndex: '1',
             cartNum: '',
-            num10: 1,
+            num: 1,
             multipleSelection: [],
             products: [
                 {
@@ -138,7 +142,8 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
-        }
+        },
+
     }
 }
 </script>
@@ -148,13 +153,13 @@ export default {
     display: flex;
 }
 
-.cart .el-input {
-    margin-left: 400px;
+.cart .search .el-input {
+    margin-left: 350px;
     width: 600px;
     align-items: center;
 }
 
-.cart .el-input__inner {
+.cart .search .el-input .el-input__inner {
     margin-top: 10px;
     align-items: center;
     border: 1px cornflowerblue solid;
@@ -277,10 +282,6 @@ export default {
 
 .cart .count {
     display: flex;
-}
 
-.cart .el-input-number {
-    /* background-color: red; */
-    width: 100%;
 }
 </style>
