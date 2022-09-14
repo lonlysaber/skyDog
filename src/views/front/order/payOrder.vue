@@ -70,59 +70,65 @@
             <li>数量</li>
             <li>小计</li>
           </ul>
-          <hr />
-          <div class="products" v-for="product in products" :key="product.key">
-            <div class="productInfo">
-              <div class="dec">
-                <div class="image">
-                  <img :src="product.img" alt="" />
-                </div>
-                <div class="productDec">
-                  <span>{{ product.productName }}</span>
-                </div>
+        </div>
+        <hr />
+        <div class="products" v-for="product in products" :key="product.key">
+          <div class="productInfo">
+            <div class="dec">
+              <div class="image">
+                <img :src="product.img" alt="" />
               </div>
-              <div class="attribute">
-                <div class="scale">{{ product.scale }}</div>
-                <div class="feature">{{ product.feature }}</div>
-              </div>
-              <div class="price">
-                <div class="span">
-                  <span>{{ product.price }}</span>
-                </div>
-              </div>
-              <div class="num">
-                <el-input-number
-                  v-model="product.num"
-                  @change="handleChange"
-                  :min="1"
-                  :max="99"
-                ></el-input-number>
-              </div>
-              <div class="sum">
-                <span>{{ product.price * product.num }}</span>
+              <div class="productDec">
+                <span>{{ product.productName }}</span>
               </div>
             </div>
-          </div>
-          <hr/>
-          <div class="addCheck">
+            <div class="attribute">
+              <div class="scale">{{ product.scale }}</div>
+              <div class="feature">{{ product.feature }}</div>
+            </div>
+            <div class="price">
+              <div class="span">
+                <span>{{ product.price }}</span>
+              </div>
+            </div>
+            <div class="num">
+              <el-input-number
+                v-model="product.num"
+                @change="handleChange"
+                :min="1"
+                :max="99"
+              ></el-input-number>
+            </div>
             <div class="sum">
-              <span>实付款</span>
-              <span class="chara">￥</span>
-              <span class="digtal">{{sum}}</span>
-            </div>
-            <div class="add">
-              <span>寄送至：</span>
-              <span class="fulladd">{{adds[idx].fullAddress}}</span>
-            </div>
-            <div class="userInfo">
-              <span>收货人：</span>
-              <span class="info">
-                {{adds[idx].name}}
-                &nbsp;
-                {{adds[idx].phone}}
-              </span>
+              <span>{{ product.price * product.num }}</span>
             </div>
           </div>
+        </div>
+        <hr />
+        <div class="finalCheck">
+          <div class="totalInfo">
+            <div class="sum">
+            <span>实付款：</span>
+            <span class="chara">￥</span>
+            <span class="digtal">{{ sum }}</span>
+          </div>
+          <div class="add">
+            <span>寄送至：</span>
+            <span class="fulladd">{{ adds[idx].fullAddress }}</span>
+          </div>
+          <div class="userInfo">
+            <span>收货人：</span>
+            <span class="info">
+              {{ adds[idx].name }}
+              &nbsp;
+              {{ adds[idx].phone }}
+            </span>
+          </div>
+          </div>
+          <div class="check">
+            <button>提交订单</button>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -169,7 +175,7 @@ export default {
         },
       ],
       checked: 10001,
-      idx:0,
+      idx: 0,
       curshow: true,
       num: 1,
       products: [
@@ -178,8 +184,8 @@ export default {
           productName:
             "拉夏贝尔 La Chapelle 针织衫女2022年新秋季女装法式复古设计感气质百搭毛衣拼接圆领开衫针织外套女 米色 F",
           price: "60",
-          scale: this.scale||'L',
-          feature: this.feature||"红色",
+          scale: this.scale || "L",
+          feature: this.feature || "红色",
           num: 1,
         },
         {
@@ -187,35 +193,43 @@ export default {
           productName:
             "拉夏贝尔 La Chapelle 针织衫女2022年新秋季女装法式复古设计感气质百搭毛衣拼接圆领开衫针织外套女 米色 F",
           price: "60",
-          scale: this.scale||"L",
-          feature: this.feature||"红色",
+          scale: this.scale || "L",
+          feature: this.feature || "红色",
           num: 1,
         },
       ],
-      sum:100
+      sum: 100,
     };
   },
   created() {
     this.productId = this.$route.query.productId || "10001";
     this.scale = this.$route.query.scale;
     this.feature = this.$route.query.feature;
+    this.handleChange();
     console.log(this.productId, this.scale, this.feature);
   },
   methods: {
     choice(id) {
       this.checked = id;
-      this.idx = this.checked -10001;
+      this.idx = this.checked - 10001;
       console.log(this.idx);
     },
-    handleChange(value) {},
+    handleChange(value) {
+      let sum = 0;
+      this.products.forEach((product) => {
+        sum += product.num * product.price;
+        // console.log(product)
+      });
+      this.sum = sum;
+    },
   },
   components: { TopBar },
 };
 </script>
 
 <style scoped>
-*{
-  margin:0;
+* {
+  margin: 0;
   padding: 0;
 }
 .payOrder .payorder {
@@ -231,10 +245,10 @@ export default {
   width: 100px;
   flex: 50%;
 }
-h4{
+h4 {
   margin: 10px 0;
 }
-hr{
+hr {
   margin: 10px 0;
 }
 .payOrder .steps .logo img {
@@ -308,56 +322,81 @@ hr{
   width: 200px;
   text-align: center;
 }
-.payOrder .checkOrder .products{
+.payOrder .checkOrder .products {
   background-color: rgb(242, 247, 255);
   margin: 5px 0;
   padding: 5px 0;
 }
-.payOrder .checkOrder .products .productInfo{
+.payOrder .checkOrder .products .productInfo {
   display: flex;
   justify-content: space-around;
-} 
-.payOrder .checkOrder .products .productInfo .dec{
-  display: flex;
-  width:200px;
 }
-.payOrder .checkOrder .products .productInfo .dec .image{
+.payOrder .checkOrder .products .productInfo .dec {
+  display: flex;
+  width: 200px;
+}
+.payOrder .checkOrder .products .productInfo .dec .image {
   width: 80px;
   height: 80px;
 }
-.payOrder .checkOrder .products .productInfo .dec img{
+.payOrder .checkOrder .products .productInfo .dec img {
   width: 80px;
 }
-.payOrder .checkOrder .products .productInfo .dec .productDec{
+.payOrder .checkOrder .products .productInfo .dec .productDec {
   line-height: 20px;
   font-size: 14px;
   /* white-space: nowrap; */
   width: 120px;
   height: 80px;
   overflow: hidden;
-  Text-overflow: ellipsis;
+  text-overflow: ellipsis;
   display: -webkit-box;
   /* 设置伸缩盒子的子元素排列方式--从上到下垂直排列 */
   -webkit-box-orient: vertical;
   /* 显示的行 */
   -webkit-line-clamp: 4;
-  margin-left:5px ;
+  margin-left: 5px;
 }
-.payOrder .checkOrder .products .productInfo .attribute{
+.payOrder .checkOrder .products .productInfo .attribute {
   width: 200px;
   text-align: center;
 }
-.payOrder .checkOrder .products .productInfo .price{
+.payOrder .checkOrder .products .productInfo .price {
   width: 200px;
   text-align: center;
 }
-.payOrder .checkOrder .products .productInfo .num{
+.payOrder .checkOrder .products .productInfo .num {
   width: 200px;
   text-align: center;
 }
-.payOrder .checkOrder .products .productInfo .sum{
+.payOrder .checkOrder .products .productInfo .sum {
   width: 200px;
   text-align: center;
 }
-/*  */
+/* 确认信息 */
+.payOrder .checkOrder .finalCheck {
+  float: right;
+  margin: 20px 0;
+  /* width:400px; */
+  text-align: right;
+ 
+}
+.payOrder .checkOrder .finalCheck .totalInfo{
+  padding: 5px;
+  border: 2px cornflowerblue solid ;
+  margin-bottom: 20px;
+}
+.payOrder .checkOrder .finalCheck .sum .chara,
+.payOrder .checkOrder .finalCheck .sum .digtal{
+  font-size: 25px;
+}
+.payOrder .checkOrder .finalCheck .sum .digtal{
+  color:cornflowerblue;
+}
+.payOrder .checkOrder .finalCheck .check button{
+  width: 150px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+}
 </style>
