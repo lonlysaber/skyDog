@@ -38,6 +38,7 @@ const routes = [
     component:()=> import("@/views/front/cart/cart.vue")
   },
 
+
   {
     path: '/productdetail',
     name: 'productDetail',
@@ -47,6 +48,11 @@ const routes = [
     path: '/search',
     name: 'search',
     component: () => import('@/views/front/search/search.vue')
+  },
+  {
+    path: '/payorder',
+    name: 'payOrder',
+    component: () => import('@/views/front/order/payOrder.vue')
   },
 ]
 
