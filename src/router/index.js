@@ -21,15 +21,19 @@ const routes = [
     component: () => import("@/views/front/me/me.vue"),
     children:
       [{
-        path: "/collect",
+        path:'',
+        redirect:'order'
+      },
+      {
+        path: "collect",
         name: "collect",
         component: () => import("@/views/front/collect/collect.vue")
       },
       {
-        path: "/order",
+        path: "order",
         name: "order",
         component: () => import("@/views/front/order/order.vue")
-
+        
       },]
   },
   {
