@@ -2,22 +2,22 @@
     <div class="orderVue">
         <div class="content">
             <el-tabs v-model="activeName" @tab-click="handleClick" stretch="true">
-                <el-tab-pane name="1">
+                <el-tab-pane name="所有订单">
                     <span slot="label"> 所有订单 </span>
                 </el-tab-pane>
-                <el-tab-pane name="2">
+                <el-tab-pane name="待付款">
                     <span slot="label"> 待付款 </span>
                 </el-tab-pane>
-                <el-tab-pane name="3">
+                <el-tab-pane name="待发货">
                     <span slot="label"> 待发货 </span>
                 </el-tab-pane>
-                <el-tab-pane name="4">
+                <el-tab-pane name="待收货">
                     <span slot="label"> 待收货 </span>
                 </el-tab-pane>
-                <el-tab-pane name="5">
+                <el-tab-pane name="待评价">
                     <span slot="label"> 待评价 </span>
                 </el-tab-pane>
-                <el-tab-pane name="6">
+                <el-tab-pane name="已删除">
                     <span slot="label"><i class="el-icon-delete-solid"></i> 订单回收站 </span>
                 </el-tab-pane>
             </el-tabs>
@@ -44,10 +44,52 @@
                     交易操作
                 </div>
             </div>
-            <div class="product">
-                <div class="herder"></div>
+            <div class="product" v-for="o in orderList" :key="o.orderId"
+            :style="true ?'border: 2px #daf3ff solid;':'border: 2px #f1f1f1 solid;'">
+                <div class="header" :style="false ?'background-color: #eaf8ff;':'background-color: #f1f1f1;'">
+                    <div style="font-weight: 600;">
+                        2022-9-14
+                    </div>
+                    <div>
+                        订单号：202456456
+                    </div>
+                </div>
                 <div class="main">
-                    
+                    <div style="width:40%">
+                        <img src="../../../assets/product.jpg" alt="">
+                        <div style="float: right;width: 60%;overflow: hidden;
+                        margin-right: 20px;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 2;
+                            word-break: break-all;
+                            -webkit-box-orient: vertical;" >
+                            <a href="">【单片独立装】瀚思Handsin一次性医用口罩50只/盒 [交易快照]</a>
+                        </div>
+                    </div>
+                    <div>
+                        ￥13.9
+                    </div>
+                    <div>
+                        1
+                    </div>
+                    <div>
+                        <a href="#">申请售后<br/></a>
+                        <a href="#">投诉商家</a>
+                    </div>
+                    <div>
+                        实付款
+                    </div>
+                    <div>
+                        <a href="#">交易成功<br/></a>
+                        <a href="#">订单详情<br/></a>
+                        <a href="#">查看物流</a>
+                    </div>
+                    <div>
+                        <el-button type="primary" size="mini" v-if="false">确认收货</el-button>
+                        <el-button size="mini" v-if="true">评价</el-button><br/>
+                        <a href="#" v-if="true">申请开票</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -56,18 +98,37 @@
 </template>
 
 <script >
+import axios from 'axios';
 export default {
     data() {
       return {
-        activeName: '1',
+        activeName: '所有订单',
         orderList:[]
       };
     },
     methods: {
       handleClick(tab, event) {
         console.log(tab, event);
+      },
+      getMyOrder(){
+        const order = {
+            userId:10001,
+            orderStatus:this.activeName == "所有订单"?null:this.activeName
+        }
+        axios({
+            method: 'post',
+            url: '/order/getMyOrder',
+            data:order
+        })
+        .then(res =>{
+            console.log(res);
+            this.orderList = res.data.data
+        });
       }
-    }
+    },
+    created() {
+        this.getMyOrder()
+    },
 }
 </script>
 
@@ -87,10 +148,53 @@ export default {
     background-color: #f5f5f5;
     overflow: hidden;
 }
-.orderVue .content .orderTar div{
+.orderVue .content .product{
+    border: 2px #daf3ff solid;
+    overflow: hidden;
+    margin-top: 20px;
+}
+.orderVue .content .product:hover{
+    border: 2px #409eff solid !important;
+}
+.orderVue .content .orderTar div
+{
     float: left;
     width: 10%;
-    line-height: 30px;
+    line-height: 36px;
     font-size: 12px;
+}
+.orderVue .content .product .main div
+{
+    float: left;
+    width: 10%;
+    line-height: 20px;
+    font-size: 12px;
+}
+.orderVue .content .product .header{
+    overflow: hidden;
+    height: 40px;
+    background-color: #eaf8ff;
+}
+.orderVue .content .product .header div{
+    float: left;
+    margin-left: 10px;
+    font-size: 12px;
+    line-height: 40px;
+}
+.orderVue .content .product .main{
+    padding: 10px;
+    overflow: hidden;
+    border-top: 2px #daf3ff solid;
+}
+.orderVue .content .product .main img{
+    width: 80px;
+    height: 80px;
+}
+.orderVue .content .product .main a{
+    text-decoration:none;
+    color:#000;
+}
+.orderVue .content .product .main a:hover{
+    color: #ff4442;
 }
 </style>
