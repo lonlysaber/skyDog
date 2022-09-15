@@ -55,6 +55,7 @@ export default {
                 path: "/me",
                 query: {
                     userName: user.username,
+                    userId:this.$cookies.get('token')
                 }
             })
         },

@@ -13,22 +13,22 @@
       <div class="carousel">
         <el-carousel trigger="click" :autoplay="false">
           <el-carousel-item
-            v-for="item in product.img"
+            v-for="(item,key) in (product.img)"
             :key="item.key"
             align="middle"
           >
-            <img :src="item" alt="" />
+            <img :src="item" v-on:error="deleteImg(key)" alt="" />
           </el-carousel-item>
         </el-carousel>
       </div>
       <!-- 右侧商品信息 -->
       <div class="detail">
         <div class="head">
-          <h3>{{ product.name }}</h3>
+          <h3>{{ product.productName }}</h3>
         </div>
         <div class="price">
           <h2>99惊喜节!!!</h2>
-          <h2>￥{{ product.price }}</h2>
+          <h2>￥{{ product.productPrice }}</h2>
         </div>
         <div class="scales">
           <div class="name">
@@ -85,6 +85,7 @@
 <script >
 import topbar from "@/components/TopBar.vue";
 import searchbar from "@/components/searchBar.vue";
+import axios from 'axios';
 
 export default {
   components: {
@@ -95,35 +96,41 @@ export default {
   data() {
     return {
       productId:'',
-      product: {
-        name: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
-        img: [
-          "https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/368811398/O1CN01ljNbqt1MCKSkDZJPA_!!368811398.jpg_430x430q90.jpg",
-          "https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/368811398/O1CN01ljNbqt1MCKSkDZJPA_!!368811398.jpg_430x430q90.jpg",
-          "https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/368811398/O1CN01ljNbqt1MCKSkDZJPA_!!368811398.jpg_430x430q90.jpg",
-          "https://img.alicdn.com/imgextra/https://img.alicdn.com/imgextra/i2/368811398/O1CN01ljNbqt1MCKSkDZJPA_!!368811398.jpg_430x430q90.jpg",
-          "https://img13.360buyimg.com/n5/s450x450_jfs/t1/84876/25/28265/194372/627b6b39E8fbe96d9/61b053d3c0a3cb99.jpg!cc_450x450.avif",
-          
-        ],
-        price: 29,
-        scales: ["1m", "2m", "3m","4m","5m"],
-        features: [
+      product: {},
+      scales: ["1m", "2m", "3m","4m","5m"],
+      features: [
           "红色",
           "黑色",
           "蓝色",
           "绿色",
           "灰色",
         ],
-      },
       num: 1,
       checkEdScale:'',
       checkEdFeature:'',
     };
   },
   created(){
-    this.productId =  this.$route.query.productId|| '10001'
+    this.productId =  this.$route.query.productId|| '10003';
+    this.getProductById()
   },
   methods: {
+    deleteImg(img){
+      console.log(img)
+    },
+    getProductById(){
+      axios({
+        method:'get',
+        url:'/product/queryById/'+this.productId
+      }).then(res=>{
+        console.log(res)
+        this.product = res.data.data
+        delete this.product.img.imgId
+        delete this.product.img.productId
+        delete this.product.img.productName
+
+      })
+    },
     handleChange(value) {
       console.log(value);
     },
@@ -184,7 +191,7 @@ export default {
 }
 .productDetail .carousel {
   border: 0.5px solid rgba(0, 0, 0, 0.05);
-  width: 314px;
+  width: 330px;
   /* height: 314px; */
   overflow: hidden;
   margin: 24px;
@@ -193,6 +200,7 @@ export default {
 }
 .productDetail .carousel img {
   /* width: 314px; */
+  width:100%;
   height: 100%;
   display: block;
 }

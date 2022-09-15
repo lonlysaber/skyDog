@@ -6,7 +6,7 @@
     <div class="payorder">
       <div class="steps">
         <div class="logo">
-          <img src="@/assets/logo.png" alt="" />
+          <img src="@/assets/logo.png" @click="gotoHome" alt="" />
         </div>
         <div class="step">
           <div class="one">
@@ -40,6 +40,11 @@
             v-for="item in adds"
             :key="item.key"
             @click="choice(item.addressId)"
+            :style="
+              checked == item.addressId
+                ? 'border:2px solid cornflowerblue;'
+                : 'border:2px solid black'
+            "
           >
             <div class="zone">
               <span>{{ item.zone }}</span>
@@ -51,12 +56,41 @@
               <span>{{ item.phone }}</span>
             </div>
             <div class="choiced" v-if="checked == item.addressId">
-              <span>修改</span>
+              <span @click="dialogVisible = true">修改</span>
               <img src="@/assets/choiced.png" alt="" />
             </div>
           </div>
         </div>
       </div>
+      <el-dialog
+        title="地址修改"
+        :visible.sync="dialogVisible"
+        width="50%"
+        :before-close="handleClose"
+      >
+        <el-form
+          :label-position="labelPosition"
+          label-width="80px"
+          :model="formLabelAlign"
+        >
+          <el-form-item label="地址">
+            <el-input v-model="adds[idx].zone"></el-input>
+          </el-form-item>
+          <el-form-item label="收货人">
+            <el-input v-model="adds[idx].name"></el-input>
+          </el-form-item>
+          <el-form-item label="详细地址">
+            <el-input v-model="adds[idx].fullAddress"></el-input>
+          </el-form-item>
+          <el-form-item label="联系方式">
+            <el-input v-model="adds[idx].phone"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="modifyAdd">确 定</el-button>
+        </span>
+      </el-dialog>
 
       <div class="checkOrder">
         <div class="heard">
@@ -64,11 +98,11 @@
         </div>
         <div class="formHeard">
           <ul>
-            <li>店铺宝贝</li>
-            <li>商品属性</li>
-            <li>单价</li>
-            <li>数量</li>
-            <li>小计</li>
+            <li class="first"><b>店铺宝贝</b></li>
+            <li><b>商品属性</b></li>
+            <li><b>单价</b></li>
+            <li><b>数量</b></li>
+            <li><b>小计</b></li>
           </ul>
         </div>
         <hr />
@@ -108,27 +142,27 @@
         <div class="finalCheck">
           <div class="totalInfo">
             <div class="sum">
-            <span>实付款：</span>
-            <span class="chara">￥</span>
-            <span class="digtal">{{ sum }}</span>
-          </div>
-          <div class="add">
-            <span>寄送至：</span>
-            <span class="fulladd">{{ adds[idx].fullAddress }}</span>
-          </div>
-          <div class="userInfo">
-            <span>收货人：</span>
-            <span class="info">
-              {{ adds[idx].name }}
-              &nbsp;
-              {{ adds[idx].phone }}
-            </span>
-          </div>
+              <span>实付款：</span>
+              <span class="chara">￥</span>
+              <span class="digtal">{{ sum }}</span>
+            </div>
+            <div class="add">
+              <span>寄送至：</span>
+              <span class="fulladd">{{ adds[idx].fullAddress }}</span>
+            </div>
+            <div class="userInfo">
+              <span>收货人：</span>
+              <span class="info">
+                {{ adds[idx].name }}
+                &nbsp;
+                {{ adds[idx].phone }}
+              </span>
+            </div>
           </div>
           <div class="check">
-            <button>提交订单</button>
+            <button @click="cancel">取消</button>
+            <button @click="submit">提交订单</button>
           </div>
-          
         </div>
       </div>
     </div>
@@ -199,6 +233,7 @@ export default {
         },
       ],
       sum: 100,
+      dialogVisible: false,
     };
   },
   created() {
@@ -212,7 +247,7 @@ export default {
     choice(id) {
       this.checked = id;
       this.idx = this.checked - 10001;
-      console.log(this.idx);
+      // console.log(this.idx);
     },
     handleChange(value) {
       let sum = 0;
@@ -221,6 +256,23 @@ export default {
         // console.log(product)
       });
       this.sum = sum;
+    },
+    gotoHome() {
+      this.$router.push("/");
+    },
+    cancel() {
+      this.$router.go(-1);
+    },
+    submit() {},
+    handleClose() {
+      this.$confirm("确认关闭？")
+        .then((_) => {
+          done();
+        })
+        .catch((_) => {});
+    },
+    modifyAdd() {
+      this.dialogVisible = false;
     },
   },
   components: { TopBar },
@@ -231,6 +283,7 @@ export default {
 * {
   margin: 0;
   padding: 0;
+  font-size: 12px;
 }
 .payOrder .payorder {
   margin: 0 100px 0 100px;
@@ -246,9 +299,11 @@ export default {
   flex: 50%;
 }
 h4 {
+  font-size: 16px;
   margin: 10px 0;
 }
 hr {
+  font-size: 16px;
   margin: 10px 0;
 }
 .payOrder .steps .logo img {
@@ -291,12 +346,16 @@ hr {
   border: 2px solid black;
   margin: 5px 5px 0 0;
   padding: 5px;
-  height: 90px;
+  height: 70px;
 }
 .payOrder .adddiv .adds .address:hover {
   cursor: pointer;
   border: 2px solid cornflowerblue;
 }
+.payOrder .adddiv .adds .address .fulladd {
+  height: 34px;
+}
+
 .payOrder .adddiv .adds .address .choiced {
   display: flex;
   align-content: center;
@@ -316,11 +375,15 @@ hr {
   list-style: none;
   display: flex;
   justify-content: space-around;
+  font-size: 16px;
 }
 .payOrder .checkOrder .formHeard ul li {
   float: left;
   width: 200px;
   text-align: center;
+}
+.payOrder .checkOrder .formHeard ul .first {
+  width: 400px;
 }
 .payOrder .checkOrder .products {
   background-color: rgb(242, 247, 255);
@@ -333,7 +396,7 @@ hr {
 }
 .payOrder .checkOrder .products .productInfo .dec {
   display: flex;
-  width: 200px;
+  width: 400px;
 }
 .payOrder .checkOrder .products .productInfo .dec .image {
   width: 80px;
@@ -344,17 +407,17 @@ hr {
 }
 .payOrder .checkOrder .products .productInfo .dec .productDec {
   line-height: 20px;
-  font-size: 14px;
+  font-size: 12px;
   /* white-space: nowrap; */
-  width: 120px;
-  height: 80px;
+  width: 320px;
+  height: 40px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   /* 设置伸缩盒子的子元素排列方式--从上到下垂直排列 */
   -webkit-box-orient: vertical;
   /* 显示的行 */
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 2;
   margin-left: 5px;
 }
 .payOrder .checkOrder .products .productInfo .attribute {
@@ -379,24 +442,30 @@ hr {
   margin: 20px 0;
   /* width:400px; */
   text-align: right;
- 
 }
-.payOrder .checkOrder .finalCheck .totalInfo{
+.payOrder .checkOrder .finalCheck .totalInfo {
   padding: 5px;
-  border: 2px cornflowerblue solid ;
+  border: 2px cornflowerblue solid;
   margin-bottom: 20px;
 }
 .payOrder .checkOrder .finalCheck .sum .chara,
-.payOrder .checkOrder .finalCheck .sum .digtal{
+.payOrder .checkOrder .finalCheck .sum .digtal {
   font-size: 25px;
 }
-.payOrder .checkOrder .finalCheck .sum .digtal{
-  color:cornflowerblue;
+.payOrder .checkOrder .finalCheck .sum .digtal {
+  color: cornflowerblue;
 }
-.payOrder .checkOrder .finalCheck .check button{
-  width: 150px;
-  height: 50px;
-  line-height: 50px;
+.payOrder .checkOrder .finalCheck .check button {
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
   font-size: 16px;
+}
+.payOrder .checkOrder .finalCheck .check button:nth-child(2) {
+  margin-left: 10px;
+}
+.payOrder .dialog-footer .el-button {
+  width: 70px;
+  height: 35px;
 }
 </style>

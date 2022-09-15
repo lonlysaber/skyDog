@@ -120,6 +120,7 @@
 import topbar from "@/components/TopBar.vue";
 import searchbar from "@/components/searchBar.vue"
 import { Message } from "element-ui";
+import axios from 'axios';
 
 
 export default {
@@ -189,8 +190,18 @@ export default {
   },
   created(){
     // console.log(this.$cookies.isKey('token'))
+    this.getProducts();
   },
   methods: {
+    getProducts(){
+      axios({
+        method:'get',
+        url:'/product/search/null',
+
+      }).then(res=>{
+        console.log(res);
+      })
+    },
     serchByName(it) {
       console.log(it);
       this.$router.push({
@@ -214,11 +225,12 @@ export default {
       // console.log(item)
     },
     gotoMe(user){
-      console.log(user.username);
+      
       this.$router.push({
         path: "/me",
         query: {
           userName: user.username,
+          userId:this.$cookies.get('token'),
         }
       })
     },
@@ -254,7 +266,7 @@ export default {
   border-radius: 12px;
   margin: 24px 0 0px 24px;
   padding: 0 24px 0px 24px;
-  height: 314px;
+  height: 303px;
 }
 .home .middle .sort .sName h2 {
   font-size: 18px;
