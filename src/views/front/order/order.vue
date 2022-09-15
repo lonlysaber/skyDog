@@ -45,13 +45,13 @@
                 </div>
             </div>
             <div class="product" v-for="o in orderList" :key="o.orderId"
-            :style="true ?'border: 2px #daf3ff solid;':'border: 2px #f1f1f1 solid;'">
-                <div class="header" :style="false ?'background-color: #eaf8ff;':'background-color: #f1f1f1;'">
+            :style="o.orderStatus !='已收货' ?'border: 2px #daf3ff solid;':'border: 2px #f1f1f1 solid;'">
+                <div class="header" :style="o.orderStatus !='已收货' ?'background-color: #eaf8ff;':'background-color: #f1f1f1;'">
                     <div style="font-weight: 600;">
-                        2022-9-14
+                        {{o.createTime}}
                     </div>
                     <div>
-                        订单号：202456456
+                        订单号：{{o.orderId}}
                     </div>
                 </div>
                 <div class="main">
@@ -64,11 +64,11 @@
                             -webkit-line-clamp: 2;
                             word-break: break-all;
                             -webkit-box-orient: vertical;" >
-                            <a href="">【单片独立装】瀚思Handsin一次性医用口罩50只/盒 [交易快照]</a>
+                            <a href="">{{o.productDto.productName}}</a>
                         </div>
                     </div>
                     <div>
-                        ￥13.9
+                        ￥{{o.productDto.productScalePrice}}
                     </div>
                     <div>
                         1
@@ -86,9 +86,9 @@
                         <a href="#">查看物流</a>
                     </div>
                     <div>
-                        <el-button type="primary" size="mini" v-if="false">确认收货</el-button>
-                        <el-button size="mini" v-if="true">评价</el-button><br/>
-                        <a href="#" v-if="true">申请开票</a>
+                        <el-button type="primary" size="mini" v-if="o.orderStatus !='已收货'">确认收货</el-button>
+                        <el-button size="mini" v-if="o.orderStatus =='已收货'">评价</el-button><br/>
+                        <a href="#" v-if="o.orderStatus =='已收货'">申请开票</a>
                     </div>
                 </div>
             </div>
@@ -108,6 +108,7 @@ export default {
     },
     methods: {
       handleClick(tab, event) {
+        this.getMyOrder()
         console.log(tab, event);
       },
       getMyOrder(){
@@ -128,6 +129,17 @@ export default {
     },
     created() {
         this.getMyOrder()
+        axios({
+            method: 'get',
+            url: '/product/search',
+            params:{
+                keyword:""
+            }
+        })
+        .then(res =>{
+            console.log(res);
+            this.orderList = res.data.data
+        });
     },
 }
 </script>
