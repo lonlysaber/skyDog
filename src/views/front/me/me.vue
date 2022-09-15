@@ -5,7 +5,7 @@
         </div>
         <el-container>
             <!-- 头部导航栏 -->
-            <el-header>
+            <el-header style="padding:0px">
 
                 <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
                     background-color="#246EDC" text-color="#fff" active-text-color="#ffd04b"
@@ -25,7 +25,7 @@
                     <el-col :span="24">
                         <el-menu default-active="/me/order" class="el-menu-vertical-demo" @open="handleOpen"
                             @close="handleClose" background-color="" text-color="#000000" 
-                            active-text-color="#409eff" router="true">
+                            active-text-color="#409eff" router>
                             <div class="menu">
                                 <el-menu-item index="/me/order" @click="toOrderPage()">
                                     <i class="el-icon-menu"></i>
@@ -35,7 +35,7 @@
                                     <i class="el-icon-menu"></i>
                                     <span slot="title">我的购物车</span>
                                 </el-menu-item>
-                                <el-menu-item index="3" @click="toCollectPage()">
+                                <el-menu-item index="/me/collect" @click="toCollectPage()">
                                     <i class="el-icon-document"></i>
                                     <span slot="title">我的收藏</span>
                                 </el-menu-item>
