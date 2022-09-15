@@ -22,7 +22,7 @@
             </el-submenu>
             <el-submenu index="3" style="float:right;margin-right: 50px;">
                 <template slot="title">收藏夹</template>
-                <el-menu-item index="3-1">收藏的商品</el-menu-item>
+                <el-menu-item index="3-1" @click="toCollectPage()">收藏的商品</el-menu-item>
                 <el-menu-item index="3-2">收藏的商家</el-menu-item>
             </el-submenu>
             <el-menu-item index="4" style="float:right">
@@ -57,6 +57,12 @@ export default {
                     userName: user.username,
                     userId:this.$cookies.get('token')
                 }
+            })
+
+        },
+        toCollectPage() {
+            this.$router.push({
+                path: "/me/collect"
             })
         },
         handleSelect(key, keyPath) {
