@@ -8,7 +8,7 @@
               <el-input v-model="form.username"></el-input>
             </el-form-item>
             <el-form-item label="密码" prop="password">
-              <el-input  v-model="form.password"  show-password></el-input>
+              <el-input v-model="form.password" show-password></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit(form)">登录</el-button>
@@ -23,12 +23,14 @@
             </el-form-item>
             <el-form-item label="验证码" prop="checkKey">
               <el-input maxlength="4" v-model="phoneform.checkKey"></el-input>
-              <p class="checkKey">{{checkKey}}</p>
+              <p class="checkKey">{{ checkKey }}</p>
               <el-button v-if="!checkEd" @click="randomKey">获取</el-button>
-              <el-button disabled v-if="checkEd">{{this.time}}</el-button>
+              <el-button disabled v-if="checkEd">{{ this.time }}</el-button>
             </el-form-item>
-            <el-form-item style="margin-left:0px">
-              <el-button type="primary" @click="onCheck(phoneform)">验证</el-button>
+            <el-form-item style="margin-left: 0px">
+              <el-button type="primary" @click="onCheck(phoneform)"
+                >验证</el-button
+              >
               <el-button @click="resetForm('form')">重置</el-button>
             </el-form-item>
           </el-form>
@@ -40,6 +42,7 @@
 
 <script >
 import { Message } from "element-ui";
+import axios from "axios";
 
 export default {
   name: "",
@@ -51,56 +54,54 @@ export default {
         password: "",
       },
       phoneform: {
-        phone:'',
-        checkKey:''
+        phone: "",
+        checkKey: "",
       },
       user: {
-        username: "user",
-        password: "123",
-        phone:'15170292977'
+        userId: "",
+        username: "",
+        password: "",
+        phone: "",
       },
-      checkKey:'',
-      time:60,
-      checkEd:false,
+      checkKey: "",
+      time: 60,
+      checkEd: false,
     };
   },
   created() {
     this.randomKey();
-    this.$cookies.remove('token')
+    this.$cookies.remove("token");
   },
   methods: {
     onSubmit(form) {
+      axios({
+        method: "post",
+        url: "/user/login",
+        data: {
+          userName: form.username,
+          password: form.password,
+        },
+      }).then((res) => {
+        this.user = res.data.data;
+        console.log(this.user);
+        if (res.data.code == 200) {
+          this.$message({
+            message: "登录成功",
+            type: "success",
+          });
+          this.setCookie(this.user.userId);
+          this.$router.push("/");
+        }
+        if (res.data.code == 201) {
+          this.$message({
+            message: "账号或密码错误",
+            type: "error",
+          });
+          return;
+        }
+        
+      });
       
-      // 登录判断
-      if (form.username == "" || form.password == "") {
-        this.$message({
-          message: "请输入账号和密码",
-          type: "error",
-        });
-        return;
-      }
-      if (
-        form.username != this.user.username ||
-        form.password != this.user.password
-      ) {
-        this.$message({
-          message: "账号或密码错误",
-          type: "error",
-        });
-        return;
-      }
-      if (
-        form.username == this.user.username &&
-        form.password == this.user.password
-      ) {
-        this.$message({
-          message: "登录成功",
-          type: "success",
-        });
-        this.setCookie();
-        this.$router.push("/");
-      }
-      // console.log(form);
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -109,81 +110,75 @@ export default {
       // console.log(tab, event);
     },
     // 写cookie
-    setCookie(){
+    setCookie(id) {
+      this.$cookies.set("token", id);
 
-      this.$cookies.set("token",'test');
-      
-      console.log(this.$cookies.keys()) ;
+      console.log(this.$cookies.keys());
     },
     // 防抖
-    throttle(cd,time = 1000){
-        var t = null;
-        return function(){
-            if(t)return;
-            t = setTimeout(()=>{
-                cd.call(this)
-                t = null;
-            },time)
-        }
+    throttle(cd, time = 1000) {
+      var t = null;
+      return function () {
+        if (t) return;
+        t = setTimeout(() => {
+          cd.call(this);
+          t = null;
+        }, time);
+      };
     },
-    randomKey(){
-        // 非第一次进入
-        if(this.checkKey!=''){
-            this.checkEd = true;
-            clearInterval(time)
-            var time = setInterval(() => {
-                if(this.time>0){
-                    this.time--
-                    // this.checkKey = this.time
-                }
-                else{
-                    this.time = 60
-                    this.checkEd = false;
-                }
-            }, 1000);
+    randomKey() {
+      // 非第一次进入
+      if (this.checkKey != "") {
+        this.checkEd = true;
+        clearInterval(time);
+        var time = setInterval(() => {
+          if (this.time > 0) {
+            this.time--;
+            // this.checkKey = this.time
+          } else {
+            this.time = 60;
+            this.checkEd = false;
+          }
+        }, 1000);
+      }
 
-        }
+      let one = (Math.random() * 9).toFixed(0).toString();
+      let two = (Math.random() * 9).toFixed(0).toString();
+      let thr = (Math.random() * 9).toFixed(0).toString();
+      let four = (Math.random() * 9).toFixed(0).toString();
 
-        let one = (Math.random()*9).toFixed(0).toString();
-        let two = (Math.random()*9).toFixed(0).toString();
-        let thr = (Math.random()*9).toFixed(0).toString();
-        let four = (Math.random()*9).toFixed(0).toString();
-
-        let key = one+two+thr+four;
-        this.checkKey = key;
-        this.throttle(function(){
-            console.log(key)
-        }
-
-        )
-    },  
-    onCheck(form){
-      this.setCookie()
-        if(form.phone==''||form.checkKey==""){
-            this.$message({
-            message: "请输入手机号和验证码",
-            type: "error",
-            });
-            return;
-        }
-        if(form.checkKey!=this.checkKey){
-            this.$message({
-            message: "验证码错误",
-            type: "error",
-            });
-            return;
-        }
-        if(form.phone==this.user.phone&&form.checkKey==this.checkKey){
-            this.$message({
-            message: "登录成功",
-            type: "success",
-            });
-            this.setCookie();
-            this.$router.push("/");
-        }
+      let key = one + two + thr + four;
+      this.checkKey = key;
+      this.throttle(function () {
+        console.log(key);
+      });
+    },
+    onCheck(form) {
+      this.setCookie();
+      if (form.phone == "" || form.checkKey == "") {
+        this.$message({
+          message: "请输入手机号和验证码",
+          type: "error",
+        });
+        return;
+      }
+      if (form.checkKey != this.checkKey) {
+        this.$message({
+          message: "验证码错误",
+          type: "error",
+        });
+        return;
+      }
+      if (form.phone == this.user.phone && form.checkKey == this.checkKey) {
+        this.$message({
+          message: "登录成功",
+          type: "success",
+        });
+        this.setCookie();
+        this.$router.push("/");
+      }
     },
   },
-  
 };
 </script>
 
@@ -201,7 +196,7 @@ export default {
 .frontLogin .window {
   padding: 30px 10px;
   background-color: #fff;
-  border:1px gray solid;
+  border: 1px gray solid;
   border-radius: 12px;
   position: absolute;
   top: 50%;
@@ -213,24 +208,28 @@ export default {
   background-color: #fff;
 }
 .window .el-input--suffix .el-input__inner {
-    border-radius: 0;
+  border-radius: 0;
 }
 ::v-deep .el-tabs__nav-scroll {
   width: 30% !important;
   margin: 0 auto !important;
 }
-.window .el-tab-pane:nth-child(2) .el-form .el-form-item:nth-child(2) .el-form-item__content{
-    /* border:1px red solid; */
-    display:flex;
+.window
+  .el-tab-pane:nth-child(2)
+  .el-form
+  .el-form-item:nth-child(2)
+  .el-form-item__content {
+  /* border:1px red solid; */
+  display: flex;
 }
-.window .frontLogin .el-button.el-button--primary{
-    float: left;
-    border-radius: 0;
+.window .frontLogin .el-button.el-button--primary {
+  float: left;
+  border-radius: 0;
 }
-.window .checkKey{
-    background-color: black;
-    color: #fff;
-    margin: 0 5px;
-    width: 90px;
+.window .checkKey {
+  background-color: black;
+  color: #fff;
+  margin: 0 5px;
+  width: 90px;
 }
 </style>
