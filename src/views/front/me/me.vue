@@ -6,7 +6,7 @@
         <el-container>
             <!-- 头部导航栏 -->
             <el-header>
-     
+
                 <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect"
                     background-color="#246EDC" text-color="#fff" active-text-color="#ffd04b"
                     style="text-align:center; padding-left: 130px;">
@@ -16,7 +16,6 @@
                     <el-menu-item index="2">账号管理</el-menu-item>
                     <el-menu-item index="3" disabled>消息中心</el-menu-item>
                     <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
-
                 </el-menu>
             </el-header>
             <el-container style="padding-left: 100px;">

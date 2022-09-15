@@ -8,8 +8,9 @@
                 text-color="#fff" active-text-color="#ffd04b" style="text-align:center; padding-left: 130px;">
                 <el-menu-item index="0" style="font-size:large">我的购物车</el-menu-item>
 
-                <el-input v-model="input" placeholder="输入内容搜索">
+                <el-input class="input" v-model="input" placeholder="输入内容搜索">
                 </el-input>
+
                 <el-button type="primary" @click="toSearch">搜索</el-button>
             </el-menu>
         </div>
@@ -29,26 +30,46 @@
 
 
             <div class="myproduct">
-                <el-table ref="multipleTable" :data="products" tooltip-effect="dark" style="width: 100%" 
-                    @selection-change="handleSelectionChange">
-                    <el-table-column type="selection" width="55">
+
+                <el-table ref="multipleTable" :data="products" tooltip-effect="dark"
+                    style="width: 100%;text-align: center;" @selection-change="handleSelectionChange">
+
+                    <el-table-column type="selection" width="45">
                     </el-table-column>
-                    <el-table-column prop="dec" label="商品信息" width="450">
-                        </el-table-column>  
-                    <el-table-column prop="name" label="单价" width="120">
+                    <el-table-column prop="dec" label="商品信息" width="500">
+                        <div class="stuff">
+                            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                                alt="图片加载失败">
+
+                            <div class="title">数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带
+                                {{products.dec}}
+                            </div>
+
+                        </div>
+
+                        <div class="scale">
+                            <!-- {{scale}} -->
+                        </div>
                     </el-table-column>
-                    <el-table-column label="数量" width="120">
-                        <template slot-scope="scope">{{ scope.row.date }}</template>
-                    </el-table-column>                       
-                    <el-table-column prop="address" label="金额" >
+                    <el-table-column prop="" label="单价" width="120">
+
+                    </el-table-column>
+                    
+                    <el-table-column prop="" label="数量">
+                        <template slot-scope="scope">
+                            <el-input-number v-model="scope.row.num" @change="handleChange" :min="1" :max="99"
+                                size="mini">
+                            </el-input-number>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="address" label="金额">
                     </el-table-column>
                     <el-table-column prop="address" label="操作" show-overflow-tooltip>
+                        <p @click="toCollectPage()">移入收藏</p>
+                        <p @click="delleteProduct()">删除商品</p>
                     </el-table-column>
+
                 </el-table>
-                <!-- <div style="margin-top: 20px">
-                    <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
-                    <el-button @click="toggleSelection()">取消选择</el-button>
-                </div> -->
 
             </div>
 
@@ -69,6 +90,8 @@ export default {
             input: "",
             activeIndex: '1',
             cartNum: '',
+            num: 1,
+            multipleSelection: [],
             products: [
                 {
                     img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
@@ -80,30 +103,19 @@ export default {
                     dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
                     price: '5.8'
                 },
-                {
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                }
             ],
 
-        }
+        };
 
     },
     created() {
         this.username = this.$route.query.userName;
     },
     methods: {
+
+        toCheck() {
+
+        },
 
         toOrderPage() {
 
@@ -114,7 +126,25 @@ export default {
         getCart() {
 
         },
-    },
+
+        handleChange(value) {
+            console.log(value);
+        },
+
+        toggleSelection(rows) {
+            if (rows) {
+                rows.forEach(row => {
+                    this.$refs.multipleTable.toggleRowSelection(row);
+                });
+            } else {
+                this.$refs.multipleTable.clearSelection();
+            }
+        },
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        },
+
+    }
 }
 </script>
 
@@ -123,13 +153,13 @@ export default {
     display: flex;
 }
 
-.cart .el-input {
-    margin-left: 400px;
+.cart .search .el-input {
+    margin-left: 350px;
     width: 600px;
     align-items: center;
 }
 
-.cart .el-input__inner {
+.cart .search .el-input .el-input__inner {
     margin-top: 10px;
     align-items: center;
     border: 1px cornflowerblue solid;
@@ -137,6 +167,7 @@ export default {
     width: 600px;
     height: 42px;
     background-color: #FFF;
+
 }
 
 .cart .search .el-button {
@@ -147,7 +178,7 @@ export default {
 }
 
 .cart .product {
-    width: 70%;
+    width: 80%;
     height: auto;
     /* display:flboxex; */
     margin: 0px auto;
@@ -208,10 +239,49 @@ export default {
     width: 100px;
     height: 42px;
 }
-.cart .myproduct{
+
+.cart .myproduct {
     height: auto;
     display: flex;
     margin-top: 2px;
     background-color: aliceblue;
+}
+
+.cart .stuff {
+    display: flex;
+    height: 150px;
+}
+
+.cart .stuff img {
+    margin-top: 30px;
+    width: 100px;
+    height: 100px;
+    display: block;
+    border-radius: 5px;
+}
+
+.cart .stuff .title {
+    margin-top: 35px;
+    word-break: normal;
+    width: 250px;
+    border-color: white;
+    word-break: break-all;
+}
+
+.cart .el-table .cell {
+    text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 23px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.cart .count {
+    display: flex;
+
 }
 </style>
