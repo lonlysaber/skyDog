@@ -8,7 +8,7 @@ import * as echarts from 'echarts';
 import VueCookies from 'vue-cookies'
 
 
-axios.defaults.baseURL = 'https://u498162a27.zicp.fun';
+axios.defaults.baseURL = 'https://5164qd7666.oicp.vip/';
 Vue.prototype.$axios = axios;
 
 Vue.prototype.$echarts = echarts;
