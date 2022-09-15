@@ -54,7 +54,7 @@
                     <el-table-column prop="" label="单价" width="120">
 
                     </el-table-column>
-                    
+
                     <el-table-column prop="" label="数量">
                         <template slot-scope="scope">
                             <el-input-number v-model="scope.row.num" @change="handleChange" :min="1" :max="99"
@@ -124,7 +124,16 @@ export default {
 
         },
         getCart() {
-
+            axios({
+                url: "/cart/getMyCart/" + this.userId,
+                method: "get",
+            }).then((res) => {
+                console.log(res);
+                // console.log(res.data.result.result);
+                // console.log(res.data.result.result.process);
+                // this.collectDetail = res.data.result.result;
+                // this.process = res.data.result.result.process;
+            });
         },
 
         handleChange(value) {

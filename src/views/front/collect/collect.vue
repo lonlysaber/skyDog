@@ -9,7 +9,7 @@
                         <el-tab-pane label="全部宝贝">
                             <div class="all">
                                 <el-row :gutter="20">
-                                    <el-col :span="4" v-for="item in products" :key="index">
+                                    <el-col :span="4" v-for="item in collectDetail" :key="index">
                                         <el-card :body-style="{ padding: '0px' }">
                                             <img :src="item.img" class="image">
                                             <div class="name">
@@ -27,11 +27,11 @@
                         <el-tab-pane label="失效宝贝">
                             <div class="all">
                                 <el-row :gutter="20">
-                                    <el-col :span="4" v-for="item in products" :key="index">
+                                    <el-col :span="4" v-for="item in collectDetail" :key="index">
                                         <el-card :body-style="{ padding: '0px' }">
                                             <img :src="item.img" class="image">
                                             <div class="name">
-                                                <span>{{item.dec}}</span>
+                                                <a>{{item.dec}}</a>
                                             </div>
                                             <div class="bottom">
                                                 <span>￥99.5</span>
@@ -72,47 +72,17 @@
 export default {
     data() {
         return {
+            userId: "10001",
             activeName: '1',
-            products: [
-                {
-                    productId: '1',
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    productId: '2',
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    productId: '3',
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    productId: '4',
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    productId: '5',
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    productId: '6',
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
+            input: '',
+            collectDetail: [
+
             ],
         };
-
+    },
+    created() {
+        // this.userId = this.$route.query.id;
+        console.log(this.$cookies);
     },
     methods: {
         handleChange(value) {
@@ -120,7 +90,23 @@ export default {
         },
         handleClick(tab, event) {
             console.log(tab, event);
-        }
+        },
+        toSearch() {
+
+        },
+        // 获取用户收藏数据
+        getMyCollect() {
+            axios({
+                url: "/collect/getMyCollect/" + this.userId,
+                method: "get",
+            }).then((res) => {
+                console.log(res);
+                // console.log(res.data.result.result);
+                // console.log(res.data.result.result.process);
+                // this.collectDetail = res.data.result.result;
+                // this.process = res.data.result.result.process;
+            });
+        },
     }
 
 }
@@ -164,6 +150,11 @@ export default {
     word-break: break-all;
     /* 6.盒子实现多行显示的必要条件，文字是垂直展示，即文字是多行展示的情况下使用 */
     -webkit-box-orient: vertical;
+}
+
+.collect .content .all .name span:hover {
+    color: #ff4442;
+    cursor: pointer;
 }
 
 .collect .content .all .name .bottom {
