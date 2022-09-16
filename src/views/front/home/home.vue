@@ -95,33 +95,62 @@
       <div class="bottom">
         <h1>猜你喜欢</h1>
         <div class="list">
-            <div class="product" 
+
+          <div
+            class="product"
             v-for="item in products"
             :key="item.key"
-            @click="gotoDetail(item)">
+            @click="gotoDetail(item)"
+          >
+            <el-skeleton style="width: 350px" :loading="loading" animated>
+              <template slot="template">
+                <el-skeleton-item
+                  variant="image"
+                  style="width: 100px;height: width: 100px;"
+                />
+                <div style="padding: 14px">
+                  <el-skeleton-item variant="h3" style="width: 40%" />
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-items: space-between;
+                      margin-top: 16px;
+                      height: 16px;
+                    "
+                  >
+                    <el-skeleton-item
+                      variant="text"
+                      style="margin-right: 16px"
+                    />
+                    <el-skeleton-item variant="text" style="width: 30%" />
+                  </div>
+                </div>
+              </template>
+              <template>
                 <div class="image">
-                    <img :src="item.img" alt="">
+                  <img :src="item.img.img1" alt="" />
                 </div>
                 <div class="info">
-                    <div class="dec">{{item.dec}}</div>
-                    <div class="price">
-                        <span>￥{{item.price}}</span>
-                    </div>
+                  <div class="dec">{{ item.productName }}</div>
+                  <div class="price">
+                    <span>￥{{ item.productPrice }}</span>
+                  </div>
                 </div>
-            </div>
+              </template>
+            </el-skeleton>
+          </div>
         </div>
       </div>
-      
     </div>
   </div>
 </template>
 
 <script >
 import topbar from "@/components/TopBar.vue";
-import searchbar from "@/components/searchBar.vue"
+import searchbar from "@/components/searchBar.vue";
 import { Message } from "element-ui";
-import axios from 'axios';
-
+import axios from "axios";
 
 export default {
   name: "",
@@ -153,90 +182,101 @@ export default {
           "https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns",
         username: "天狗用户001",
       },
-      products:[
+      products: [
         {
-            img:'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-            dec:'数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-            price:'5.8'
+          img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
+          dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
+          price: "5.8",
         },
         {
-            img:'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-            dec:'数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-            price:'5.8'
+          img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
+          dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
+          price: "5.8",
         },
         {
-            img:'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-            dec:'数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-            price:'5.8'
+          img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
+          dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
+          price: "5.8",
         },
         {
-            img:'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-            dec:'数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-            price:'5.8'
+          img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
+          dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
+          price: "5.8",
         },
         {
-            img:'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-            dec:'数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-            price:'5.8'
+          img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
+          dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
+          price: "5.8",
         },
         {
-            img:'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-            dec:'数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-            price:'5.8'
+          img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
+          dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
+          price: "5.8",
         },
       ],
       num: 1,
+      loading: true,
     };
   },
-  created(){
+  created() {
     // console.log(this.$cookies.isKey('token'))
     this.getProducts();
   },
   methods: {
-    getProducts(){
+    getProducts() {
       axios({
-        method:'get',
-        url:'/product/search/null',
-
-      }).then(res=>{
-        console.log(res);
-      })
+        method: "post",
+        url: "/product/search/",
+        data: {
+          currentPage: 1,
+          keyword: "食品",
+          pageSize: 30,
+        },
+      }).then((res) => {
+        this.products = res.data.data.data;
+        // console.log(res);
+        this.loading = false;
+      });
     },
     serchByName(it) {
       console.log(it);
       this.$router.push({
-        path:'search',
-        query:{
-          input:it
-        }
-      })
+        path: "search",
+        query: {
+          input: it,
+        },
+      });
     },
-    gotoDetail(item){
-      if(this.$cookies.isKey('token')){
-        this.$router.push('/productdetail')
-      }else{
+    gotoDetail(p) {
+      if (this.$cookies.isKey("token")) {
+        this.$router.push({
+          path: "/productdetail",
+          query: {
+            productId: p.productId,
+          },
+        });
+      } else {
         this.$message({
-            message: "请先登录",
-            type: "error",
-            });
-            
-        this.$router.push('/frontlogin')
+          message: "请先登录",
+          type: "error",
+        });
+
+        this.$router.push("/frontlogin");
       }
       // console.log(item)
     },
-    gotoMe(user){
-      
+    gotoMe(user) {
       this.$router.push({
         path: "/me",
         query: {
           userName: user.username,
-          userId:this.$cookies.get('token'),
-        }
-      })
+          userId: this.$cookies.get("token"),
+        },
+      });
     },
-    gotoCart(user){
-      console.log(user.name)
-    }
+    gotoCart(user) {
+      console.log(user.name);
+    },
   },
 };
 </script>
@@ -248,7 +288,6 @@ export default {
 
 .home {
   background-color: rgb(234, 232, 235);
-  
 }
 .home .container {
   font-size: 14px;
@@ -335,25 +374,23 @@ export default {
   justify-content: space-around;
 }
 
-.home .middle .userInfo .likeInfo{
-    display: flex;
+.home .middle .userInfo .likeInfo {
+  display: flex;
   justify-content: space-around;
-
 }
-.home .middle .userInfo .likeInfo .item{
-    width: 70px;
+.home .middle .userInfo .likeInfo .item {
+  width: 70px;
 }
-.home .middle .userInfo .likeInfo .item img{
-    width: 25px;
-
+.home .middle .userInfo .likeInfo .item img {
+  width: 25px;
 }
 /* 商品展示 */
-.home .bottom .list{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+.home .bottom .list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
-.home .bottom .list .product{
+.home .bottom .list .product >div:first-child{
   display: flex;
   /* flex: 1; */
   width: 31%;
@@ -364,20 +401,35 @@ export default {
   border-radius: 15px;
   cursor: pointer;
 }
-.home .bottom .product img{
-    width: 100px;
-    height: 100px;
+.home .bottom .product img {
+  width: 100px;
+  height: 100px;
 }
-.home .bottom .product .info{
+.home .bottom .product .info {
   margin-left: 12px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-
+  /* justify-content: space-around; */
 }
-.home .bottom .product .info .price span{
+.home .bottom .product .info .dec{
+  font-size: 14px;
+    height: 55px;
+    margin-top: 6px;
+    /* 1.溢出隐藏 */
+    overflow: hidden;
+    /* 2.用省略号来代替超出文本 */
+    text-overflow: ellipsis;
+    /* 3.设置盒子属性为-webkit-box  必须的 */
+    display: -webkit-box;
+    /* 4.-webkit-line-clamp 设置为2，表示超出2行的部分显示省略号，如果设置为3，那么就是超出3行部分显示省略号 */
+    -webkit-line-clamp: 3;
+    /* 5.字面意思：单词破坏：破坏英文单词的整体性，在英文单词还没有在一行完全展示时就换行  即一个单词可能会被分成两行展示 */
+    word-break: break-all;
+    /* 6.盒子实现多行显示的必要条件，文字是垂直展示，即文字是多行展示的情况下使用 */
+    -webkit-box-orient: vertical;
+}
+.home .bottom .product .info .price span {
   font-size: 18px;
   color: cornflowerblue;
-
 }
 </style>

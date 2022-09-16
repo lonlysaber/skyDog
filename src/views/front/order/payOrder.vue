@@ -69,21 +69,21 @@
         :before-close="handleClose"
       >
         <el-form
-          :label-position="labelPosition"
+          label-position="right"
           label-width="80px"
           :model="formLabelAlign"
         >
           <el-form-item label="地址">
-            <el-input v-model="adds[idx].zone"></el-input>
+            <el-input v-model="formLabelAlign.zone"></el-input>
           </el-form-item>
           <el-form-item label="收货人">
-            <el-input v-model="adds[idx].name"></el-input>
+            <el-input v-model="formLabelAlign.name"></el-input>
           </el-form-item>
           <el-form-item label="详细地址">
-            <el-input v-model="adds[idx].fullAddress"></el-input>
+            <el-input v-model="formLabelAlign.fullAddress"></el-input>
           </el-form-item>
           <el-form-item label="联系方式">
-            <el-input v-model="adds[idx].phone"></el-input>
+            <el-input v-model="formLabelAlign.phone"></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -110,7 +110,7 @@
           <div class="productInfo">
             <div class="dec">
               <div class="image">
-                <img :src="product.img" alt="" />
+                <img :src="product.img.img1" alt="" />
               </div>
               <div class="productDec">
                 <span>{{ product.productName }}</span>
@@ -122,7 +122,7 @@
             </div>
             <div class="price">
               <div class="span">
-                <span>{{ product.price }}</span>
+                <span>{{ product.productPrice}}</span>
               </div>
             </div>
             <div class="num">
@@ -134,7 +134,7 @@
               ></el-input-number>
             </div>
             <div class="sum">
-              <span>{{ product.price * product.num }}</span>
+              <span>{{ product.productPrice * product.num }}</span>
             </div>
           </div>
         </div>
@@ -171,6 +171,7 @@
 
 <script >
 import TopBar from "@/components/TopBar.vue";
+import axios from 'axios';
 export default {
   name: "",
   data() {
@@ -213,46 +214,50 @@ export default {
       curshow: true,
       num: 1,
       products: [
-        {
-          img: "https://img12.360buyimg.com/n5/s450x450_jfs/t1/75126/14/21233/346381/62ea208bE630e5e19/578e0bcb5e4b7910.jpg!cc_450x450.avif",
-          productName:
-            "拉夏贝尔 La Chapelle 针织衫女2022年新秋季女装法式复古设计感气质百搭毛衣拼接圆领开衫针织外套女 米色 F",
-          price: "60",
-          scale: this.scale || "L",
-          feature: this.feature || "红色",
-          num: 1,
-        },
-        {
-          img: "https://img12.360buyimg.com/n5/s450x450_jfs/t1/75126/14/21233/346381/62ea208bE630e5e19/578e0bcb5e4b7910.jpg!cc_450x450.avif",
-          productName:
-            "拉夏贝尔 La Chapelle 针织衫女2022年新秋季女装法式复古设计感气质百搭毛衣拼接圆领开衫针织外套女 米色 F",
-          price: "60",
-          scale: this.scale || "L",
-          feature: this.feature || "红色",
-          num: 1,
-        },
+        
       ],
       sum: 100,
       dialogVisible: false,
+      formLabelAlign:{
+        zone:'',
+        name:'',
+        fullAddress:'',
+        phone:'',
+      }
     };
   },
   created() {
-    this.productId = this.$route.query.productId || "10001";
+    this.products = this.$route.query.productIds || ['10003','10004'];
     this.scale = this.$route.query.scale;
     this.feature = this.$route.query.feature;
     this.handleChange();
-    console.log(this.productId, this.scale, this.feature);
+    // this.getProductById();
+    console.log(this.productIds, this.scale, this.feature);
   },
   methods: {
+    getProductById(){
+      console.log(this.productIds)
+      this.productIds.forEach((product)=>
+        axios({
+        method:'get',
+        url:'/product/queryById/'+product.productId,
+      }).then(res=>{
+        this.products.push(res.data.data)
+        // console.log(this.products)
+      })
+      )
+      
+    },
     choice(id) {
       this.checked = id;
       this.idx = this.checked - 10001;
-      // console.log(this.idx);
+      this.formLabelAlign = this.adds[this.idx]
+      // console.log(this.adds[this.idx]);
     },
     handleChange(value) {
       let sum = 0;
       this.products.forEach((product) => {
-        sum += product.num * product.price;
+        sum += product.num * product.productPrice;
         // console.log(product)
       });
       this.sum = sum;
@@ -264,15 +269,25 @@ export default {
       this.$router.go(-1);
     },
     submit() {},
-    handleClose() {
-      this.$confirm("确认关闭？")
-        .then((_) => {
-          done();
-        })
-        .catch((_) => {});
+    handleClose(done) {
+      done()
     },
-    modifyAdd() {
-      this.dialogVisible = false;
+    confirmModify(){
+      // console.log(this.formLabelAlign)
+      axios({
+        method:'post',
+        url:'/address/update',
+        data:this.formLabelAlign
+      })
+    },
+    modifyAdd(done) {
+      this.$confirm("确认修改？")
+      .then((_) => {
+        // this.confirmModify()
+        done();
+      })
+      .catch((_) => {});
+      
     },
   },
   components: { TopBar },
@@ -349,8 +364,8 @@ hr {
   height: 70px;
 }
 .payOrder .adddiv .adds .address:hover {
-  cursor: pointer;
-  border: 2px solid cornflowerblue;
+  cursor: pointer !important;
+  border: 2px solid cornflowerblue !important;
 }
 .payOrder .adddiv .adds .address .fulladd {
   height: 34px;
@@ -406,11 +421,11 @@ hr {
   width: 80px;
 }
 .payOrder .checkOrder .products .productInfo .dec .productDec {
+  width: 320px;
+  height: 40px;
   line-height: 20px;
   font-size: 12px;
   /* white-space: nowrap; */
-  width: 320px;
-  height: 40px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

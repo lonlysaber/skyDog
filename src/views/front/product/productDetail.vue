@@ -13,11 +13,11 @@
       <div class="carousel">
         <el-carousel trigger="click" :autoplay="false">
           <el-carousel-item
-            v-for="(item,key) in (product.img)"
+            v-for="(item) in (product.img)"
             :key="item.key"
             align="middle"
           >
-            <img :src="item" v-on:error="deleteImg(key)" alt="" />
+            <img :src="item" onerror="javascript:this.src='src/assets/logo.png';this.onerror=null" alt="" />
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -26,10 +26,16 @@
         <div class="head">
           <h3>{{ product.productName }}</h3>
         </div>
+        <hr />
         <div class="price">
-          <h2>99惊喜节!!!</h2>
-          <h2>￥{{ product.productPrice }}</h2>
+          <div class="name">
+            <span>价格</span>
+          </div>
+          <div class="pri">
+            <h2>￥{{ product.productPrice }}</h2>
+          </div>
         </div>
+        <hr/>
         <div class="scales">
           <div class="name">
             <span>规格</span>
@@ -96,7 +102,19 @@ export default {
   data() {
     return {
       productId:'',
-      product: {},
+      product: {
+        productId:'10003',
+        productName:'PINKPINEAPPLE粉红菠萝女装短外套女春秋新款2022年学生开衫夹克上衣女士风衣外套短款 PPA芥末黄 165/88A（L）',
+        productPrice:'279',
+        img:{
+          img1:'https://img10.360buyimg.com/n5/s450x450_jfs/t1/101838/18/31132/98953/62d65f90E37aaf946/143951520738aee4.jpg!cc_450x450.avif',
+          img2:'https://img10.360buyimg.com/n5/s450x450_jfs/t1/101838/18/31132/98953/62d65f90E37aaf946/143951520738aee4.jpg!cc_450x450.avif',
+          img3:'https://img10.360buyimg.com/n5/s450x450_jfs/t1/101838/18/31132/98953/62d65f90E37aaf946/143951520738aee4.jpg!cc_450x450.avif',
+          img4:'https://img10.360buyimg.com/n5/s450x450_jfs/t1/101838/18/31132/98953/62d65f90E37aaf946/143951520738aee4.jpg!cc_450x450.avif',
+          img5:'https://img10.360buyimg.com/n5/s450x450_jfs/t1/101838/18/31132/98953/62d65f90E37aaf946/143951520738aee4.jpg!cc_450x450.avif',
+
+        }
+      },
       scales: ["1m", "2m", "3m","4m","5m"],
       features: [
           "红色",
@@ -115,15 +133,17 @@ export default {
     this.getProductById()
   },
   methods: {
-    deleteImg(img){
-      console.log(img)
+    deleteImg(key){
+      console.log(key)
+      eval(`delete this.product.img.${key}`)
+      // console.log(this.product,this.product.img)
     },
     getProductById(){
       axios({
         method:'get',
         url:'/product/queryById/'+this.productId
       }).then(res=>{
-        console.log(res)
+        // console.log(res)
         this.product = res.data.data
         delete this.product.img.imgId
         delete this.product.img.productId
@@ -153,22 +173,28 @@ export default {
         }
     },
     buy(){
-        let scale = this.checkEdScale || this.product.scales[0]
-        let feature = this.checkEdFeature || this.product.features[0]
+        let scale = this.checkEdScale || this.scales[0]
+        let feature = this.checkEdFeature || this.features[0]
+        this.product.num = this.num||1;
+        let products = []
+        products.push(this.product)
+        console.log(products)
+
         this.$router.push({
           path:'/payorder',
           query:{
-            productId:this.productId,
+            productIds:products,
             scale:scale,
             feature:feature,
+            num:this.num,
           }
         })
-        console.log(scale,feature)
+        // console.log(scale,feature)
     },
     addCart(){
-        let scale = this.checkEdScale || this.product.scales[0]
-        let feacture = this.checkEdFeature || this.product.features[0]
-        console.log(scale,feacture)
+        let scale = this.checkEdScale || this.scales[0]
+        let feacture = this.checkEdFeature || this.features[0]
+        // console.log(scale,feacture)
     }
   },
 };
@@ -212,13 +238,37 @@ export default {
 .productDetail ul.el-carousel__indicators.el-carousel__indicators--horizontal{
   width: 100%;
 }
+
 .productDetail .detail {
   margin: 24px;
 }
+.productDetail .detail hr{
+  margin:15px 0;
+}
+.productDetail .detail .head{
+  line-height: 20px;
+  /* font-size: 12px; */
+  /* white-space: nowrap; */
+  overflow: hidden;
+  /* text-overflow: ellipsis; */
+  display: -webkit-box;
+  /* 设置伸缩盒子的子元素排列方式--从上到下垂直排列 */
+  -webkit-box-orient: vertical;
+  /* 显示的行 */
+  -webkit-line-clamp: 3;
+  margin-left: 5px;
+}
 .productDetail .detail .price {
   display: flex;
-  color: cornflowerblue;
-  justify-content: center;
+  /* color: cornflowerblue; */
+  
+  text-align: left;
+}
+.productDetail .detail .price .name{
+  flex:30%;
+}
+.productDetail .detail .price .pri{
+  flex:70%;
 }
 .productDetail .detail .scales {
   display: flex;
@@ -268,7 +318,7 @@ export default {
 }
 .productDetail .detail .stepnum {
   display: flex;
-  margin: 10px 0;
+  /* margin: 10px 0; */
   text-align: left;
 }
 .productDetail .detail .stepnum .name {

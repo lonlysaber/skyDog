@@ -123,9 +123,14 @@ export default {
                 this.count = res.data.data.count
             });
         },
-        gotoDetail(item){
+        gotoDetail(p){
             if(this.$cookies.isKey('token')){
-                this.$router.push('/productdetail')
+                this.$router.push({
+                    path:'/productdetail',
+                    query:{
+                        productId:p.productId
+                    }
+                })
             }else{
                 this.$message({
                     message: "请先登录",

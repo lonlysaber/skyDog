@@ -2,7 +2,7 @@
     <div class="TopBar">
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
             <el-submenu index="1" style="margin-left:50px;">
-                <template slot="title">{{user.username}}</template>
+                <template slot="title">{{user.userName}}</template>
                 <el-menu-item style="width:200px;height: 100px;" index="1-1">
                     <div class="userinfo">
                         <div class="avatar">
@@ -33,21 +33,31 @@
 </template>
 
 <script >
+import axios from 'axios';
 export default {
     name: "topbar",
     data() {
         return {
             user: {
                 avatar: 'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns',
-                username: '天狗用户001'
+                userName: '天狗用户001'
             },
             activeIndex: "1",
             activeIndex2: "1",
         }
     },
+    created(){
+        this.getUserinfo()
+    },
     methods: {
         getUserinfo() {
-
+            axios({
+                method:'get',
+                url:'/user/queryId/'+this.$cookies.get('token')
+            }).then(res=>{
+                // console.log(res)
+                this.user = res.data.data.data
+            })
         },
         toMePage(user) {
             console.log(user.username);
