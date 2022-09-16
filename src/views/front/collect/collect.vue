@@ -9,14 +9,14 @@
                         <el-tab-pane label="全部宝贝">
                             <div class="all">
                                 <el-row :gutter="20">
-                                    <el-col :span="4" v-for="item in collectDetail" :key="index">
+                                    <el-col :span="4" v-for="item in collectDetail" :key="item.key">
                                         <el-card :body-style="{ padding: '0px' }">
-                                            <img :src="item.img" class="image">
+                                            <img :src="item.product.img.img1" class="image">
                                             <div class="name">
-                                                <span>{{item.dec}}</span>
+                                                <span>{{item.product.productName}}</span>
                                             </div>
                                             <div class="bottom">
-                                                <span>￥99.5</span>
+                                                <span>￥{{item.product.productPrice}}</span>
                                             </div>
                                         </el-card>
                                     </el-col>
@@ -27,14 +27,14 @@
                         <el-tab-pane label="失效宝贝">
                             <div class="all">
                                 <el-row :gutter="20">
-                                    <el-col :span="4" v-for="item in collectDetail" :key="index">
+                                    <el-col :span="4" v-for="item in uselessDetail" :key="item.index">
                                         <el-card :body-style="{ padding: '0px' }">
-                                            <img :src="item.img" class="image">
+                                            <img :src="item.product.img.img1" class="image">
                                             <div class="name">
-                                                <a>{{item.dec}}</a>
+                                                <span>{{item.product.productName}}</span>
                                             </div>
                                             <div class="bottom">
-                                                <span>￥99.5</span>
+                                                <span>￥{{item.product.productPrice}}</span>
                                             </div>
                                         </el-card>
                                     </el-col>
@@ -47,7 +47,21 @@
                                 </el-input>
                                 <el-button type="primary" @click="toSearch">搜索</el-button>
                             </div>
-                            <div class="stuff"></div>
+                            <div class="all">
+                                <el-row :gutter="20">
+                                    <el-col :span="4" v-for="item in searchDetail" :key="item.key">
+                                        <el-card :body-style="{ padding: '0px' }">
+                                            <img :src="item.product.img.img1" class="image">
+                                            <div class="name">
+                                                <span>{{item.product.productName}}</span>
+                                            </div>
+                                            <div class="bottom">
+                                                <span>￥{{item.product.productPrice}}</span>
+                                            </div>
+                                        </el-card>
+                                    </el-col>
+                                </el-row>
+                            </div>
                         </el-tab-pane>
 
                     </el-tabs>
@@ -75,14 +89,15 @@ export default {
             userId: "10001",
             activeName: '1',
             input: '',
-            collectDetail: [
-
-            ],
+            collectDetail: [],
+            uselessDetail: [],
+            searchDetail: [],
         };
     },
     created() {
         // this.userId = this.$route.query.id;
-        console.log(this.$cookies);
+        this.getMyCollect();
+        this.getUseless();
     },
     methods: {
         handleChange(value) {
@@ -91,20 +106,40 @@ export default {
         handleClick(tab, event) {
             console.log(tab, event);
         },
+
+        // 搜索收藏商品
         toSearch() {
+            console.log(this.input);
+            this.$axios({
+                url: "/collect/getSearch/",
+                method: "get",
+                params: {
+                    userId: this.userId,
+                    keyword: this.input,
+                },
+            }).then((res) => {
+                this.searchDetail = res.data.data;
+            });
 
         },
         // 获取用户收藏数据
         getMyCollect() {
-            axios({
+            this.$axios({
                 url: "/collect/getMyCollect/" + this.userId,
                 method: "get",
             }).then((res) => {
-                console.log(res);
-                // console.log(res.data.result.result);
-                // console.log(res.data.result.result.process);
-                // this.collectDetail = res.data.result.result;
-                // this.process = res.data.result.result.process;
+                // console.log(res.data.data);
+                this.collectDetail = res.data.data;
+            });
+        },
+
+        // 获取失效数据
+        getUseless() {
+            this.$axios({
+                url: "/collect/getUseless/" + this.userId,
+                method: "get",
+            }).then((res) => {
+                this.uselessDetail = res.data.data;
             });
         },
     }
@@ -129,6 +164,7 @@ export default {
 
 .collect .content .all .image {
     width: 99%;
+    height: 180px
 }
 
 .collect .content .all .name span {
@@ -136,7 +172,7 @@ export default {
     float: left;
     color: #3c3c3c;
     font-size: 10px;
-    height: 20px;
+    height: 19px;
     margin: 0px;
     /* 1.溢出隐藏 */
     overflow: hidden;

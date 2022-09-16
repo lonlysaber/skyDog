@@ -20,53 +20,67 @@
             <!-- <el-empty description="购物车为空"></el-empty> -->
 
             <div class="title">
-                <span class="title-left">购物车(全部{{cartNum}})</span>
+                <span class="title-left">购物车(全部{{cartDetail.length}})</span>
 
                 <div class="check">
-                    <span class="title-right">已选商品 ￥&nbsp;<span class="dollar"></span> 元</span>
-                    <el-button type="primary" @click="toCheck">结算</el-button>
+                    <span class="title-right">已选商品 ￥&nbsp;<span class="dollar">{{total}}</span> 元</span>
+                    <el-button type="primary" @click="toOrderPage()">结算</el-button>
                 </div>
             </div>
 
 
             <div class="myproduct">
-
-                <el-table ref="multipleTable" :data="products" tooltip-effect="dark"
+                <el-table ref="multipleTable" :data="cartDetail" tooltip-effect="dark"
                     style="width: 100%;text-align: center;" @selection-change="handleSelectionChange">
 
                     <el-table-column type="selection" width="45">
                     </el-table-column>
-                    <el-table-column prop="dec" label="商品信息" width="500">
-                        <div class="stuff">
-                            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                                alt="图片加载失败">
 
-                            <div class="title">数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带
-                                {{products.dec}}
-                            </div>
-
-                        </div>
-
-                        <div class="scale">
-                            <!-- {{scale}} -->
+                    <el-table-column label="商品图片" width="110">
+                        <div class="stuff" slot-scope="scope">
+                            <img :src="scope.row.productDto.img.img1" alt="图片加载失败" @click="toProductDetail(scope.row)">
                         </div>
                     </el-table-column>
-                    <el-table-column prop="" label="单价" width="120">
 
+                    <el-table-column label="商品信息" width="330">
+                        <div class="dec" slot-scope="scope">
+                            <span @click="toProductDetail(scope.row)">￥{{scope.row.productDto.productName}}</span>
+                        </div>
                     </el-table-column>
 
-                    <el-table-column prop="" label="数量">
+                    <el-table-column label="规格" width="130">
+                        <div class="scale" slot-scope="scope">
+                            <span v-if="scope.row.productDto.productScale">{{scope.row.productDto.productScale}}</span>
+                            <span v-else="scope.row.productDto.productScale">无</span>
+                        </div>
+                    </el-table-column>
+
+                    <el-table-column label="单价" width="110">
                         <template slot-scope="scope">
-                            <el-input-number v-model="scope.row.num" @change="handleChange" :min="1" :max="99"
-                                size="mini">
+                            <span>￥{{scope.row.productDto.productPrice}}</span>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column label="数量">
+                        <template slot-scope="scope">
+                            <el-input-number v-model="scope.row.productCount" @change="handleChange(scope.row)" :min="1"
+                                :max="99" size="mini">
                             </el-input-number>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="address" label="金额">
+
+                    <el-table-column label="金额" width="100">
+                        <div class="money" slot-scope="scope">
+                            <span>￥{{parseInt(scope.row.productCount)*
+                            parseInt(scope.row.productDto.productPrice)}}</span>
+                        </div>
                     </el-table-column>
-                    <el-table-column prop="address" label="操作" show-overflow-tooltip>
-                        <p @click="toCollectPage()">移入收藏</p>
-                        <p @click="delleteProduct()">删除商品</p>
+
+                    <el-table-column prop="" label="操作" width="110">
+                        <div class="operation" slot-scope="scope">
+                            <p @click="addCollect(scope.row)">移入收藏</p>
+                            <p @click="deleteProduct(scope.row)">删除商品</p>
+                        </div>
                     </el-table-column>
 
                 </el-table>
@@ -78,66 +92,127 @@
     </div>
 </template>
 
-<script >
+<script>
 import topBar from '@/components/TopBar.vue';
 import searchBar from '@/components/searchBar.vue';
+
 export default {
     name: "",
     components: { topBar, searchBar },
     data() {
         return {
+            userId: '10001',
+            productId: '',
             username: "",
             input: "",
             activeIndex: '1',
             cartNum: '',
             num: 1,
+            money: '',
+            total: 0,
             multipleSelection: [],
-            products: [
-                {
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
+            cartDetail: [
             ],
-
-        };
-
+        }
     },
     created() {
         this.username = this.$route.query.userName;
+        this.getCart();
     },
     methods: {
 
-        toCheck() {
-
-        },
-
+        //跳转订单页
         toOrderPage() {
-
-        },
-        toSearch() {
-
-        },
-        getCart() {
-            axios({
-                url: "/cart/getMyCart/" + this.userId,
-                method: "get",
-            }).then((res) => {
-                console.log(res);
-                // console.log(res.data.result.result);
-                // console.log(res.data.result.result.process);
-                // this.collectDetail = res.data.result.result;
-                // this.process = res.data.result.result.process;
+            this.$router.push({
+                path: '/orderDetail',
+                query: {
+                    checkOrder: this.multipleSelection,
+                }
             });
         },
 
+        //跳转详情页
+        toProductDetail(value) {
+            console.log(value);
+            this.$router.push({
+                path: '/productdetail',
+                query: {
+                    userId: value.userId,
+                    productId: value.productDto.productId
+                }
+            });
+        },
+
+        //搜索
+        toSearch() {
+
+        },
+
+        toCheck(value) {
+            console.log(this.multipleSelection);
+            let res = value.map((item) => {
+                // console.log(this.getMoney(item));
+                return this.total += parseInt(this.getMoney(item));
+            });
+        },
+        // 计算金额
+        getMoney(value) {
+            // console.log(value);
+            this.money = value.productCount * value.productDto.productPrice;
+            // console.log(this.money);
+            return this.money;
+        },
+
+        //添加收藏
+        addCollect(value) {
+
+            this.$axios({
+                url: "/collect/add",
+                method: "post",
+                data: {
+                    userId: value.userId,
+                    productId: value.productDto.productId
+                }
+            }).then(res => {
+                console.log(res);
+            });
+        },
+
+        //删除商品
+        deleteProduct(value) {
+            let _this = this;
+            this.$confirm('此操作将永久删除该数据, 是否继续?', '警告', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                // console.log(value);
+                _this.$axios({
+                    url: "/cart/delete/" + value.cartId,
+                    method: "get",
+                }).then(res => {
+                    console.log(res);
+                })
+            });
+            this.getCart();
+
+        },
+
+        // 获取购物车
+        getCart() {
+            this.$axios({
+                url: "/cart/getMyCart/" + this.userId,
+                method: "get",
+            }).then((res) => {
+                console.log(res.data.data);
+                this.cartDetail = res.data.data;
+            });
+        },
+
+        //数量改变
         handleChange(value) {
             console.log(value);
+            this.getMoney(value);
         },
 
         toggleSelection(rows) {
@@ -146,11 +221,17 @@ export default {
                     this.$refs.multipleTable.toggleRowSelection(row);
                 });
             } else {
+
                 this.$refs.multipleTable.clearSelection();
+
             }
         },
+
         handleSelectionChange(val) {
+            this.total = 0;
             this.multipleSelection = val;
+            console.log(this.multipleSelection);
+            this.toCheck(this.multipleSelection)
         },
 
     }
@@ -256,17 +337,39 @@ export default {
     background-color: aliceblue;
 }
 
-.cart .stuff {
+.cart .myproduct .dec:hover {
+    color: #ff4442;
+    cursor: pointer;
+}
+
+.cart .myproduct .money {
+    font-family: Verdana, Arial;
+    font-weight: 100;
+    font-size: 14px;
+    color: #FF5000;
+}
+
+.cart .myproduct .operation p:hover {
+    color: #ff4442;
+    cursor: pointer;
+}
+
+.cart .myproduct .stuff {
     display: flex;
     height: 150px;
 }
 
-.cart .stuff img {
+.cart .myproduct .stuff img {
+    /* float: left; */
     margin-top: 30px;
     width: 100px;
     height: 100px;
     display: block;
     border-radius: 5px;
+}
+
+.cart .myproduct .stuff img:hover {
+    cursor: pointer;
 }
 
 .cart .stuff .title {
