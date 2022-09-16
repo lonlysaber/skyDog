@@ -1,7 +1,7 @@
 <template>
     <div class="inner">
         <TopBar/>
-        <SearchBar :sel="select" :ipt="input"/>
+        <SearchBar :sel="select" :ipt="input" @changeInput="hand" />
         <!-- 筛选 -->
         <div class="sift">
             <el-tabs type="card" v-model="activeName" @tab-click="handleClick">
@@ -24,19 +24,19 @@
                 ——
                 <el-input placeholder="￥" v-model="highPrice" clearable>
                 </el-input>
-                <el-button type="primary" round @click="getProductByPrice">确定</el-button>
+                <el-button type="primary" round @click="getProduct">确定</el-button>
             </div>
         </div>
         <!-- 商品内容 -->
         <div class="main">
             <div class="product" v-for="p in products" :key="p.productId"
             @click="gotoDetail(p)">
-                <img src="../../../assets/product.jpg">
+                <img :src="p.img.img1">
                 <div class="content">
                     <div class="row1">
                         <div class="price">
                             <span>￥</span>
-                            <span>{{p.price}}</span>
+                            <span>{{p.productPrice}}</span>
                         </div>
                         <div class="pay">
                             {{200+"+"}}付款
@@ -44,7 +44,7 @@
                     </div>
                     <div class="row2">
                         <div class="dec">
-                            {{p.productDec}}
+                            {{p.productName}}
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,9 @@
         <el-pagination
             background
             layout="prev, pager, next"
-            :total="1000">
+            @current-change="handleCurrentChange"
+            :page-size="pageSize"
+            :total="count">
         </el-pagination>
     </div>
 </template>
@@ -61,6 +63,7 @@
 <script >
 import SearchBar from '@/components/searchBar.vue';
 import TopBar from '@/components/TopBar.vue';
+import axios from 'axios';
 export default {
     name: "",
     data() {
@@ -68,100 +71,12 @@ export default {
             lowPrice:"",
             highPrice:"",
             activeName:"综合排序",
-            products:[
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                },
-                {
-                    imgUrl:"../../../assets/product.jpg",
-                    productDec:"iPhone 14全网通2022新品5G手机正品国行苹果14手机官方正品iphone",
-                    price:4999,
-                }
-            ],
+            products:[],
+            currentPage:1,
+            pageSize:30,
             select:'商品',
-            input:''
+            input:"",
+            count:0     
         };
     },
     created(){
@@ -170,27 +85,57 @@ export default {
         this.select = this.$route.query.select
         this.input = this.$route.query.input
 
+        this.getProduct()
+        this.$on("changeInput",data=>console.log(data))
+    },
+    Mounted() {
+        this.$on("changeInput",data=>console.log(data))
+        this.getProduct()
     },
     methods: {
-      handleClick(tab, event) {
-        console.log(tab, event,this.activeName);
-      },
-      getProductByPrice(){
-        console.log(this.lowPrice,this.highPrice);
-      },
-      gotoDetail(item){
-      if(this.$cookies.isKey('token')){
-        this.$router.push('/productdetail')
-      }else{
-        this.$message({
-            message: "请先登录",
-            type: "error",
+        handleCurrentChange(val) {
+            this.currentPage = val
+            this.getProduct()
+        },
+        hand(data){
+            this.input = data
+            this.getProduct()
+        },
+
+        handleClick(tab, event) {
+            console.log(tab, event,this.activeName);
+        },
+        getProduct(){
+            axios({
+                method: 'post',
+                url: '/product/search',
+                data:{
+                    lowPrice:this.lowPrice,
+                    highPrice:this.highPrice,
+                    currentPage:this.currentPage,
+                    pageSize:this.pageSize,
+                    keyword:this.input
+                },
+            })
+            .then(res =>{
+                console.log(res);
+                this.products = res.data.data.data
+                this.count = res.data.data.count
             });
-            
-        this.$router.push('/frontlogin')
-      }
-      // console.log(item)
-    },
+        },
+        gotoDetail(item){
+            if(this.$cookies.isKey('token')){
+                this.$router.push('/productdetail')
+            }else{
+                this.$message({
+                    message: "请先登录",
+                    type: "error",
+                    });
+                    
+                this.$router.push('/frontlogin')
+            }
+            // console.log(item)
+        },
     },
     components: { SearchBar, TopBar }
 }

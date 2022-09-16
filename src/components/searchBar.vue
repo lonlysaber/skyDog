@@ -45,7 +45,7 @@ export default {
     toSearch(){
       console.log(this.select,this.input,this.$route.path);
       let that = this;
-      
+      this.$emit("changeInput",this.input)
       this.$router.push({
         path:'/search',
         query:{
