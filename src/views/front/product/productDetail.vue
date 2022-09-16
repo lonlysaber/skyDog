@@ -260,7 +260,7 @@ export default {
 .productDetail .carousel {
   border: 0.5px solid rgba(0, 0, 0, 0.05);
   width: 330px;
-  /* height: 314px; */
+  height: 314px;
   overflow: hidden;
   margin: 24px;
   display: block;

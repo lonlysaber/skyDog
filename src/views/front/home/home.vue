@@ -42,7 +42,7 @@
             </div>
             <div class="hello">
               <p>你好!</p>
-              <span class="username">{{ user.username }}</span>
+              <span class="username">{{ user.userName }}</span>
             </div>
           </div>
           <div class="orderInfo">
@@ -180,7 +180,7 @@ export default {
       user: {
         avatar:
           "https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns",
-        username: "天狗用户001",
+        userName: "天狗用户001",
       },
       products: [
         {

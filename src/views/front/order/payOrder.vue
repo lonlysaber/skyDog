@@ -39,7 +39,7 @@
             class="address"
             v-for="item in adds"
             :key="item.key"
-            @click="choice(item.addressId)"
+            @click="choice(item)"
             :style="
               checked == item.addressId
                 ? 'border:2px solid cornflowerblue;'
@@ -48,12 +48,12 @@
           >
             <div class="zone">
               <span>{{ item.zone }}</span>
-              <span>({{ item.name }})</span>
+              <span>({{ item.consigneeName }})</span>
             </div>
             <div class="fulladd">
               <span>{{ item.fullAddress }}</span>
               &nbsp;
-              <span>{{ item.phone }}</span>
+              <span>{{ item.consigneePhone }}</span>
             </div>
             <div class="choiced" v-if="checked == item.addressId">
               <span @click="dialogVisible = true">修改</span>
@@ -77,13 +77,13 @@
             <el-input v-model="formLabelAlign.zone"></el-input>
           </el-form-item>
           <el-form-item label="收货人">
-            <el-input v-model="formLabelAlign.name"></el-input>
+            <el-input v-model="formLabelAlign.consigneeName"></el-input>
           </el-form-item>
           <el-form-item label="详细地址">
             <el-input v-model="formLabelAlign.fullAddress"></el-input>
           </el-form-item>
           <el-form-item label="联系方式">
-            <el-input v-model="formLabelAlign.phone"></el-input>
+            <el-input v-model="formLabelAlign.consigneePhone"></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -148,14 +148,14 @@
             </div>
             <div class="add">
               <span>寄送至：</span>
-              <span class="fulladd">{{ adds[idx].fullAddress }}</span>
+              <span class="fulladd">{{ formLabelAlign.fullAddress }}</span>
             </div>
             <div class="userInfo">
               <span>收货人：</span>
               <span class="info">
-                {{ adds[idx].name }}
+                {{ formLabelAlign.consigneeName}}
                 &nbsp;
-                {{ adds[idx].phone }}
+                {{ formLabelAlign.consigneePhone }}
               </span>
             </div>
           </div>
@@ -180,34 +180,6 @@ export default {
       scale: "",
       feature: "",
       adds: [
-        {
-          addressId: 10001,
-          name: "zjz",
-          zone: "江西南昌",
-          fullAddress: "江西省南昌市青山湖区双港东大街808号北区",
-          phone: "15170292966",
-        },
-        {
-          addressId: 10002,
-          name: "zjz",
-          zone: "江西南昌",
-          fullAddress: "江西省南昌市青山湖区双港东大街",
-          phone: "15170292966",
-        },
-        {
-          addressId: 10003,
-          name: "zjz",
-          zone: "江西南昌",
-          fullAddress: "江西省南昌市青山湖区808号北区",
-          phone: "15170292966",
-        },
-        {
-          addressId: 10004,
-          name: "zjz",
-          zone: "江西南昌",
-          fullAddress: "江西省南昌市",
-          phone: "15170292966",
-        },
       ],
       checked: 10001,
       idx: 0,
@@ -220,9 +192,9 @@ export default {
       dialogVisible: false,
       formLabelAlign:{
         zone:'',
-        name:'',
+        consigneeName:'',
         fullAddress:'',
-        phone:'',
+        consigneePhone:'',
       }
     };
   },
@@ -232,6 +204,7 @@ export default {
     this.feature = this.$route.query.feature;
     this.handleChange();
     // this.getProductById();
+    this.getAddress()
     console.log(this.productIds, this.scale, this.feature);
   },
   methods: {
@@ -248,11 +221,10 @@ export default {
       )
       
     },
-    choice(id) {
-      this.checked = id;
-      this.idx = this.checked - 10001;
-      this.formLabelAlign = this.adds[this.idx]
-      // console.log(this.adds[this.idx]);
+    choice(address) {
+      this.formLabelAlign = address
+      this.checked = address.addressId
+      console.log(this.formLabelAlign.addressId);
     },
     handleChange(value) {
       let sum = 0;
@@ -276,19 +248,30 @@ export default {
       // console.log(this.formLabelAlign)
       axios({
         method:'post',
-        url:'/address/update',
+        url:'/address/updateAddress',
         data:this.formLabelAlign
       })
     },
     modifyAdd(done) {
       this.$confirm("确认修改？")
       .then((_) => {
-        // this.confirmModify()
+        this.confirmModify()
         done();
       })
       .catch((_) => {});
       
     },
+    getAddress(){
+      axios({
+        method:'get',
+        url:'/address/getMyAddress/'+this.$cookies.get('token')
+      }).then(res=>{
+        // console.log(res.data.data)
+        this.adds = res.data.data
+        this.checked = this.adds[0].addressId
+        this.formLabelAlign = this.adds[0]
+      })
+    },  
   },
   components: { TopBar },
 };
