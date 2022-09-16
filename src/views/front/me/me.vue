@@ -18,19 +18,20 @@
                     <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
                 </el-menu>
             </el-header>
+
             <el-container style="padding-left: 100px;">
                 <!-- 侧边 -->
                 <el-aside width="250px">
 
                     <el-col :span="24">
                         <el-menu default-active="/me/order" class="el-menu-vertical-demo" @open="handleOpen"
-                            @close="handleClose" background-color="" text-color="#000000" 
-                            active-text-color="#409eff" router>
+                            @close="handleClose" background-color="" text-color="#000000" active-text-color="#409eff"
+                            router>
                             <div class="menu">
                                 <el-menu-item index="/me/order" @click="toOrderPage()">
                                     <i class="el-icon-menu"></i>
                                     <span slot="title">我的订单</span>
-                                </el-menu-item> 
+                                </el-menu-item>
                                 <el-menu-item @click="toCartPage(user)">
                                     <i class="el-icon-menu"></i>
                                     <span slot="title">我的购物车</span>
@@ -58,7 +59,7 @@
                 <el-main>
                     <router-view></router-view>
                 </el-main>
-                
+
             </el-container>
         </el-container>
 
@@ -107,8 +108,13 @@ export default {
                 }
             })
         },
-        toCollectPage() {
-
+        toCollectPage(user) {
+            this.$router.push({
+                path: "/collect",
+                query: {
+                    userName: user.username,
+                }
+            })
         },
         toEvaluate() {
 
