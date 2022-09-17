@@ -129,17 +129,7 @@ export default {
     },
     created() {
         this.getMyOrder()
-        axios({
-            method: 'get',
-            url: '/product/search',
-            params:{
-                keyword:""
-            }
-        })
-        .then(res =>{
-            console.log(res);
-            this.orderList = res.data.data
-        });
+        
     },
 }
 </script>
