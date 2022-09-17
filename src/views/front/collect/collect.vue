@@ -9,14 +9,14 @@
                         <el-tab-pane label="全部宝贝">
                             <div class="all">
                                 <el-row :gutter="20">
-                                    <el-col :span="4" v-for="item in products" :key="index">
+                                    <el-col :span="4" v-for="item in collectDetail" :key="item.key">
                                         <el-card :body-style="{ padding: '0px' }">
-                                            <img :src="item.img" class="image">
+                                            <img :src="item.product.img.img1" class="image">
                                             <div class="name">
-                                                <span>{{item.dec}}</span>
+                                                <span>{{item.product.productName}}</span>
                                             </div>
                                             <div class="bottom">
-                                                <span>￥99.5</span>
+                                                <span>￥{{item.product.productPrice}}</span>
                                             </div>
                                         </el-card>
                                     </el-col>
@@ -27,14 +27,14 @@
                         <el-tab-pane label="失效宝贝">
                             <div class="all">
                                 <el-row :gutter="20">
-                                    <el-col :span="4" v-for="item in products" :key="index">
+                                    <el-col :span="4" v-for="item in uselessDetail" :key="item.index">
                                         <el-card :body-style="{ padding: '0px' }">
-                                            <img :src="item.img" class="image">
+                                            <img :src="item.product.img.img1" class="image">
                                             <div class="name">
-                                                <span>{{item.dec}}</span>
+                                                <span>{{item.product.productName}}</span>
                                             </div>
                                             <div class="bottom">
-                                                <span>￥99.5</span>
+                                                <span>￥{{item.product.productPrice}}</span>
                                             </div>
                                         </el-card>
                                     </el-col>
@@ -47,7 +47,21 @@
                                 </el-input>
                                 <el-button type="primary" @click="toSearch">搜索</el-button>
                             </div>
-                            <div class="stuff"></div>
+                            <div class="all">
+                                <el-row :gutter="20">
+                                    <el-col :span="4" v-for="item in searchDetail" :key="item.key">
+                                        <el-card :body-style="{ padding: '0px' }">
+                                            <img :src="item.product.img.img1" class="image">
+                                            <div class="name">
+                                                <span>{{item.product.productName}}</span>
+                                            </div>
+                                            <div class="bottom">
+                                                <span>￥{{item.product.productPrice}}</span>
+                                            </div>
+                                        </el-card>
+                                    </el-col>
+                                </el-row>
+                            </div>
                         </el-tab-pane>
 
                     </el-tabs>
@@ -72,47 +86,18 @@
 export default {
     data() {
         return {
+            userId: "10001",
             activeName: '1',
-            products: [
-                {
-                    productId: '1',
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    productId: '2',
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    productId: '3',
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    productId: '4',
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    productId: '5',
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-                {
-                    productId: '6',
-                    img: 'https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp',
-                    dec: '数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带',
-                    price: '5.8'
-                },
-            ],
+            input: '',
+            collectDetail: [],
+            uselessDetail: [],
+            searchDetail: [],
         };
-
+    },
+    created() {
+        // this.userId = this.$route.query.id;
+        this.getMyCollect();
+        this.getUseless();
     },
     methods: {
         handleChange(value) {
@@ -120,7 +105,43 @@ export default {
         },
         handleClick(tab, event) {
             console.log(tab, event);
-        }
+        },
+
+        // 搜索收藏商品
+        toSearch() {
+            console.log(this.input);
+            this.$axios({
+                url: "/collect/getSearch/",
+                method: "get",
+                params: {
+                    userId: this.userId,
+                    keyword: this.input,
+                },
+            }).then((res) => {
+                this.searchDetail = res.data.data;
+            });
+
+        },
+        // 获取用户收藏数据
+        getMyCollect() {
+            this.$axios({
+                url: "/collect/getMyCollect/" + this.userId,
+                method: "get",
+            }).then((res) => {
+                // console.log(res.data.data);
+                this.collectDetail = res.data.data;
+            });
+        },
+
+        // 获取失效数据
+        getUseless() {
+            this.$axios({
+                url: "/collect/getUseless/" + this.userId,
+                method: "get",
+            }).then((res) => {
+                this.uselessDetail = res.data.data;
+            });
+        },
     }
 
 }
@@ -143,6 +164,7 @@ export default {
 
 .collect .content .all .image {
     width: 99%;
+    height: 180px
 }
 
 .collect .content .all .name span {
@@ -150,7 +172,7 @@ export default {
     float: left;
     color: #3c3c3c;
     font-size: 10px;
-    height: 20px;
+    height: 19px;
     margin: 0px;
     /* 1.溢出隐藏 */
     overflow: hidden;
@@ -164,6 +186,11 @@ export default {
     word-break: break-all;
     /* 6.盒子实现多行显示的必要条件，文字是垂直展示，即文字是多行展示的情况下使用 */
     -webkit-box-orient: vertical;
+}
+
+.collect .content .all .name span:hover {
+    color: #ff4442;
+    cursor: pointer;
 }
 
 .collect .content .all .name .bottom {
