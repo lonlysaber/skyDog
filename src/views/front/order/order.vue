@@ -1,7 +1,7 @@
 <template>
     <div class="orderVue">
         <div class="content">
-            <el-tabs v-model="activeName" @tab-click="handleClick" stretch="true">
+            <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
                 <el-tab-pane name="所有订单">
                     <span slot="label"> 所有订单 </span>
                 </el-tab-pane>
@@ -113,7 +113,7 @@ export default {
       },
       getMyOrder(){
         const order = {
-            userId:10001,
+            userId:this.$cookies.get("token"),
             orderStatus:this.activeName == "所有订单"?null:this.activeName
         }
         axios({
@@ -129,7 +129,7 @@ export default {
     },
     created() {
         this.getMyOrder()
-        
+        console.log(this.$cookies.get("token"));
     },
 }
 </script>
