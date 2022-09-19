@@ -1,10 +1,9 @@
 <template>
     <div>
-        <form name="punchout_form" method="post"
-	action="https://openapi.alipay.com/gateway.do?charset=UTF-8&method=alipay.trade.page.pay&sign=VHZaMBROmWjjVOASo3jEomk2zdvStllkqPAr2Zmf8S49VgZUgkuKCnKqlcnRD0gXENrsDCB2EoVaT7z0yIjxbkKybA64mv%2FL91MyeoSXS9b15276VGLkGdoxIKWp0lm6ApWAkNfStQfm9Z965wkNN7LIIyVvxv1nP70t6rBM%2BFBcudpTrehxLxOWRd9BEZwZSfb5vgja1Thsm9dn98C498mSM2twCS%2FbweEvhWtXfc3aplptuyiXXq%2BdZk0XnHZZaQD7xvbmvjAtR9NpsEdpOYbFlMehZm04ZiawwQO4M2v7loEqzTKBo4aX0qMojWoAEyEWTpHqlWvwG21aM8qB%2FQ%3D%3D&return_url=http%3A%2F%2Fxxx.xxx.com%2Falipay%2Freturn&notify_url=http%3A%2F%2Fxxx.xxx.com%2Falipay%2Fnotify&version=1.0&app_id=xxxxxxxxxx&sign_type=RSA2&timestamp=2020-10-26+19%3A08%3A19&alipay_sdk=alipay-sdk-java-dynamicVersionNo&format=json">
-	<input type="hidden" name="biz_content" value="{&quot;out_trade_no&quot;:&quot;20201023175135&quot;,&quot;total_amount&quot;:&quot;0.05&quot;,&quot;subject&quot;:&quot;支付&quot;,&quot;timeout_express&quot;:&quot;10m&quot;,&quot;product_code&quot;:&quot;FAST_INSTANT_TRADE_PAY&quot;,&quot;body&quot;:&quot;支付&quot;}">
-	<input type="submit" value="立即支付" style="display:none" >
-</form>
+        <form name="punchout_form" method="post" action="https://openapi.alipaydev.com/gateway.do?charset=utf-8&method=alipay.trade.page.pay&sign=fzzdYSdpD0sQndtjtRPVqrvV4DtK%2FkmItfakKjFOXUTDxW%2B8N6TS64A3Wj2vRGT4I8c1fHgYAR0MhGGWwg2ILFjml5A70GrLgCQZ6hW6RNLzMDatrDl2Un0fecGQE7Wsdu5LWeCrsvNnt6TdGhf5Ydj%2BCPFXTMzNFoTa%2FTqKcCjzF30Pw7bfWRyQa5SO09ShWEeQQMaQeqgg7pIGCaV%2Bza2kFSL1vUGfcbfd6jX6KaGLy%2FIKHEbqwZhvHO6LEdb%2Fe0MADLUgIkQ990Sh7QObFP9MFzm8mRgKWRB6e2WvQbZSWLyklAVwMe%2FCS15bn%2FRH5boVOA02616CPJeRXv%2BnQg%3D%3D&notify_url=http%3A%2F%2Flocallhost%3A8888&version=1.0&app_id=2021000121668200&sign_type=RSA2&timestamp=2022-09-19+12%3A04%3A22&alipay_sdk=alipay-sdk-java-dynamicVersionNo&format=json">
+        <input type="hidden" name="biz_content" value="{&quot;body&quot;:&quot;test&quot;,&quot;out_trade_no&quot;:&quot;10003&quot;,&quot;product_code&quot;:&quot;FAST_INSTANT_TRADE_PAY&quot;,&quot;subject&quot;:&quot;product1&quot;,&quot;timeout_express&quot;:&quot;10m&quot;,&quot;total_amount&quot;:&quot;100&quot;}">
+        <input type="submit" value="立即支付" >
+        </form>
 
     </div>
 </template>

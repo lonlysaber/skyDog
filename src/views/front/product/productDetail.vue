@@ -8,116 +8,156 @@
         <searchbar></searchbar>
       </div>
     </div>
-    <div class="productInfo">
-      <!-- 左侧图片轮播图 -->
-      <div class="carousel">
-        <el-carousel trigger="click" :autoplay="false">
-          <el-carousel-item
-            v-for="item in product.img"
-            :key="item.key"
-            align="middle"
+    <div class="middle">
+      <div class="productInfo">
+        <!-- 左侧图片轮播图 -->
+        <div class="carousel">
+          <el-carousel trigger="click" :autoplay="false">
+            <el-carousel-item
+              v-for="item in product.img"
+              :key="item.key"
+              align="middle"
+            >
+              <img
+                :src="item"
+                onerror="javascript:this.src='src/assets/logo.png';this.onerror=null"
+                alt=""
+              />
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+        <!-- 右侧商品信息 -->
+        <div class="detail">
+          <div class="head">
+            <h3>{{ product.productName }}</h3>
+          </div>
+          <hr />
+          <div class="price">
+            <div class="name">
+              <span>价格</span>
+            </div>
+            <div class="pri">
+              <h2>￥{{ product.productPrice }}</h2>
+            </div>
+          </div>
+          <hr />
+          <div class="scales">
+            <div class="name">
+              <span>规格</span>
+            </div>
+            <div class="scale">
+              <template v-if="product.productScale">
+                <div
+                  class="span"
+                  v-for="item in product.scales"
+                  :key="item.key"
+                >
+                  <span @click="clickScale(item, $event)">{{ item }}</span>
+
+                  <span v-if="checkEdScale == item" style="color: red">●</span>
+                </div>
+              </template>
+              <template v-else>
+                <span>无</span>
+              </template>
+            </div>
+          </div>
+          <hr />
+          <div class="features">
+            <div class="name">
+              <span>特征</span>
+            </div>
+            <div class="feature">
+              <template v-if="product.productFeature">
+                <div
+                  class="span"
+                  v-for="item in product.features"
+                  :key="item.key"
+                >
+                  <span @click="clickFeature(item, $event)">{{ item }}</span>
+                  <span v-if="checkEdFeature == item" style="color: red"
+                    >●</span
+                  >
+                </div>
+              </template>
+              <template v-else>
+                <span>无</span>
+              </template>
+            </div>
+          </div>
+          <hr />
+          <div class="stepnum">
+            <div class="name">
+              <span>数量</span>
+            </div>
+            <div class="num">
+              <el-input-number
+                v-model="num"
+                @change="handleChange"
+                :min="1"
+                :max="99"
+              >
+              </el-input-number>
+            </div>
+          </div>
+          <hr />
+          <div class="subBtn">
+            <div class="buy">
+              <button @click="buy">立即购买</button>
+            </div>
+            <div class="addCart">
+              <button @click="addCart">加入购物车</button>
+            </div>
+            <div class="gotoCart">
+              <button @click="gotoCart">查看购物车</button>
+            </div>
+          </div>
+          <el-dialog
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose"
+            center
           >
-            <img
-              :src="item"
-              onerror="javascript:this.src='src/assets/logo.png';this.onerror=null"
+            <span>添加购物车成功</span>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">关 闭</el-button>
+              <el-button type="primary" @click="gotoCart">
+                查看购物车
+              </el-button>
+            </span>
+          </el-dialog>
+        </div>
+      </div>
+      <hr />
+      <div class="detailDescript">
+        <h4>商品介绍</h4>
+        <div class="descript">
+          <template v-if="true">
+            <div
+              class="desitem"
+              v-for="(value, key) in product.productDetail"
+              :key="value.key"
+            >
+              <span>{{ key }}：{{ value }}</span>
+            </div>
+          </template>
+          <template v-else>
+            <span>暂无商品介绍</span>
+          </template>
+        </div>
+      </div>
+      <div class="bigImg">
+        <h4>商品大图</h4>
+        <div class="imgs">
+          <div class="imgItem" 
+          v-for="item in product.img" 
+          :key="item.key">
+            <img :src="item"
+              onerror="this.style.display='none';this.onerror=null"
               alt=""
             />
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-      <!-- 右侧商品信息 -->
-      <div class="detail">
-        <div class="head">
-          <h3>{{ product.productName }}</h3>
-        </div>
-        <hr />
-        <div class="price">
-          <div class="name">
-            <span>价格</span>
-          </div>
-          <div class="pri">
-            <h2>￥{{ product.productPrice }}</h2>
           </div>
         </div>
-        <hr />
-        <div class="scales">
-          <div class="name">
-            <span>规格</span>
-          </div>
-          <div class="scale">
-            <template v-if="product.productScale">
-            <div class="span"  
-            
-            v-for="item in product.scales" :key="item.key">
-              <span  @click="clickScale(item, $event)">{{ item }}</span>
-              
-              <span v-if="checkEdScale == item" style="color: red">●</span>
-            </div>
-          </template>
-          <template v-else>
-            <span>无</span>
-          </template>
-          </div>
-        </div>
-        <hr />
-        <div class="features">
-          <div class="name">
-            <span>特征</span>
-          </div>
-          <div class="feature">
-            <template v-if="product.productFeature">
-            <div class="span" v-for="item in product.features" :key="item.key">
-              <span @click="clickFeature(item, $event)">{{ item }}</span>
-              <span v-if="checkEdFeature == item" style="color: red">●</span>
-            </div>
-          </template>
-          <template v-else>
-            <span>无</span>
-          </template>
-          </div>
-
-        </div>
-        <hr />
-        <div class="stepnum">
-          <div class="name">
-            <span>数量</span>
-          </div>
-          <div class="num">
-            <el-input-number
-              v-model="num"
-              @change="handleChange"
-              :min="1"
-              :max="99"
-            >
-            </el-input-number>
-          </div>
-        </div>
-        <hr />
-        <div class="subBtn">
-          <div class="buy">
-            <button @click="buy">立即购买</button>
-          </div>
-          <div class="addCart">
-            <button @click="addCart">加入购物车</button>
-          </div>
-          <div class="gotoCart">
-            <button @click="gotoCart">查看购物车</button>
-          </div>
-        </div>
-        <el-dialog
-          :visible.sync="dialogVisible"
-          width="30%"
-          :before-close="handleClose"
-          center
-        >
-          <span>添加购物车成功</span>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">关 闭</el-button>
-            <el-button type="primary" @click="gotoCart">
-              查看购物车
-            </el-button>
-          </span>
-        </el-dialog>
       </div>
     </div>
   </div>
@@ -153,9 +193,10 @@ export default {
       scales: ["1m", "2m", "3m", "4m", "5m"],
       features: ["红色", "黑色", "蓝色", "绿色", "灰色"],
       num: 1,
+      descript: {},
       checkEdScale: "",
       checkEdFeature: "",
-      dialogVisible:false,
+      dialogVisible: false,
     };
   },
   created() {
@@ -173,8 +214,9 @@ export default {
         method: "get",
         url: "/product/queryById/" + this.productId,
       }).then((res) => {
-        console.log(res)
+        console.log(res);
         this.product = res.data.data;
+        this.product.productDetail = JSON.parse(this.product.productDetail);
         delete this.product.img.imgId;
         delete this.product.img.productId;
         delete this.product.img.productName;
@@ -237,21 +279,20 @@ export default {
       }).then((res) => {
         console.log(res);
         this.dialogVisible = true;
-
       });
     },
     handleClose(done) {
-        done()
+      done();
     },
-    gotoCart(){
+    gotoCart() {
       this.dialogVisible = false;
       this.$router.push({
-        path:'/cart',
-        query:{
-          userId:this.$cookies.get('token')
-        }
-      })
-    }
+        path: "/cart",
+        query: {
+          userId: this.$cookies.get("token"),
+        },
+      });
+    },
   },
 };
 </script>
@@ -263,13 +304,20 @@ export default {
 }
 .productDetail {
   background-color: rgb(234, 232, 235);
-  height: 100vh;
+  height: 100%;
+  padding-bottom: 10px;
 }
-.productDetail .productInfo {
-  display: flex;
+.productDetail .middle {
   margin: 0 100px;
   background-color: #fff;
   border-radius: 18px;
+  padding-bottom: 10px;
+}
+.productDetail .middle > hr {
+  margin: 0 24px 10px 24px;
+}
+.productDetail .productInfo {
+  display: flex;
 }
 .productDetail .carousel {
   border: 0.5px solid rgba(0, 0, 0, 0.05);
@@ -281,7 +329,7 @@ export default {
   visibility: visible;
 }
 .productDetail .carousel img {
-  /* width: 314px; */
+  width: 100%;
   width: 100%;
   height: 100%;
   display: block;
@@ -291,12 +339,13 @@ export default {
   position: relative;
   height: 314px;
 }
-.productDetail ul.el-carousel__indicators.el-carousel__indicators--horizontal {
+.productDetail .carousel ul {
   width: 100%;
 }
 
 .productDetail .detail {
   margin: 24px;
+  flex-grow: 1;
 }
 .productDetail .detail hr {
   margin: 15px 0;
@@ -408,5 +457,38 @@ export default {
 }
 .productDetail .detail .subBtn .addCart button:active {
   border: 1px black;
+}
+.productDetail .middle .detailDescript {
+  text-align: left;
+  margin: 0 24px 24px 24px;
+}
+.productDetail .middle .detailDescript .descript {
+  display: flex;
+  flex-wrap: wrap;
+}
+.productDetail .middle .detailDescript .descript .desitem {
+  flex: 0 0 25%;
+  font-size: 10px;
+  height: 19px;
+  margin: 0px;
+  /* 1.溢出隐藏 */
+  overflow: hidden;
+  /* 2.用省略号来代替超出文本 */
+  text-overflow: ellipsis;
+  /* 3.设置盒子属性为-webkit-box  必须的 */
+  display: -webkit-box;
+  /* 4.-webkit-line-clamp 设置为2，表示超出2行的部分显示省略号，如果设置为3，那么就是超出3行部分显示省略号 */
+  -webkit-line-clamp: 1;
+  /* 5.字面意思：单词破坏：破坏英文单词的整体性，在英文单词还没有在一行完全展示时就换行  即一个单词可能会被分成两行展示 */
+  word-break: break-all;
+  /* 6.盒子实现多行显示的必要条件，文字是垂直展示，即文字是多行展示的情况下使用 */
+  -webkit-box-orient: vertical;
+}
+.productDetail .middle .bigImg{
+  text-align: left;
+  margin: 24px;
+}
+.productDetail .middle .bigImg img{
+  width:100%;
 }
 </style>
