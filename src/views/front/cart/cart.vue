@@ -51,7 +51,7 @@
                     <el-table-column label="规格" width="130">
                         <div class="scale" slot-scope="scope">
                             <span v-if="scope.row.productDto.productScale">{{scope.row.productDto.productScale}}</span>
-                            <span v-else="scope.row.productDto.productScale">无</span>
+                            <span v-else>无</span>
                         </div>
                     </el-table-column>
 
@@ -116,7 +116,7 @@ export default {
         }
     },
     created() {
-        this.username = this.$route.query.userName;
+        this.userId = this.$cookies.get('token');
         this.getCart();
     },
     methods: {
@@ -124,7 +124,7 @@ export default {
         //跳转订单页
         toOrderPage() {
             this.$router.push({
-                path: '/orderDetail',
+                path: '/payorder',
                 query: {
                     checkOrder: this.multipleSelection,
                 }

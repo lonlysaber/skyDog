@@ -216,6 +216,7 @@ export default {
       ],
       num: 1,
       loading: true,
+      hotWord:'食品',
     };
   },
   created() {
@@ -226,15 +227,15 @@ export default {
     getProducts() {
       axios({
         method: "post",
-        url: "/product/search/",
+        url: "/product/queryByCategory/",
         data: {
           currentPage: 1,
-          keyword: "食品",
+          keyword: this.hotWord,
           pageSize: 30,
         },
       }).then((res) => {
         this.products = res.data.data.data;
-        // console.log(res);
+        console.log(res);
         this.loading = false;
       });
     },
@@ -392,8 +393,9 @@ export default {
 }
 .home .bottom .list .product >div:first-child{
   display: flex;
-  /* flex: 1; */
-  width: 31%;
+  flex:0 0 31%;
+  /* width: 31%; */
+
   text-align: left;
   background-color: #f7f9fa;
   padding: 10px;

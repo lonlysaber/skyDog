@@ -117,8 +117,9 @@
               </div>
             </div>
             <div class="attribute">
-              <div class="scale">{{ product.scale }}</div>
-              <div class="feature">{{ product.feature }}</div>
+              <div class="scale" v-if="product.scale">{{ product.scale }}</div>
+              <div class="feature" v-if="product.feature">{{ product.feature }}</div>
+              <div  v-else><span>无</span></div>
             </div>
             <div class="price">
               <div class="span">
@@ -134,7 +135,7 @@
               ></el-input-number>
             </div>
             <div class="sum">
-              <span>{{ product.productPrice * product.num }}</span>
+              <span>{{ (product.productPrice * product.num).toFixed(1) }}</span>
             </div>
           </div>
         </div>
@@ -144,7 +145,7 @@
             <div class="sum">
               <span>实付款：</span>
               <span class="chara">￥</span>
-              <span class="digtal">{{ sum }}</span>
+              <span class="digtal">{{ (sum).toFixed(1) }}</span>
             </div>
             <div class="add">
               <span>寄送至：</span>
@@ -191,6 +192,7 @@ export default {
       sum: 100,
       dialogVisible: false,
       formLabelAlign:{
+        addressId:'',
         zone:'',
         consigneeName:'',
         fullAddress:'',
@@ -199,13 +201,17 @@ export default {
     };
   },
   created() {
-    this.products = this.$route.query.productIds || ['10003','10004'];
+    this.products = this.$route.query.productIds || 
+                    this.$route.query.checkOrder ||
+                    ['10003','10004'];
+    console.log(this.products)
     this.scale = this.$route.query.scale;
     this.feature = this.$route.query.feature;
+    this.whereFrom()
     this.handleChange();
     // this.getProductById();
     this.getAddress()
-    console.log(this.productIds, this.scale, this.feature);
+    // console.log(this.productIds, this.scale, this.feature);
   },
   methods: {
     getProductById(){
@@ -226,6 +232,18 @@ export default {
       this.checked = address.addressId
       console.log(this.formLabelAlign.addressId);
     },
+    whereFrom(){
+      if(this.products[0].productDto){
+        let tmpProducts = []
+        this.products.forEach(item=>{
+          item.productDto.num = item.productCount
+          tmpProducts.push(item.productDto)
+
+        })
+        this.products = tmpProducts
+        console.log(this.products)
+      }
+    },
     handleChange(value) {
       let sum = 0;
       this.products.forEach((product) => {
@@ -240,7 +258,27 @@ export default {
     cancel() {
       this.$router.go(-1);
     },
-    submit() {},
+    submit() {
+      this.products.forEach(value=>{
+        axios({
+        method:'post',
+        url:'/order/add',
+        data:{
+          userId:this.$cookies.get('token'),
+          cartId:value.cartId || null,
+          addressId:this.formLabelAlign.addressId,
+          productId:value.productId,
+          scaleId:value.scaleId||null,
+          productCount:value.num,
+          orderStatus:'待支付',
+          createTime:(new Date()).getTime(),
+        }
+      }).then(res=>{
+        console.log(res)
+      })
+      })
+      
+    },
     handleClose(done) {
       done()
     },

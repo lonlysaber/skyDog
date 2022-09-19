@@ -192,6 +192,7 @@ export default {
 }
 .main .product img{
     width: 100%;
+    height: 180px;
     
 }
 .main .product .content{
