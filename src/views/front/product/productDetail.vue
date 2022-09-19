@@ -45,10 +45,18 @@
             <span>规格</span>
           </div>
           <div class="scale">
-            <div class="span" v-for="item in product.scales" :key="item.key">
-              <span @click="clickScale(item, $event)">{{ item }}</span>
+            <template v-if="product.productScale">
+            <div class="span"  
+            
+            v-for="item in product.scales" :key="item.key">
+              <span  @click="clickScale(item, $event)">{{ item }}</span>
+              
               <span v-if="checkEdScale == item" style="color: red">●</span>
             </div>
+          </template>
+          <template v-else>
+            <span>无</span>
+          </template>
           </div>
         </div>
         <hr />
@@ -57,11 +65,17 @@
             <span>特征</span>
           </div>
           <div class="feature">
+            <template v-if="product.productFeature">
             <div class="span" v-for="item in product.features" :key="item.key">
               <span @click="clickFeature(item, $event)">{{ item }}</span>
               <span v-if="checkEdFeature == item" style="color: red">●</span>
             </div>
+          </template>
+          <template v-else>
+            <span>无</span>
+          </template>
           </div>
+
         </div>
         <hr />
         <div class="stepnum">
@@ -159,7 +173,7 @@ export default {
         method: "get",
         url: "/product/queryById/" + this.productId,
       }).then((res) => {
-        // console.log(res)
+        console.log(res)
         this.product = res.data.data;
         delete this.product.img.imgId;
         delete this.product.img.productId;
@@ -324,7 +338,7 @@ export default {
   display: flex;
   flex: 70%;
   justify-content: space-between;
-  max-width: 400px;
+  /* max-width: 400px; */
   flex-wrap: wrap;
   align-content: flex-start;
 }
@@ -346,7 +360,7 @@ export default {
 .productDetail .detail .features .feature {
   display: flex;
   flex: 70%;
-  max-width: 400px;
+  /* max-width: 400px; */
   justify-content: space-between;
   flex-wrap: wrap;
   align-content: flex-start;

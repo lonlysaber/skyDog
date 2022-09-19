@@ -199,13 +199,17 @@ export default {
     };
   },
   created() {
-    this.products = this.$route.query.productIds || ['10003','10004'];
+    this.products = this.$route.query.productIds || 
+                    this.$route.query.checkOrder ||
+                    ['10003','10004'];
+    console.log(this.products)
     this.scale = this.$route.query.scale;
     this.feature = this.$route.query.feature;
+    this.whereFrom()
     this.handleChange();
     // this.getProductById();
     this.getAddress()
-    console.log(this.productIds, this.scale, this.feature);
+    // console.log(this.productIds, this.scale, this.feature);
   },
   methods: {
     getProductById(){
@@ -225,6 +229,18 @@ export default {
       this.formLabelAlign = address
       this.checked = address.addressId
       console.log(this.formLabelAlign.addressId);
+    },
+    whereFrom(){
+      if(this.products[0].productDto){
+        let tmpProducts = []
+        this.products.forEach(item=>{
+          item.productDto.num = item.productCount
+          tmpProducts.push(item.productDto)
+
+          console.log(item)
+        })
+        this.products = tmpProducts
+      }
     },
     handleChange(value) {
       let sum = 0;
