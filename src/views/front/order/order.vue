@@ -5,8 +5,8 @@
                 <el-tab-pane name="所有订单">
                     <span slot="label"> 所有订单 </span>
                 </el-tab-pane>
-                <el-tab-pane name="待付款">
-                    <span slot="label"> 待付款 </span>
+                <el-tab-pane name="待支付">
+                    <span slot="label"> 待支付 </span>
                 </el-tab-pane>
                 <el-tab-pane name="待发货">
                     <span slot="label"> 待发货 </span>
@@ -71,7 +71,7 @@
                         ￥{{o.productDto.productScalePrice}}
                     </div>
                     <div>
-                        1
+                        {{o.productCount}}
                     </div>
                     <div>
                         <a href="#">申请售后<br/></a>
