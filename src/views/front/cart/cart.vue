@@ -213,6 +213,8 @@ export default {
         handleChange(value) {
             console.log(value);
             this.getMoney(value);
+            this.total = 0
+            this.toCheck(this.multipleSelection)
         },
 
         toggleSelection(rows) {
