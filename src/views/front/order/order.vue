@@ -123,14 +123,14 @@ export default {
             data:order
         })
         .then(res =>{
-            console.log(res);
+            // console.log(res);
             this.orderList = res.data.data
         });
       }
     },
     created() {
+        this.activeName = this.$route.query.activeName || '所有订单'
         this.getMyOrder()
-        console.log(this.$cookies.get("token"));
     },
 }
 </script>

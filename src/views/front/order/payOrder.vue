@@ -10,22 +10,39 @@
         </div>
         <div class="step">
           <div class="one">
-            <div class="item">1</div>
+            <div class="item"
+            :style="order.payStatu>=1?
+            'background-color: cornflowerblue;color: white;border: 1px cornflowerblue solid;':
+            'background-color: white;color: black;border: 1px black solid;'
+            "
+            >1</div>
             <div class="stepItem">拍下商品</div>
           </div>
           <div class="line"></div>
           <div class="two">
-            <div class="item">2</div>
+            <div class="item"
+            :style="order.payStatu>=2?
+            'background-color: cornflowerblue;color: white;border: 1px cornflowerblue solid;':
+            'background-color: white;color: black;border: 1px black solid;'
+            ">2</div>
             <div class="stepItem">付款到支付宝</div>
           </div>
           <div class="line"></div>
           <div class="thr">
-            <div class="item">3</div>
+            <div class="item"
+            :style="order.payStatu>=3?
+            'background-color: cornflowerblue;color: white;border: 1px cornflowerblue solid;':
+            'background-color: white;color: black;border: 1px black solid;'
+            ">3</div>
             <div class="stepItem">确认收货</div>
           </div>
           <div class="line"></div>
           <div class="four">
-            <div class="item">4</div>
+            <div class="item"
+            :style="order.payStatu>=4?
+            'background-color: cornflowerblue;color: white;border: 1px cornflowerblue solid;':
+            'background-color: white;color: black;border: 1px black solid;'
+            ">4</div>
             <div class="stepItem">评价</div>
           </div>
         </div>
@@ -200,7 +217,9 @@ export default {
       order: {
         curId: "",
         priceSum: 0,
+        payStatu:1,
       },
+
     };
   },
   created() {
@@ -287,6 +306,7 @@ export default {
     },
     gotoPay(resultSum) {
       if (resultSum == this.products.length) {
+        console.log(resultSum, "执行");
         axios({
           method: "post",
           url: "/alipay/orderPay",
@@ -299,8 +319,7 @@ export default {
           console.log(res, res.data);
           var win = window.open();
           win.document.write(res.data);
-          // win.document.getElementsByTagName('body')
-          // document.write(res.data)
+          this.order.payStatu = 2
         });
       } else {
         console.log(resultSum, "等待");

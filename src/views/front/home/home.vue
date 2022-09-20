@@ -35,31 +35,32 @@
           </el-carousel>
         </div>
         <!-- 身份信息 -->
-        <div class="userInfo" @click="gotoMe(user)">
-          <div class="faceInfo">
+        <div class="userInfo">
+          <div class="faceInfo" @click="gotoMe(user)">
             <div class="avatar">
-              <img :src="user.avatar" alt="" />
+              <img src="@/assets/user.png" alt="" />
             </div>
             <div class="hello">
-              <p>你好!</p>
+              <span>你好!</span>
+              <br />
               <span class="username">{{ user.userName }}</span>
             </div>
           </div>
           <div class="orderInfo">
-            <div class="item">
-              <div class="num">20</div>
+            <div class="item"  @click="gotoCart()">
+              <div class="num">{{ countNum.cartNum }}</div>
               <div class="dec">购物车</div>
             </div>
-            <div class="item">
-              <div class="num">3</div>
+            <div class="item"  @click="gotoOrder('待收货')">
+              <div class="num">{{ countNum.orderTakeNum }}</div>
               <div class="dec">待收货</div>
             </div>
-            <div class="item">
-              <div class="num">2</div>
-              <div class="dec">待付款</div>
+            <div class="item" @click="gotoOrder('待支付')">
+              <div class="num">{{ countNum.orderPayNum }}</div>
+              <div class="dec">待支付</div>
             </div>
-            <div class="item">
-              <div class="num">5</div>
+            <div class="item" @click="gotoOrder('待评价')">
+              <div class="num">{{ countNum.orderDesNum }}</div>
               <div class="dec">待评价</div>
             </div>
           </div>
@@ -95,7 +96,56 @@
       <div class="bottom">
         <h1>猜你喜欢</h1>
         <div class="list">
-
+          <div
+            class="product"
+            v-for="item in products"
+            :key="item.key"
+            @click="gotoDetail(item)"
+          >
+            <el-skeleton style="width: 350px" :loading="loading" animated>
+              <template slot="template">
+                <el-skeleton-item
+                  variant="image"
+                  style="width: 100px;height: width: 100px;"
+                />
+                <div style="padding: 14px">
+                  <el-skeleton-item variant="h3" style="width: 40%" />
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-items: space-between;
+                      margin-top: 16px;
+                      height: 16px;
+                    "
+                  >
+                    <el-skeleton-item
+                      variant="text"
+                      style="margin-right: 16px"
+                    />
+                    <el-skeleton-item variant="text" style="width: 30%" />
+                  </div>
+                </div>
+              </template>
+              <template>
+                <div class="image">
+                  <img :src="item.img.img1" alt="" />
+                </div>
+                <div class="info">
+                  <div class="dec">{{ item.productName }}</div>
+                  <div class="price">
+                    <span>￥{{ item.productPrice }}</span>
+                  </div>
+                </div>
+              </template>
+            </el-skeleton>
+          </div>
+        </div>
+      </div>
+      <!-- 商品展示 -->
+      <div class="bottom">
+        <h1>热门推荐</h1>
+        <div class="list">
           <div
             class="product"
             v-for="item in products"
@@ -181,6 +231,13 @@ export default {
         avatar:
           "https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns",
         userName: "天狗用户001",
+
+      },
+      countNum:{
+        cartNum: 0,
+        orderTakeNum: 0,
+        orderPayNum: 0,
+        orderDesNum: 0,
       },
       products: [
         {
@@ -216,14 +273,65 @@ export default {
       ],
       num: 1,
       loading: true,
-      hotWord:'食品',
+      hotWord: "食品",
     };
   },
   created() {
     // console.log(this.$cookies.isKey('token'))
     this.getProducts();
+    this.getUser();
   },
   methods: {
+    // 获取用户信息
+    getUser() {
+      axios({
+        method: "get",
+        url: "/user/queryId/" + this.$cookies.get("token"),
+      }).then((res) => {
+        this.user = res.data.data.data;
+
+        this.getCartNum();
+        this.getOrderSum();
+      });
+    },
+    // 统计购物车数量
+    getCartNum() {
+      axios({
+        method: "get",
+        url: "/cart/getMyCart/" + this.$cookies.get("token"),
+      }).then((res) => {
+        this.countNum.cartNum = res.data.data.length;
+      });
+    },
+    // 统计订单数量
+    getOrderSum() {
+      axios({
+        method: "post",
+        url: "/order/getMyOrder/",
+        data: {
+          userId: this.$cookies.get("token"),
+        },
+      }).then((res) => {
+        // this.user.cartNum = res.data.data.data.length
+        // console.log(res)
+
+        this.orderCount(res.data.data);
+      });
+    },
+    orderCount(arr) {
+      arr.forEach((item) => {
+        if (item.orderStatus == "待支付") {
+          this.countNum.orderPayNum++;
+        } else if (item.orderStatus == "待收货") {
+          this.countNum.orderTakeNum++;
+        } else if (item.orderStatus == "待评价") {
+          this.countNum.orderDesNum++;
+        } else {
+          console.log(item.orderStatus);
+        }
+      });
+    },
+    // 主页商品信息
     getProducts() {
       axios({
         method: "post",
@@ -235,12 +343,12 @@ export default {
         },
       }).then((res) => {
         this.products = res.data.data.data;
-        console.log(res);
+        // console.log(res);
         this.loading = false;
       });
     },
     serchByName(it) {
-      console.log(it);
+      // console.log(it);
       this.$router.push({
         path: "search",
         query: {
@@ -248,6 +356,7 @@ export default {
         },
       });
     },
+    // 跳转详情页
     gotoDetail(p) {
       if (this.$cookies.isKey("token")) {
         this.$router.push({
@@ -266,6 +375,7 @@ export default {
       }
       // console.log(item)
     },
+    // 跳转个人页面
     gotoMe(user) {
       this.$router.push({
         path: "/me",
@@ -275,9 +385,19 @@ export default {
         },
       });
     },
+    // 跳转购物车页面
     gotoCart(user) {
-      console.log(user.name);
+      this.$router.push("/cart");
     },
+    // 跳转订单页面
+    gotoOrder(name){
+      this.$router.push({
+        path: "/me/order",
+        query: {
+          activeName: name,
+        },
+      });
+    }
   },
 };
 </script>
@@ -290,6 +410,7 @@ export default {
 .home {
   background-color: rgb(234, 232, 235);
 }
+/* 页面主体 */
 .home .container {
   font-size: 14px;
   background-color: #fff;
@@ -297,6 +418,7 @@ export default {
   /* height: 100vh; */
   border-radius: 18px;
 }
+/* 中间内容 */
 .home .middle {
   display: flex;
 }
@@ -360,7 +482,15 @@ export default {
 .home .middle .faceInfo {
   display: flex;
 }
+.home .middle .faceInfo:hover {
+  cursor: pointer;
+}
+.home .middle .faceInfo .avatar {
+  margin-right: 20px;
+  width: 50px;
+}
 .home .middle .faceInfo img {
+  width: 100%;
   border-radius: 50px;
   margin-right: 20px;
 }
@@ -374,6 +504,9 @@ export default {
   display: flex;
   justify-content: space-around;
 }
+.home .middle .userInfo .orderInfo .item:hover {
+  cursor: pointer;
+}
 
 .home .middle .userInfo .likeInfo {
   display: flex;
@@ -381,6 +514,9 @@ export default {
 }
 .home .middle .userInfo .likeInfo .item {
   width: 70px;
+}
+.home .middle .userInfo .likeInfo .item:hover {
+  cursor: pointer;
 }
 .home .middle .userInfo .likeInfo .item img {
   width: 25px;
@@ -391,9 +527,9 @@ export default {
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
-.home .bottom .list .product >div:first-child{
+.home .bottom .list .product > div:first-child {
   display: flex;
-  flex:0 0 31%;
+  flex: 0 0 31%;
   /* width: 31%; */
 
   text-align: left;
@@ -413,22 +549,22 @@ export default {
   flex-direction: column;
   /* justify-content: space-around; */
 }
-.home .bottom .product .info .dec{
+.home .bottom .product .info .dec {
   font-size: 14px;
-    height: 55px;
-    margin-top: 6px;
-    /* 1.溢出隐藏 */
-    overflow: hidden;
-    /* 2.用省略号来代替超出文本 */
-    text-overflow: ellipsis;
-    /* 3.设置盒子属性为-webkit-box  必须的 */
-    display: -webkit-box;
-    /* 4.-webkit-line-clamp 设置为2，表示超出2行的部分显示省略号，如果设置为3，那么就是超出3行部分显示省略号 */
-    -webkit-line-clamp: 3;
-    /* 5.字面意思：单词破坏：破坏英文单词的整体性，在英文单词还没有在一行完全展示时就换行  即一个单词可能会被分成两行展示 */
-    word-break: break-all;
-    /* 6.盒子实现多行显示的必要条件，文字是垂直展示，即文字是多行展示的情况下使用 */
-    -webkit-box-orient: vertical;
+  height: 55px;
+  margin-top: 6px;
+  /* 1.溢出隐藏 */
+  overflow: hidden;
+  /* 2.用省略号来代替超出文本 */
+  text-overflow: ellipsis;
+  /* 3.设置盒子属性为-webkit-box  必须的 */
+  display: -webkit-box;
+  /* 4.-webkit-line-clamp 设置为2，表示超出2行的部分显示省略号，如果设置为3，那么就是超出3行部分显示省略号 */
+  -webkit-line-clamp: 3;
+  /* 5.字面意思：单词破坏：破坏英文单词的整体性，在英文单词还没有在一行完全展示时就换行  即一个单词可能会被分成两行展示 */
+  word-break: break-all;
+  /* 6.盒子实现多行显示的必要条件，文字是垂直展示，即文字是多行展示的情况下使用 */
+  -webkit-box-orient: vertical;
 }
 .home .bottom .product .info .price span {
   font-size: 18px;
