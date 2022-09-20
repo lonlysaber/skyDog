@@ -56,7 +56,7 @@
                 </div>
                 <div class="main">
                     <div style="width:40%">
-                        <img src="../../../assets/product.jpg" alt="">
+                        <img :src="o.productDto.img.img1" alt="">
                         <div style="float: right;width: 60%;overflow: hidden;
                         margin-right: 20px;
                             text-overflow: ellipsis;
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div>
-                        ￥{{o.productDto.productScalePrice}}
+                        ￥{{o.productDto.productPrice}}
                     </div>
                     <div>
                         {{o.productCount}}
@@ -81,9 +81,10 @@
                         实付款
                     </div>
                     <div>
-                        <a href="#">交易成功<br/></a>
+                        {{o.orderStatus}}
+                        <!-- <a href="#">交易成功<br/></a>
                         <a href="#">订单详情<br/></a>
-                        <a href="#">查看物流</a>
+                        <a href="#">查看物流</a> -->
                     </div>
                     <div>
                         <el-button type="primary" size="mini" v-if="o.orderStatus !='已收货'">确认收货</el-button>

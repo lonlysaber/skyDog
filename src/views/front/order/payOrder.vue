@@ -118,12 +118,14 @@
             </div>
             <div class="attribute">
               <div class="scale" v-if="product.scale">{{ product.scale }}</div>
-              <div class="feature" v-if="product.feature">{{ product.feature }}</div>
-              <div  v-else><span>无</span></div>
+              <div class="feature" v-if="product.feature">
+                {{ product.feature }}
+              </div>
+              <div v-else><span>无</span></div>
             </div>
             <div class="price">
               <div class="span">
-                <span>{{ product.productPrice}}</span>
+                <span>{{ product.productPrice }}</span>
               </div>
             </div>
             <div class="num">
@@ -145,7 +147,7 @@
             <div class="sum">
               <span>实付款：</span>
               <span class="chara">￥</span>
-              <span class="digtal">{{ (sum).toFixed(1) }}</span>
+              <span class="digtal">{{ sum.toFixed(1) }}</span>
             </div>
             <div class="add">
               <span>寄送至：</span>
@@ -154,7 +156,7 @@
             <div class="userInfo">
               <span>收货人：</span>
               <span class="info">
-                {{ formLabelAlign.consigneeName}}
+                {{ formLabelAlign.consigneeName }}
                 &nbsp;
                 {{ formLabelAlign.consigneePhone }}
               </span>
@@ -172,7 +174,7 @@
 
 <script >
 import TopBar from "@/components/TopBar.vue";
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "",
   data() {
@@ -180,68 +182,66 @@ export default {
       productId: "",
       scale: "",
       feature: "",
-      adds: [
-      ],
+      adds: [],
       checked: 10001,
       idx: 0,
       curshow: true,
       num: 1,
-      products: [
-        
-      ],
+      products: [],
       sum: 100,
       dialogVisible: false,
-      formLabelAlign:{
-        addressId:'',
-        zone:'',
-        consigneeName:'',
-        fullAddress:'',
-        consigneePhone:'',
-      }
+      formLabelAlign: {
+        addressId: "",
+        zone: "",
+        consigneeName: "",
+        fullAddress: "",
+        consigneePhone: "",
+      },
+      order: {
+        curId: "",
+        priceSum: 0,
+      },
     };
   },
   created() {
-    this.products = this.$route.query.productIds || 
-                    this.$route.query.checkOrder ||
-                    ['10003','10004'];
-    console.log(this.products)
+    this.products = this.$route.query.productIds ||
+      this.$route.query.checkOrder || ["10003", "10004"];
+    console.log(this.products);
     this.scale = this.$route.query.scale;
     this.feature = this.$route.query.feature;
-    this.whereFrom()
+    this.whereFrom();
     this.handleChange();
     // this.getProductById();
-    this.getAddress()
+    this.getAddress();
     // console.log(this.productIds, this.scale, this.feature);
   },
   methods: {
-    getProductById(){
-      console.log(this.productIds)
-      this.productIds.forEach((product)=>
+    getProductById() {
+      console.log(this.productIds);
+      this.productIds.forEach((product) =>
         axios({
-        method:'get',
-        url:'/product/queryById/'+product.productId,
-      }).then(res=>{
-        this.products.push(res.data.data)
-        // console.log(this.products)
-      })
-      )
-      
+          method: "get",
+          url: "/product/queryById/" + product.productId,
+        }).then((res) => {
+          this.products.push(res.data.data);
+          // console.log(this.products)
+        })
+      );
     },
     choice(address) {
-      this.formLabelAlign = address
-      this.checked = address.addressId
+      this.formLabelAlign = address;
+      this.checked = address.addressId;
       console.log(this.formLabelAlign.addressId);
     },
-    whereFrom(){
-      if(this.products[0].productDto){
-        let tmpProducts = []
-        this.products.forEach(item=>{
-          item.productDto.num = item.productCount
-          tmpProducts.push(item.productDto)
-
-        })
-        this.products = tmpProducts
-        console.log(this.products)
+    whereFrom() {
+      if (this.products[0].productDto) {
+        let tmpProducts = [];
+        this.products.forEach((item) => {
+          item.productDto.num = item.productCount;
+          tmpProducts.push(item.productDto);
+        });
+        this.products = tmpProducts;
+        console.log(this.products);
       }
     },
     handleChange(value) {
@@ -259,57 +259,83 @@ export default {
       this.$router.go(-1);
     },
     submit() {
-      this.products.forEach(value=>{
+      let resultSum = 0;
+      this.products.forEach((value) => {
         axios({
-        method:'post',
-        url:'/order/add',
-        data:{
-          userId:this.$cookies.get('token'),
-          cartId:value.cartId || null,
-          addressId:this.formLabelAlign.addressId,
-          productId:value.productId,
-          scaleId:value.scaleId||null,
-          productCount:value.num,
-          orderStatus:'待支付',
-          createTime:(new Date()).getTime(),
-        }
-      }).then(res=>{
-        console.log(res)
-      })
-      })
-      
+          method: "post",
+          url: "/order/add",
+          data: {
+            userId: this.$cookies.get("token"),
+            cartId: value.cartId || null,
+            addressId: this.formLabelAlign.addressId,
+            productId: value.productId,
+            scaleId: value.scaleId || null,
+            productCount: value.num,
+            orderStatus: "待支付",
+            createTime: new Date().getTime(),
+          },
+        }).then((res) => {
+          let cur = res.data.data;
+          this.order.curId = cur.orderId;
+          resultSum++;
+          console.log(this.order);
+
+          this.gotoPay(resultSum);
+        });
+      });
+      this.order.priceSum = this.sum;
+    },
+    gotoPay(resultSum) {
+      if (resultSum == this.products.length) {
+        axios({
+          method: "post",
+          url: "/alipay/orderPay",
+          params: {
+            outTradeNo: this.order.curId,
+            subject: "支付宝支付",
+            totalAmount: this.order.priceSum,
+          },
+        }).then((res) => {
+          console.log(res, res.data);
+          var win = window.open();
+          win.document.write(res.data);
+          // win.document.getElementsByTagName('body')
+          // document.write(res.data)
+        });
+      } else {
+        console.log(resultSum, "等待");
+      }
     },
     handleClose(done) {
-      done()
+      done();
     },
-    confirmModify(){
+    confirmModify() {
       // console.log(this.formLabelAlign)
       axios({
-        method:'post',
-        url:'/address/updateAddress',
-        data:this.formLabelAlign
-      })
+        method: "post",
+        url: "/address/updateAddress",
+        data: this.formLabelAlign,
+      });
     },
     modifyAdd(done) {
       this.$confirm("确认修改？")
-      .then((_) => {
-        this.confirmModify()
-        done();
-      })
-      .catch((_) => {});
-      
+        .then((_) => {
+          this.confirmModify();
+          done();
+        })
+        .catch((_) => {});
     },
-    getAddress(){
+    getAddress() {
       axios({
-        method:'get',
-        url:'/address/getMyAddress/'+this.$cookies.get('token')
-      }).then(res=>{
+        method: "get",
+        url: "/address/getMyAddress/" + this.$cookies.get("token"),
+      }).then((res) => {
         // console.log(res.data.data)
-        this.adds = res.data.data
-        this.checked = this.adds[0].addressId
-        this.formLabelAlign = this.adds[0]
-      })
-    },  
+        this.adds = res.data.data;
+        this.checked = this.adds[0].addressId;
+        this.formLabelAlign = this.adds[0];
+      });
+    },
   },
   components: { TopBar },
 };
