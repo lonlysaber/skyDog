@@ -111,6 +111,11 @@
             <div class="gotoCart">
               <button @click="gotoCart">查看购物车</button>
             </div>
+            <div class="collect" @click="collectProduct">
+              <img v-if="!collectEd" src="@/assets/collect.png" alt="" title="收藏商品">
+              <img v-else src="@/assets/collected.png" alt="" title="已收藏">
+              
+            </div>
           </div>
           <el-dialog
             :visible.sync="dialogVisible"
@@ -197,24 +202,28 @@ export default {
       checkEdScale: "",
       checkEdFeature: "",
       dialogVisible: false,
+      collectEd:false,
     };
   },
   created() {
     this.productId = this.$route.query.productId || "10003";
     this.getProductById();
+    this.queryCollect();
   },
   methods: {
+    // 删除图片信息
     deleteImg(key) {
       console.log(key);
       eval(`delete this.product.img.${key}`);
       // console.log(this.product,this.product.img)
     },
+    // 查询商品信息
     getProductById() {
       axios({
         method: "get",
         url: "/product/queryById/" + this.productId,
       }).then((res) => {
-        console.log(res);
+        // console.log(res);
         this.product = res.data.data;
         this.product.productDetail = JSON.parse(this.product.productDetail);
         delete this.product.img.imgId;
@@ -222,9 +231,11 @@ export default {
         delete this.product.img.productName;
       });
     },
+    // 商品信息改变
     handleChange(value) {
       console.log(value);
     },
+    // 商品规格改变
     clickScale(scale, e) {
       // console.log(scale,e);
       // e.target.style.color='red'
@@ -234,6 +245,7 @@ export default {
         this.checkEdScale = scale;
       }
     },
+    // 商品特征改变
     clickFeature(feature, e) {
       // console.log(feature,e);
       // e.target.style.color='red'
@@ -243,6 +255,7 @@ export default {
         this.checkEdFeature = feature;
       }
     },
+    // 点击购买
     buy() {
       let scale = this.checkEdScale || this.scales[0];
       let feature = this.checkEdFeature || this.features[0];
@@ -262,6 +275,7 @@ export default {
       });
       // console.log(scale,feature)
     },
+    // 加入购物车
     addCart() {
       let scale = this.checkEdScale || this.scales[0];
       let feacture = this.checkEdFeature || this.features[0];
@@ -281,9 +295,11 @@ export default {
         this.dialogVisible = true;
       });
     },
+    // 关闭弹框
     handleClose(done) {
       done();
     },
+    // 跳转到购物车
     gotoCart() {
       this.dialogVisible = false;
       this.$router.push({
@@ -293,6 +309,49 @@ export default {
         },
       });
     },
+    // 收藏商品
+    collectProduct(){
+      axios({
+        method:'post',
+        url:'/collect/add',
+        data:{
+          userId:this.$cookies.get('token'),
+          productId:this.product.productId,
+          collectTime:(new Date()).getTime()
+        }
+      }).then(res=>{
+        // 收藏成功
+        if(res.data.code == 202){
+          this.collectEd = true
+          this.$message({
+            message: "收藏成功",
+            type: "success",
+          });
+        }
+        if(res.data.code == 203){
+          this.collectEd = true
+          this.$message({
+            message: "该商品已收藏",
+            type: "error",
+          });
+        }
+      })
+    },
+    // 查询收藏情况
+    queryCollect(){
+      axios({
+        method:'get',
+        url:'/collect/getMyCollect/'+this.$cookies.get('token')
+      }).then(res=>{
+        console.log(res)
+        let arr = res.data.data
+        for(let i=0;i<arr.length;i++){
+          if(arr[i].productId == this.product.productId){
+            this.collectEd = true;
+          }
+        }
+      })
+    }
   },
 };
 </script>
@@ -302,11 +361,13 @@ export default {
   margin: 0;
   padding: 0;
 }
+/* 主体页面 */
 .productDetail {
   background-color: rgb(234, 232, 235);
   height: 100%;
   padding-bottom: 10px;
 }
+/* 中间部分 */
 .productDetail .middle {
   margin: 0 100px;
   background-color: #fff;
@@ -319,6 +380,7 @@ export default {
 .productDetail .productInfo {
   display: flex;
 }
+/* 左侧轮播图 */
 .productDetail .carousel {
   border: 0.5px solid rgba(0, 0, 0, 0.05);
   width: 330px;
@@ -342,7 +404,7 @@ export default {
 .productDetail .carousel ul {
   width: 100%;
 }
-
+/* 右侧商品信息 */
 .productDetail .detail {
   margin: 24px;
   flex-grow: 1;
@@ -458,6 +520,20 @@ export default {
 .productDetail .detail .subBtn .addCart button:active {
   border: 1px black;
 }
+.productDetail .detail .subBtn .collect{
+  height:50px;
+  width: 50px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.productDetail .detail .subBtn .collect img{
+  height:50px;
+}
+.productDetail .detail .subBtn .collect img:active{
+  height:47px;
+
+}
+/* 商品详细描述 */
 .productDetail .middle .detailDescript {
   text-align: left;
   margin: 0 24px 24px 24px;
@@ -484,6 +560,7 @@ export default {
   /* 6.盒子实现多行显示的必要条件，文字是垂直展示，即文字是多行展示的情况下使用 */
   -webkit-box-orient: vertical;
 }
+/* 商品大图展示 */
 .productDetail .middle .bigImg{
   text-align: left;
   margin: 24px;
