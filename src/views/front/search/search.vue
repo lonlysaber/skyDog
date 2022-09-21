@@ -90,7 +90,7 @@ export default {
     },
     Mounted() {
         this.$on("changeInput",data=>console.log(data))
-        this.getProduct()
+        // this.getProduct()
     },
     methods: {
         handleCurrentChange(val) {

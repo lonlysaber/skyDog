@@ -11,12 +11,19 @@
                                 <el-row :gutter="20">
                                     <el-col :span="4" v-for="item in collectDetail" :key="item.key">
                                         <el-card :body-style="{ padding: '0px' }">
-                                            <img :src="item.product.img.img1" class="image">
-                                            <div class="name">
-                                                <span>{{item.product.productName}}</span>
-                                            </div>
-                                            <div class="bottom">
-                                                <span>￥{{item.product.productPrice}}</span>
+                                            <div
+                                            :style="item.product.productStatus=='在售'?
+                                            'border:1px white solid;':
+                                            'border:1px red solid;'"
+                                            >
+                                                <img :src="item.product.img.img1" class="image">
+                                                <div class="name">
+                                                    <span>{{item.product.productName}}</span>
+                                                </div>
+                                                <div class="bottom">
+                                                    <span>￥{{item.product.productPrice}}</span>
+                                                </div>
+
                                             </div>
                                         </el-card>
                                     </el-col>
@@ -95,7 +102,7 @@ export default {
         };
     },
     created() {
-        // this.userId = this.$route.query.id;
+        this.userId = this.$cookies.get('token');
         this.getMyCollect();
         this.getUseless();
     },
@@ -128,7 +135,6 @@ export default {
                 url: "/collect/getMyCollect/" + this.userId,
                 method: "get",
             }).then((res) => {
-                // console.log(res.data.data);
                 this.collectDetail = res.data.data;
             });
         },
@@ -166,7 +172,9 @@ export default {
     width: 99%;
     height: 180px
 }
-
+.collect .content .all .name{
+    height: 19px;
+}
 .collect .content .all .name span {
 
     float: left;

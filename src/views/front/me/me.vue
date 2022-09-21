@@ -28,7 +28,7 @@
                             @close="handleClose" background-color="" text-color="#000000" active-text-color="#409eff"
                             router>
                             <div class="menu">
-                                <el-menu-item index="/me/order" @click="toOrderPage()">
+                                <el-menu-item index="/me/order" @click="toOrderPage(user)">
                                     <i class="el-icon-menu"></i>
                                     <span slot="title">我的订单</span>
                                 </el-menu-item>
@@ -36,7 +36,14 @@
                                     <i class="el-icon-menu"></i>
                                     <span slot="title">我的购物车</span>
                                 </el-menu-item>
-                                <el-menu-item index="/me/collect" @click="toCollectPage()">
+                                <el-menu-item index="/me/collect" @click="toCollectPage(user)"
+                                v-track="{
+                                    triggerType:'click',
+                                    currentUrl: $route.path,
+                                    behavior:'点击收藏',
+                                    businessCode: 12,
+                                    actionType:'collect-click'
+                                    }">
                                     <i class="el-icon-document"></i>
                                     <span slot="title">我的收藏</span>
                                 </el-menu-item>
@@ -75,19 +82,27 @@ export default {
     components: { topBar },
     data() {
         return {
-            username: "",
+            userId: "",
             activeIndex2: '1',
             user: {
                 avatar:
                     "https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns",
                 username: "天狗用户001",
+                userId:10000
             },
         };
     },
     created() {
-        this.username = this.$route.query.userName;
+        this.loginEd()
+        this.userId = this.$cookies.get('token')||10001;
+        this.user.userId = this.userId
     },
     methods: {
+        loginEd(){
+            if(!this.$cookies.isKey('token')){
+                this.$router.push('/frontlogin')
+            }
+        },
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
         },
@@ -104,15 +119,15 @@ export default {
             this.$router.push({
                 path: "/cart",
                 query: {
-                    userName: user.username,
+                    userId: user.userId,
                 }
             })
         },
         toCollectPage(user) {
             this.$router.push({
-                path: "/collect",
+                path: "/me/collect",
                 query: {
-                    userName: user.username,
+                    userId: user.userId,
                 }
             })
         },

@@ -45,6 +45,8 @@ export default {
     toSearch(){
       console.log(this.select,this.input,this.$route.path);
       let that = this;
+      // 子组件传值给父组件
+      // 搜索栏 --> 搜索页面
       this.$emit("changeInput",this.input)
       this.$router.push({
         path:'/search',
