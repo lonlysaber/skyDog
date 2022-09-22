@@ -132,6 +132,9 @@
             </span>
           </el-dialog>
         </div>
+        <div class="outList" v-if="product.productStatus=='下架'">
+          <img src="@/assets/outList.png" alt="">
+        </div>
       </div>
       <hr />
       <div class="detailDescript">
@@ -206,9 +209,9 @@ export default {
     };
   },
   created() {
-    this.productId = this.$route.query.productId || "10003";
+    this.productId = this.$route.query.productId || "10004";
     this.getProductById();
-    this.queryCollect();
+    
   },
   methods: {
     // 删除图片信息
@@ -229,6 +232,7 @@ export default {
         delete this.product.img.imgId;
         delete this.product.img.productId;
         delete this.product.img.productName;
+        this.queryCollect();
       });
     },
     // 商品信息改变
@@ -343,9 +347,9 @@ export default {
         method:'get',
         url:'/collect/getMyCollect/'+this.$cookies.get('token')
       }).then(res=>{
-        console.log(res)
         let arr = res.data.data
         for(let i=0;i<arr.length;i++){
+          // console.log(arr[i].productId,this.product.productId)
           if(arr[i].productId == this.product.productId){
             this.collectEd = true;
           }
@@ -532,6 +536,15 @@ export default {
 .productDetail .detail .subBtn .collect img:active{
   height:47px;
 
+}
+/* 下架商品遮罩 */
+.productDetail .middle .productInfo .outList{
+  position: absolute;
+  z-index: 9999;
+  right: 120px;
+}
+.productDetail .middle .productInfo .outList img{
+  width:825px;
 }
 /* 商品详细描述 */
 .productDetail .middle .detailDescript {

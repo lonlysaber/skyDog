@@ -123,12 +123,19 @@ export default {
 
         //跳转订单页
         toOrderPage() {
-            this.$router.push({
-                path: '/payorder',
-                query: {
-                    checkOrder: this.multipleSelection,
-                }
-            });
+            if(this.multipleSelection.length==0){
+                this.$message({
+                    message:'请至少选择一个商品',
+                    type:'error'
+                })
+            }else{
+                this.$router.push({
+                    path: '/payorder',
+                    query: {
+                        checkOrder: this.multipleSelection,
+                    }
+                });
+            }
         },
 
         //跳转详情页

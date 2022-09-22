@@ -24,19 +24,19 @@
                 <el-aside width="250px">
 
                     <el-col :span="24">
-                        <el-menu default-active="/me/order" class="el-menu-vertical-demo" @open="handleOpen"
-                            @close="handleClose" background-color="" text-color="#000000" active-text-color="#409eff"
+                        <el-menu :default-active="curPath"  class="el-menu-vertical-demo" @open="handleOpen"
+                            @close="handleClose" @select="handSelect" background-color="" text-color="#000000" active-text-color="#409eff"
                             router>
                             <div class="menu">
-                                <el-menu-item index="/me/order" @click="toOrderPage(user)">
+                                <el-menu-item index="/me/order">
                                     <i class="el-icon-menu"></i>
                                     <span slot="title">我的订单</span>
                                 </el-menu-item>
-                                <el-menu-item @click="toCartPage(user)">
+                                <el-menu-item index="/cart">
                                     <i class="el-icon-menu"></i>
                                     <span slot="title">我的购物车</span>
                                 </el-menu-item>
-                                <el-menu-item index="/me/collect" @click="toCollectPage(user)"
+                                <el-menu-item index="/me/collect"
                                 v-track="{
                                     triggerType:'click',
                                     currentUrl: $route.path,
@@ -47,15 +47,15 @@
                                     <i class="el-icon-document"></i>
                                     <span slot="title">我的收藏</span>
                                 </el-menu-item>
-                                <el-menu-item index="4" @click="toBaughtPage()">
+                                <el-menu-item index="4">
                                     <i class="el-icon-setting"></i>
                                     <span slot="title">我的购买</span>
                                 </el-menu-item>
-                                <el-menu-item index="5" @click="toHistoryPage()">
+                                <el-menu-item index="5">
                                     <i class="el-icon-setting"></i>
                                     <span slot="title">我的足迹</span>
                                 </el-menu-item>
-                                <el-menu-item index="6" @click="toEvaluatePage()">
+                                <el-menu-item index="6">
                                     <i class="el-icon-setting"></i>
                                     <span slot="title">我评价的</span>
                                 </el-menu-item>
@@ -90,6 +90,7 @@ export default {
                 username: "天狗用户001",
                 userId:10000
             },
+            curPath:'/me/order'
         };
     },
     created() {
@@ -105,6 +106,10 @@ export default {
         },
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
+        },
+        handSelect(key, keyPath) {
+            this.curPath = key
+            // console.log(key, keyPath);
         },
         handleOpen(key, keyPath) {
             console.log(key, keyPath);

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import qs from 'qs'
 let params=''
+let preTime = Date.now()
 // 自定义埋点指令
 Vue.directive('track', {
   //钩子函数，只调用一次，指令第一次绑定到元素时调用。在这里可以进行一次性的初始化设置
@@ -21,13 +22,32 @@ Vue.directive('track', {
     if (binding.value) {
       //这里参数是根据自己业务可以自己定义
       params = {
-		  date:new Date().getTime(),
-		  actionTime: new Date().getTime(),
-		  userId:binding.value.userId,
-		  sessionId:'ae-23-550000',
-		  currentUrl:binding.value.currentUrl,
-		  searchKeyword:binding.value.searchKeyword,
-		  cityId:'20'
+        // 日期
+        date:Date.now(),
+        // 用户id
+		    userId:binding.value.userId || null,
+        // 页面地址path
+		    currentUrl:binding.value.currentUrl || null,
+		    // 当前点击时间
+		    actionTime:Date.now(),
+        // 上一次点击时间
+        // preTime:preTime,
+        // 页面停留时间
+        duration:null,
+        // 搜索关键词
+        searchKeyword:binding.value.searchKeyword || null,
+        // 商品id
+        productId:binding.value.productId || null,
+        // 商品分类
+        categoryName:binding.value.categoryName || null,
+        // 订单编号
+        orderId:binding.value.orderId || null,
+        // 订单状态
+        orderStatus:binding.value.orderStatus || null,
+        // 收藏id
+        collectId:binding.value.collectId || null,
+        // 评论id
+        evaluateId:binding.value.evaluateId || null,
       }
   }
  },
