@@ -19,7 +19,17 @@
           <div class="sortDetail">
             <div class="sortItem" v-for="item in sorts" :key="item.key">
               <div class="icon"></div>
-              <div class="itemName" v-for="(it, index) in item" :key="index">
+              <div
+                class="itemName"
+                v-for="(it, index) in item"
+                :key="index"
+                v-track="{
+                  triggerType: 'click',
+                  currentUrl: $route.path,
+                  categoryName:sortItem,
+                  actionType: 'category-click',
+                }"
+              >
                 <span class="i" v-if="index != 0">/</span>
                 <span @click="serchByName(it)" class="name">{{ it }}</span>
               </div>
@@ -47,11 +57,11 @@
             </div>
           </div>
           <div class="orderInfo">
-            <div class="item"  @click="gotoCart()">
+            <div class="item" @click="gotoCart()">
               <div class="num">{{ countNum.cartNum }}</div>
               <div class="dec">购物车</div>
             </div>
-            <div class="item"  @click="gotoOrder('待收货')">
+            <div class="item" @click="gotoOrder('待收货')">
               <div class="num">{{ countNum.orderTakeNum }}</div>
               <div class="dec">待收货</div>
             </div>
@@ -101,6 +111,13 @@
             v-for="item in products"
             :key="item.key"
             @click="gotoDetail(item)"
+            v-track="{
+              triggerType: 'click',
+              currentUrl: $route.path,
+              productId1: productItem.productId,
+              categoryName: productItem.categoryName,
+              actionType: 'product-click',
+            }"
           >
             <el-skeleton style="width: 350px" :loading="loading" animated>
               <template slot="template">
@@ -151,6 +168,13 @@
             v-for="item in products"
             :key="item.key"
             @click="gotoDetail(item)"
+            v-track="{
+              triggerType: 'click',
+              currentUrl: $route.path,
+              productId1: productItem.productId,
+              categoryName: productItem.categoryName,
+              actionType: 'product-click',
+            }"
           >
             <el-skeleton style="width: 350px" :loading="loading" animated>
               <template slot="template">
@@ -211,11 +235,11 @@ export default {
   data() {
     return {
       sorts: [
-        ["女装", "内衣", "奢品"],
+      ["女装", "内衣", "奢品"],
         ["女鞋", "男鞋", "箱包"],
         ["美妆", "饰品", "洗护"],
         ["男装", "运动", "百货"],
-        ["手机", "数码", "礼品"],
+        ["手机", "数码", "企业礼品"],
         ["家装", "电器", "车品"],
         ["食品", "生鲜", "母婴"],
         ["医药", "保健", "进口"],
@@ -231,9 +255,8 @@ export default {
         avatar:
           "https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns",
         userName: "天狗用户001",
-
       },
-      countNum:{
+      countNum: {
         cartNum: 0,
         orderTakeNum: 0,
         orderPayNum: 0,
@@ -274,6 +297,8 @@ export default {
       num: 1,
       loading: true,
       hotWord: "食品",
+      sortItem: "女装",
+      productItem:'',
     };
   },
   created() {
@@ -327,7 +352,7 @@ export default {
         } else if (item.orderStatus == "待评价") {
           this.countNum.orderDesNum++;
         } else {
-          console.log(item.orderStatus);
+          // console.log(item.orderStatus);
         }
       });
     },
@@ -348,7 +373,7 @@ export default {
       });
     },
     serchByName(it) {
-      // console.log(it);
+      this.sortItem = it;
       this.$router.push({
         path: "search",
         query: {
@@ -359,6 +384,8 @@ export default {
     // 跳转详情页
     gotoDetail(p) {
       if (this.$cookies.isKey("token")) {
+        // console.log(p)
+        this.productItem = p
         this.$router.push({
           path: "/productdetail",
           query: {
@@ -390,19 +417,19 @@ export default {
       this.$router.push("/cart");
     },
     // 跳转订单页面
-    gotoOrder(name){
+    gotoOrder(name) {
       this.$router.push({
         path: "/me/order",
         query: {
           activeName: name,
         },
       });
-    }
+    },
   },
 };
 </script>
 
-<style scoped>
+<style>
 * {
   box-sizing: border-box;
 }
@@ -428,7 +455,9 @@ export default {
   border-radius: 12px;
   margin: 24px 0 0px 24px;
   padding: 0 24px 0px 24px;
-  height: 303px;
+  height: 314px;
+  white-space: nowrap;
+  width:230px;
 }
 .home .middle .sort .sName h2 {
   font-size: 18px;

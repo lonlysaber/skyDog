@@ -30,7 +30,14 @@
         <!-- 商品内容 -->
         <div class="main">
             <div class="product" v-for="p in products" :key="p.productId"
-            @click="gotoDetail(p)">
+            @click="gotoDetail(p)"
+            v-track="{
+              triggerType: 'click',
+              currentUrl: $route.path,
+              productId1: p.productId,
+              categoryName: p.categoryName,
+              actionType: 'product-click',
+            }">
                 <img :src="p.img.img1">
                 <div class="content">
                     <div class="row1">
@@ -86,10 +93,10 @@ export default {
         this.input = this.$route.query.input
 
         this.getProduct()
-        this.$on("changeInput",data=>console.log(data))
+        // this.$on("changeInput",data=>console.log(data))
     },
     Mounted() {
-        this.$on("changeInput",data=>console.log(data))
+        // this.$on("changeInput",data=>console.log(data))
         // this.getProduct()
     },
     methods: {
@@ -103,7 +110,7 @@ export default {
         },
 
         handleClick(tab, event) {
-            console.log(tab, event,this.activeName);
+            // console.log(tab, event,this.activeName);
         },
         getProduct(){
             axios({
@@ -118,7 +125,7 @@ export default {
                 },
             })
             .then(res =>{
-                console.log(res);
+                // console.log(res);
                 this.products = res.data.data.data
                 this.count = res.data.data.count
             });

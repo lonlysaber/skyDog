@@ -103,15 +103,34 @@
           <hr />
           <div class="subBtn">
             <div class="buy">
-              <button @click="buy">立即购买</button>
+              <button @click="buy"
+              
+            >立即购买</button>
             </div>
             <div class="addCart">
-              <button @click="addCart">加入购物车</button>
+              <button @click="addCart"
+              v-track="{
+              triggerType: 'click',
+              currentUrl: $route.path,
+              cartId:1,
+              productId5: product.productId,
+              categoryName: product.categoryName,
+              actionType: 'cart-click',
+            }"
+              >加入购物车</button>
             </div>
             <div class="gotoCart">
               <button @click="gotoCart">查看购物车</button>
             </div>
-            <div class="collect" @click="collectProduct">
+            <div class="collect" @click="collectProduct"
+            v-track="{
+              triggerType: 'click',
+              currentUrl: $route.path,
+              productId4: product.productId,
+              categoryName: product.categoryName,
+              actionType: 'collect-click',
+            }"
+            >
               <img v-if="!collectEd" src="@/assets/collect.png" alt="" title="收藏商品">
               <img v-else src="@/assets/collected.png" alt="" title="已收藏">
               
@@ -237,7 +256,7 @@ export default {
     },
     // 商品信息改变
     handleChange(value) {
-      console.log(value);
+      // console.log(value);
     },
     // 商品规格改变
     clickScale(scale, e) {

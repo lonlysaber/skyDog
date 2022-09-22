@@ -181,7 +181,16 @@
           </div>
           <div class="check">
             <button @click="cancel">取消</button>
-            <button @click="submit">提交订单</button>
+            <button @click="submit"
+            v-track="{
+              triggerType: 'click',
+              currentUrl: $route.path,
+              orderId1:1,
+              productId2: product.productId,
+              categoryName: product.categoryName,
+              actionType: 'buy-click',
+            }"
+            >提交订单</button>
           </div>
         </div>
       </div>
@@ -247,11 +256,13 @@ export default {
         })
       );
     },
+    // 选择地址
     choice(address) {
       this.formLabelAlign = address;
       this.checked = address.addressId;
       console.log(this.formLabelAlign.addressId);
     },
+    // 购物车和商品详情页传递参数格式不一致，需要统一
     whereFrom() {
       if (this.products[0].productDto) {
         let tmpProducts = [];
@@ -263,20 +274,25 @@ export default {
         console.log(this.products);
       }
     },
+    // 计数器数量改变
     handleChange(value) {
       let sum = 0;
+      // 计算总金额
       this.products.forEach((product) => {
         sum += product.num * product.productPrice;
         // console.log(product)
       });
       this.sum = sum;
     },
+    // 跳转到主页
     gotoHome() {
       this.$router.push("/");
     },
+    // 取消支付
     cancel() {
       this.$router.go(-1);
     },
+    // 提交支付
     submit() {
       let resultSum = 0;
       this.products.forEach((value) => {
@@ -304,6 +320,11 @@ export default {
       });
       this.order.priceSum = this.sum;
     },
+    // 验证支付宝支付是否完成
+    checkPay(){
+      return true;
+    },
+    // 支付宝支付
     gotoPay(resultSum) {
       if (resultSum == this.products.length) {
         console.log(resultSum, "执行");
@@ -319,15 +340,20 @@ export default {
           console.log(res, res.data);
           var win = window.open();
           win.document.write(res.data);
-          this.order.payStatu = 2
+          // 验证是否支付完成
+          if(checkPay()){
+            this.order.payStatu = 2
+          }
         });
       } else {
         console.log(resultSum, "等待");
       }
     },
+    // 关闭弹窗
     handleClose(done) {
       done();
     },
+    // 确认地址修改
     confirmModify() {
       // console.log(this.formLabelAlign)
       axios({
@@ -336,6 +362,7 @@ export default {
         data: this.formLabelAlign,
       });
     },
+    // 修改地址
     modifyAdd(done) {
       this.$confirm("确认修改？")
         .then((_) => {
@@ -344,6 +371,7 @@ export default {
         })
         .catch((_) => {});
     },
+    // 获取个人地址
     getAddress() {
       axios({
         method: "get",

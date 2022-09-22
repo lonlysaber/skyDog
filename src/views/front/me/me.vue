@@ -37,13 +37,7 @@
                                     <span slot="title">我的购物车</span>
                                 </el-menu-item>
                                 <el-menu-item index="/me/collect"
-                                v-track="{
-                                    triggerType:'click',
-                                    currentUrl: $route.path,
-                                    behavior:'点击收藏',
-                                    businessCode: 12,
-                                    actionType:'collect-click'
-                                    }">
+                                >
                                     <i class="el-icon-document"></i>
                                     <span slot="title">我的收藏</span>
                                 </el-menu-item>

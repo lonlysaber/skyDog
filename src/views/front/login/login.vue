@@ -71,6 +71,7 @@ export default {
   created() {
     this.randomKey();
     this.$cookies.remove("token");
+    localStorage.removeItem('userId')
   },
   methods: {
     onSubmit(form) {
@@ -90,6 +91,7 @@ export default {
             type: "success",
           });
           this.setCookie(this.user.userId);
+          localStorage.setItem('userId',this.user.userId)
           this.$router.push("/");
         }
         if (res.data.code == 201) {

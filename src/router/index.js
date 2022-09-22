@@ -75,28 +75,18 @@ const router = new VueRouter({
 let startTime = Date.now()
 let currentTime
 router.beforeEach((to, from, next) => {
-  /* if (to) {
-  	// 第一步：页面跳转后记录一下当前的时间 currentTime
-  	currentTime = Date.now()
-  	// 第二步：计算 currentTime - startTime 的 差值 
-    console.log('用户由 ', from.path, ' 页面 跳转到 ', to.path, ' 页面，在 ', from.path, ' 页面停留了 ', currentTime - startTime, '毫秒。转换成秒数约为：', parseInt((currentTime - startTime) / 1000))
-    // 通过计算currentTime - startTime 的 差值 之后，再上报数据
-    
-    // 第三步：每次都要初始化一下 startTime
-    startTime = Date.now()
-	next();
-  } */
+
   if(to,from){
 	 currentTime = Date.now() 
 	 let date = currentTime
-	 console.log('用户由 ', from.name, ' 页面 跳转到 ', to.name, ' 页面，在 ', from.name, ' 页面停留了 ', currentTime - startTime, '毫秒。转换成秒数约为：', parseInt((currentTime - startTime) / 1000))
+	 console.log('用户由 ', from.path, ' 页面 跳转到 ', to.path, ' 页面，在 ', from.path, ' 页面停留了 ', currentTime - startTime, '毫秒。转换成秒数约为：', parseInt((currentTime - startTime) / 1000))
 	 let params = {
 	 		  // 日期
          date:Date.now(),
          // 用户id
-         userId:null,
+         userId:localStorage.getItem('userId') || null,
          // 页面地址path
-         currentUrl:to.name || null,
+         currentUrl:from.path || null,
          // 当前点击时间
          actionTime:Date.now(),
          // 上一次点击时间
@@ -120,6 +110,11 @@ router.beforeEach((to, from, next) => {
 	 }
    console.log(params)
    startTime = Date.now()
+   axios({
+    method:'post',
+    url:'/spark/saveEventTrack',
+    data:params
+  })
 
 	//  axios.post('http://localhost:9000/api/v1/track/saveEventTrack',qs.stringify(params))
 	 next()
