@@ -5,7 +5,12 @@
         </div>
         <div class="search">
             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" background-color="#246EDC"
-                text-color="#fff" active-text-color="#ffd04b" style="text-align:center; padding-left: 130px;">
+                text-color="#fff" active-text-color="#ffd04b"
+                style="text-align:center; padding-left: 15px; padding-right:20px">
+                <el-menu-item style="font-size:small" @click="goBack">
+                    <i class="el-icon-back"> 返回</i>
+                </el-menu-item>
+
                 <el-menu-item index="0" style="font-size:large">我的购物车</el-menu-item>
 
                 <el-input class="input" v-model="input" placeholder="输入内容搜索">
@@ -121,14 +126,18 @@ export default {
     },
     methods: {
 
+        // 返回上一页
+        goBack() {
+            history.back(1)
+        },
         //跳转订单页
         toOrderPage() {
-            if(this.multipleSelection.length==0){
+            if (this.multipleSelection.length == 0) {
                 this.$message({
-                    message:'请至少选择一个商品',
-                    type:'error'
+                    message: '请至少选择一个商品',
+                    type: 'error'
                 })
-            }else{
+            } else {
                 this.$router.push({
                     path: '/payorder',
                     query: {
@@ -193,7 +202,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                // console.log(value);
+                console.log(value);
                 _this.$axios({
                     url: "/cart/delete/" + value.cartId,
                     method: "get",
@@ -201,6 +210,8 @@ export default {
                     console.log(res);
                 })
             });
+
+
             this.getCart();
 
         },
@@ -252,11 +263,20 @@ export default {
     display: flex;
 }
 
+.cart .search .el-icon-back {
+    font-size: 15px;
+    height: fit-content;
+    color: white;
+    padding-right: 20px;
+    margin-bottom: 2px;
+}
+
 .cart .search .el-input {
     margin-left: 350px;
     width: 600px;
     align-items: center;
 }
+
 
 .cart .search .el-input .el-input__inner {
     margin-top: 10px;

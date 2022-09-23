@@ -9,19 +9,13 @@
             <el-tab-pane label="全部宝贝">
               <div class="all">
                 <el-row :gutter="20">
-                  <el-col
-                    :span="4"
-                    v-for="item in collectDetail"
-                    :key="item.key"
-                  >
+                  <el-col :span="4" v-for="item in collectDetail" :key="item.key">
                     <el-card :body-style="{ padding: '0px' }">
-                      <div
-                        :style="
-                          item.product.productStatus == '在售'
-                            ? 'border:1px white solid;'
-                            : 'border:1px red solid;'
-                        "
-                      >
+                      <div :style="
+                        item.product.productStatus == '在售'
+                          ? 'border:1px white solid;'
+                          : 'border:1px red solid;'
+                      ">
                         <img :src="item.product.img.img1" class="image" />
                         <div class="name">
                           <span @click="gotoProductDetail(item.product.productId)">
@@ -39,19 +33,13 @@
             <el-tab-pane label="失效宝贝">
               <div class="all">
                 <el-row :gutter="20">
-                  <el-col
-                    :span="4"
-                    v-for="item in uselessDetail"
-                    :key="item.index"
-                  >
+                  <el-col :span="4" v-for="item in uselessDetail" :key="item.index">
                     <el-card :body-style="{ padding: '0px' }">
-                      <div
-                        :style="
-                          item.product.productStatus == '在售'
-                            ? 'border:1px white solid;'
-                            : 'border:1px red solid;'
-                        "
-                      >
+                      <div :style="
+                        item.product.productStatus == '在售'
+                          ? 'border:1px white solid;'
+                          : 'border:1px red solid;'
+                      ">
                         <img :src="item.product.img.img1" class="image" />
                         <div class="name">
                           <span @click="gotoProductDetail(item.product.productId)">
@@ -68,30 +56,19 @@
             </el-tab-pane>
             <el-tab-pane label="宝贝搜索">
               <div class="search">
-                <el-input
-                  style=""
-                  class="input"
-                  v-model="input"
-                  placeholder="输入内容搜索"
-                >
+                <el-input style="" class="input" v-model="input" placeholder="输入内容搜索">
                 </el-input>
                 <el-button type="primary" @click="toSearch">搜索</el-button>
               </div>
               <div class="all">
                 <el-row :gutter="20">
-                  <el-col
-                    :span="4"
-                    v-for="item in searchDetail"
-                    :key="item.key"
-                  >
+                  <el-col :span="4" v-for="item in searchDetail" :key="item.key">
                     <el-card :body-style="{ padding: '0px' }">
-                      <div
-                        :style="
-                          item.product.productStatus == '在售'
-                            ? 'border:1px white solid;'
-                            : 'border:1px red solid;'
-                        "
-                      >
+                      <div :style="
+                        item.product.productStatus == '在售'
+                          ? 'border:1px white solid;'
+                          : 'border:1px red solid;'
+                      ">
                         <img :src="item.product.img.img1" class="image" />
                         <div class="name">
                           <span @click="gotoProductDetail(item.product.productId)">
@@ -180,13 +157,13 @@ export default {
         this.uselessDetail = res.data.data;
       });
     },
-    gotoProductDetail(id){
-        this.$router.push({
-            path:'/productdetail',
-            query:{
-                productId:id
-            }
-        })
+    gotoProductDetail(id) {
+      this.$router.push({
+        path: '/productdetail',
+        query: {
+          productId: id
+        }
+      })
     }
   },
 };
@@ -211,9 +188,11 @@ export default {
   width: 99%;
   height: 180px;
 }
+
 .collect .content .all .name {
   height: 19px;
 }
+
 .collect .content .all .name span {
   float: left;
   color: #3c3c3c;
