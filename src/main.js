@@ -6,7 +6,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios';
 import * as echarts from 'echarts';
 import VueCookies from 'vue-cookies'
-import './components/track.js'
+import './assets/js/track.js'
 
 
 axios.defaults.baseURL = 'https://5164qd7666.oicp.vip/';

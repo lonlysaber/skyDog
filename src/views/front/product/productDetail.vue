@@ -112,7 +112,7 @@
               v-track="{
               triggerType: 'click',
               currentUrl: $route.path,
-              cartId:1,
+              cartId:cartId,
               productId5: product.productId,
               categoryName: product.categoryName,
               actionType: 'cart-click',
@@ -126,16 +126,31 @@
             v-track="{
               triggerType: 'click',
               currentUrl: $route.path,
+              collectId:collectId,
               productId4: product.productId,
               categoryName: product.categoryName,
               actionType: 'collect-click',
             }"
             >
-              <img v-if="!collectEd" src="@/assets/collect.png" alt="" title="收藏商品">
-              <img v-else src="@/assets/collected.png" alt="" title="已收藏">
+              <img v-if="!collectEd" src="@/assets/img/collect.png" alt="" title="收藏商品">
+              <img v-else src="@/assets/img/collected.png" alt="" title="已收藏">
               
             </div>
           </div>
+          <el-dialog
+            :visible.sync="collectVisible"
+            width="30%"
+            :before-close="handleClose"
+            center
+          >
+            <span>商品已收藏</span>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="collectVisible = false">关 闭</el-button>
+              <el-button type="danger" @click="deleteCollect">
+                取消收藏
+              </el-button>
+            </span>
+          </el-dialog>
           <el-dialog
             :visible.sync="dialogVisible"
             width="30%"
@@ -152,7 +167,7 @@
           </el-dialog>
         </div>
         <div class="outList" v-if="product.productStatus=='下架'">
-          <img src="@/assets/outList.png" alt="">
+          <img src="@/assets/img/outList.png" alt="">
         </div>
       </div>
       <hr />
@@ -224,7 +239,10 @@ export default {
       checkEdScale: "",
       checkEdFeature: "",
       dialogVisible: false,
+      collectVisible:false,
       collectEd:false,
+      cartId:'',
+      collectId:'',
     };
   },
   created() {
@@ -315,6 +333,7 @@ export default {
         },
       }).then((res) => {
         console.log(res);
+        this.cartId = res.data.data
         this.dialogVisible = true;
       });
     },
@@ -334,7 +353,9 @@ export default {
     },
     // 收藏商品
     collectProduct(){
-      axios({
+      if(this.collectEd == true){
+        
+        axios({
         method:'post',
         url:'/collect/add',
         data:{
@@ -344,8 +365,10 @@ export default {
         }
       }).then(res=>{
         // 收藏成功
+        console.log(res)
         if(res.data.code == 202){
           this.collectEd = true
+          this.collectId = res.data.data
           this.$message({
             message: "收藏成功",
             type: "success",
@@ -358,6 +381,24 @@ export default {
             type: "error",
           });
         }
+      })
+      }else{
+        this.collectEd = false;
+      }
+      
+    },
+    // 删除收藏
+    deleteCollect(){
+      this.collectEd = false
+      axios({
+        method:'get',
+        url:'/collect/delete/',
+        data:{
+          userId:this.$cookies.get('token'),
+          productId:this.product.productId,
+        }
+      }).then(res=>{
+        console.log(res)
       })
     },
     // 查询收藏情况

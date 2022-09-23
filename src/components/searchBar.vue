@@ -2,7 +2,7 @@
   <div class="searchBar">
     <!-- logo -->
     <div class="logo">
-      <img src="@/assets/logo.png" @click="gotoHome" alt="" />
+      <img src="@/assets/img/logo.png" @click="gotoHome" alt="" />
     </div>
     <div class="search">
       <el-select v-model="select" placeholder="请选择">

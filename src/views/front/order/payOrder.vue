@@ -6,7 +6,7 @@
     <div class="payorder">
       <div class="steps">
         <div class="logo">
-          <img src="@/assets/logo.png" @click="gotoHome" alt="" />
+          <img src="@/assets/img/logo.png" @click="gotoHome" alt="" />
         </div>
         <div class="step">
           <div class="one">
@@ -74,7 +74,7 @@
             </div>
             <div class="choiced" v-if="checked == item.addressId">
               <span @click="dialogVisible = true">修改</span>
-              <img src="@/assets/choiced.png" alt="" />
+              <img src="@/assets/img/choiced.png" alt="" />
             </div>
           </div>
         </div>
@@ -310,8 +310,8 @@ export default {
             createTime: new Date().getTime(),
           },
         }).then((res) => {
-          let cur = res.data.data;
-          this.order.curId = cur.orderId;
+          let cur = res.data;
+          this.order.curId = cur;
           resultSum++;
           console.log(this.order);
 
