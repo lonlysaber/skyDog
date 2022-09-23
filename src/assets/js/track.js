@@ -441,7 +441,7 @@ Vue.directive('track', {
         })
       }
        if(binding.value.actionType == 'product-click'){
-        console.log(product)
+        if(product=={})return
          axios({
            method:'post',
            url:'/spark/saveEventTrack',

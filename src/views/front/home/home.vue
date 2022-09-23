@@ -48,7 +48,7 @@
         <div class="userInfo">
           <div class="faceInfo" @click="gotoMe(user)">
             <div class="avatar">
-              <img src="@/assets/user.png" alt="" />
+              <img src="@/assets/img/user.png" alt="" />
             </div>
             <div class="hello">
               <span>你好!</span>
@@ -77,25 +77,25 @@
           <div class="likeInfo">
             <div class="item">
               <div class="icon">
-                <img src="@/assets/collect.png" alt="" />
+                <img src="@/assets/img/collect.png" alt="" />
               </div>
               <div class="dec">宝贝收藏</div>
             </div>
             <div class="item">
               <div class="icon">
-                <img src="@/assets/collectShop.png" alt="" />
+                <img src="@/assets/img/collectShop.png" alt="" />
               </div>
               <div class="dec">商家收藏</div>
             </div>
             <div class="item">
               <div class="icon">
-                <img src="@/assets/shop.png" alt="" />
+                <img src="@/assets/img/shop.png" alt="" />
               </div>
               <div class="dec">买过的</div>
             </div>
             <div class="item">
               <div class="icon">
-                <img src="@/assets/mark.png" alt="" />
+                <img src="@/assets/img/mark.png" alt="" />
               </div>
               <div class="dec">我的足迹</div>
             </div>

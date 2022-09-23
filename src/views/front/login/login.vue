@@ -191,7 +191,7 @@ export default {
 }
 .frontLogin {
   height: 100vh;
-  background: url(@/assets/frontLogin.jpg);
+  background: url(@/assets/img/frontLogin.jpg);
   background-repeat: no-repeat;
   background-size: 100%;
 }
