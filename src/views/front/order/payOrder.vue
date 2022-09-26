@@ -181,13 +181,11 @@
           </div>
           <div class="check">
             <button @click="cancel">取消</button>
-            <button @click="submit"
+            <button @click="submits"
             v-track="{
               triggerType: 'click',
               currentUrl: $route.path,
-              orderId1:1,
-              productId2: product.productId,
-              categoryName: product.categoryName,
+              productId2: products,
               actionType: 'buy-click',
             }"
             >提交订单</button>
@@ -244,6 +242,7 @@ export default {
     // console.log(this.productIds, this.scale, this.feature);
   },
   methods: {
+    submits(){},
     getProductById() {
       console.log(this.productIds);
       this.productIds.forEach((product) =>

@@ -112,7 +112,6 @@
               v-track="{
               triggerType: 'click',
               currentUrl: $route.path,
-              cartId:cartId,
               productId5: product.productId,
               categoryName: product.categoryName,
               actionType: 'cart-click',
@@ -126,7 +125,6 @@
             v-track="{
               triggerType: 'click',
               currentUrl: $route.path,
-              collectId:collectId,
               productId4: product.productId,
               categoryName: product.categoryName,
               actionType: 'collect-click',
@@ -353,7 +351,7 @@ export default {
     },
     // 收藏商品
     collectProduct(){
-      if(this.collectEd == true){
+      if(this.collectEd == false){
         
         axios({
         method:'post',
@@ -376,14 +374,11 @@ export default {
         }
         if(res.data.code == 203){
           this.collectEd = true
-          this.$message({
-            message: "该商品已收藏",
-            type: "error",
-          });
+          
         }
       })
       }else{
-        this.collectEd = false;
+        this.collectVisible = true
       }
       
     },
@@ -392,13 +387,16 @@ export default {
       this.collectEd = false
       axios({
         method:'get',
-        url:'/collect/delete/',
-        data:{
-          userId:this.$cookies.get('token'),
-          productId:this.product.productId,
-        }
+        url:'/collect/delete/'+this.$cookies.get('token')+'&&'+this.product.productId,
+        
+        
       }).then(res=>{
-        console.log(res)
+        this.$message({
+            message: "该商品已取消收藏",
+            type: "success",
+          });
+        // console.log(res)
+        this.collectVisible = false
       })
     },
     // 查询收藏情况
