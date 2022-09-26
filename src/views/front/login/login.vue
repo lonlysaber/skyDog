@@ -3,7 +3,7 @@
     <div class="window">
       <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
         <el-tab-pane label="密码登录" name="first">
-          <el-form ref="form" :model="form" label-width="80px">
+          <el-form ref="form" :rules="rules" :model="form" label-width="80px">
             <el-form-item label="用户名" prop="username">
               <el-input v-model="form.username"></el-input>
             </el-form-item>
@@ -16,22 +16,35 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="手机号登录" name="second">
-          <el-form ref="phoneform" :model="phoneform" label-width="80px">
-            <el-form-item label="手机号" prop="phone">
-              <el-input v-model="phoneform.phone"></el-input>
+        <el-tab-pane label="注册" name="second">
+          <el-form
+            ref="digestform"
+            :rules="rules"
+            :model="digestform"
+            label-width="80px"
+          >
+            <el-form-item label="用户名" prop="username">
+              <el-input v-model="digestform.username"></el-input>
             </el-form-item>
-            <el-form-item label="验证码" prop="checkKey">
-              <el-input maxlength="4" v-model="phoneform.checkKey"></el-input>
-              <p class="checkKey">{{ checkKey }}</p>
-              <el-button v-if="!checkEd" @click="randomKey">获取</el-button>
-              <el-button disabled v-if="checkEd">{{ this.time }}</el-button>
+            <el-form-item label="密码" prop="password">
+              <el-input
+                maxlength="4"
+                v-model="digestform.password"
+                show-password
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="checkPsd">
+              <el-input
+                maxlength="4"
+                v-model="digestform.checkPsd"
+                show-password
+              ></el-input>
             </el-form-item>
             <el-form-item style="margin-left: 0px">
-              <el-button type="primary" @click="onCheck(phoneform)"
-                >验证</el-button
+              <el-button type="primary" @click="onDigest(digestform)"
+                >注册</el-button
               >
-              <el-button @click="resetForm('form')">重置</el-button>
+              <el-button @click="resetForm('digestform')">重置</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -53,9 +66,10 @@ export default {
         username: "",
         password: "",
       },
-      phoneform: {
-        phone: "",
-        checkKey: "",
+      digestform: {
+        username: "",
+        password: "",
+        checkPsd: "",
       },
       user: {
         userId: "",
@@ -66,12 +80,35 @@ export default {
       checkKey: "",
       time: 60,
       checkEd: false,
+
+      rules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+        ],
+        checkPsd: [
+          {
+            required: true,
+            validator: (rule, value, callback) => {
+              if (value === "") {
+                callback(new Error("请再次输入密码"));
+              } else if (value !== this.digestform.password) {
+                callback(new Error("两次输入密码不一致!"));
+              } else {
+                callback();
+              }
+            },
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   created() {
-    this.randomKey();
     this.$cookies.remove("token");
-    localStorage.removeItem('userId')
+    localStorage.removeItem("userId");
   },
   methods: {
     onSubmit(form) {
@@ -91,7 +128,7 @@ export default {
             type: "success",
           });
           this.setCookie(this.user.userId);
-          localStorage.setItem('userId',this.user.userId)
+          localStorage.setItem("userId", this.user.userId);
           this.$router.push("/");
         }
         if (res.data.code == 201) {
@@ -101,9 +138,7 @@ export default {
           });
           return;
         }
-        
       });
-      
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -128,56 +163,38 @@ export default {
         }, time);
       };
     },
-    randomKey() {
-      // 非第一次进入
-      if (this.checkKey != "") {
-        this.checkEd = true;
-        clearInterval(time);
-        var time = setInterval(() => {
-          if (this.time > 0) {
-            this.time--;
-            // this.checkKey = this.time
-          } else {
-            this.time = 60;
-            this.checkEd = false;
-          }
-        }, 1000);
-      }
 
-      let one = (Math.random() * 9).toFixed(0).toString();
-      let two = (Math.random() * 9).toFixed(0).toString();
-      let thr = (Math.random() * 9).toFixed(0).toString();
-      let four = (Math.random() * 9).toFixed(0).toString();
-
-      let key = one + two + thr + four;
-      this.checkKey = key;
-      this.throttle(function () {
-        console.log(key);
-      });
-    },
-    onCheck(form) {
+    onDigest(form) {
       this.setCookie();
-      if (form.phone == "" || form.checkKey == "") {
+      if (form.username == "" || form.password == "" || form.checkPsd == "") {
         this.$message({
-          message: "请输入手机号和验证码",
+          message: "请输入用户名和密码",
           type: "error",
         });
         return;
       }
-      if (form.checkKey != this.checkKey) {
+      if (form.password != form.checkPsd) {
         this.$message({
-          message: "验证码错误",
+          message: "两次输入的密码不一致",
           type: "error",
         });
         return;
       }
-      if (form.phone == this.user.phone && form.checkKey == this.checkKey) {
-        this.$message({
-          message: "登录成功",
-          type: "success",
-        });
-        this.setCookie();
-        this.$router.push("/");
+      if (form.password == form.checkPsd) {
+        axios({
+          method:'post',
+          url:'/user/register',
+          data:{
+            username:form.username,
+            password:form.password
+          }
+        }).then(res=>{
+          this.$message({
+            message: "注册成功",
+            type: "success",
+          });
+          this.activeName = 'first'
+        })
       }
     },
   },
@@ -204,6 +221,9 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.frontLogin .el-form-item:last-child .el-form-item__content{
+  margin-left:0 !important;
 }
 .window .el-tabs {
   width: 500px;

@@ -9,17 +9,26 @@
             <el-tab-pane label="全部宝贝">
               <div class="all">
                 <el-row :gutter="20">
-                  <el-col :span="4" v-for="item in collectDetail" :key="item.key">
+                  <el-col
+                    :span="4"
+                    v-for="item in collectDetail"
+                    :key="item.key"
+                  >
                     <el-card :body-style="{ padding: '0px' }">
-                      <div :style="
-                        item.product.productStatus == '在售'
-                          ? 'border:1px white solid;'
-                          : 'border:1px red solid;'
-                      ">
+                      <div
+                        :style="
+                          item.product.productStatus == '在售'
+                            ? 'border:1px white solid;'
+                            : 'border:1px red solid;'
+                        "
+                      >
                         <img :src="item.product.img.img1" class="image" />
                         <div class="name">
-                          <span @click="gotoProductDetail(item.product.productId)">
-                            {{ item.product.productName }}</span>
+                          <span
+                            @click="gotoProductDetail(item.product.productId)"
+                          >
+                            {{ item.product.productName }}</span
+                          >
                         </div>
                         <div class="bottom">
                           <span>￥{{ item.product.productPrice }}</span>
@@ -33,17 +42,26 @@
             <el-tab-pane label="失效宝贝">
               <div class="all">
                 <el-row :gutter="20">
-                  <el-col :span="4" v-for="item in uselessDetail" :key="item.index">
+                  <el-col
+                    :span="4"
+                    v-for="item in uselessDetail"
+                    :key="item.index"
+                  >
                     <el-card :body-style="{ padding: '0px' }">
-                      <div :style="
-                        item.product.productStatus == '在售'
-                          ? 'border:1px white solid;'
-                          : 'border:1px red solid;'
-                      ">
+                      <div
+                        :style="
+                          item.product.productStatus == '在售'
+                            ? 'border:1px white solid;'
+                            : 'border:1px red solid;'
+                        "
+                      >
                         <img :src="item.product.img.img1" class="image" />
                         <div class="name">
-                          <span @click="gotoProductDetail(item.product.productId)">
-                            {{ item.product.productName }}</span>
+                          <span
+                            @click="gotoProductDetail(item.product.productId)"
+                          >
+                            {{ item.product.productName }}</span
+                          >
                         </div>
                         <div class="bottom">
                           <span>￥{{ item.product.productPrice }}</span>
@@ -56,23 +74,37 @@
             </el-tab-pane>
             <el-tab-pane label="宝贝搜索">
               <div class="search">
-                <el-input style="" class="input" v-model="input" placeholder="输入内容搜索">
+                <el-input
+                  style=""
+                  class="input"
+                  v-model="input"
+                  placeholder="输入内容搜索"
+                >
                 </el-input>
                 <el-button type="primary" @click="toSearch">搜索</el-button>
               </div>
               <div class="all">
                 <el-row :gutter="20">
-                  <el-col :span="4" v-for="item in searchDetail" :key="item.key">
+                  <el-col
+                    :span="4"
+                    v-for="item in searchDetail"
+                    :key="item.key"
+                  >
                     <el-card :body-style="{ padding: '0px' }">
-                      <div :style="
-                        item.product.productStatus == '在售'
-                          ? 'border:1px white solid;'
-                          : 'border:1px red solid;'
-                      ">
+                      <div
+                        :style="
+                          item.product.productStatus == '在售'
+                            ? 'border:1px white solid;'
+                            : 'border:1px red solid;'
+                        "
+                      >
                         <img :src="item.product.img.img1" class="image" />
                         <div class="name">
-                          <span @click="gotoProductDetail(item.product.productId)">
-                            {{ item.product.productName }}</span>
+                          <span
+                            @click="gotoProductDetail(item.product.productId)"
+                          >
+                            {{ item.product.productName }}</span
+                          >
                         </div>
                         <div class="bottom">
                           <span>￥{{ item.product.productPrice }}</span>
@@ -87,7 +119,34 @@
         </el-tab-pane>
         <el-tab-pane name="2">
           <span slot="label"> 店铺收藏 </span>
-          店铺收藏
+          <el-tabs type="border-card">
+            <el-tab-pane label="全部店铺">
+              <el-table :data="shops" style="width: 100%" border>
+                <el-table-column
+                  fixed
+                  prop="userName"
+                  label="店铺名称"
+                  width="300"
+                >
+                </el-table-column>
+                <el-table-column prop="productSale" label="商品" width="700">
+                  <template slot-scope="scope">
+                    <div class="productBox">
+                      <div class="productOfShop"
+                      v-for="item in scope.row.products"
+                      :key="item.key"
+                      @click="gotoDetail(item.productId)">
+                        <img :src="item.img.img1" alt="">
+                        <span>￥{{item.productPrice}}</span>
+                      </div>
+
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+
+            </el-tab-pane>
+          </el-tabs>
         </el-tab-pane>
       </el-tabs>
 
@@ -109,6 +168,34 @@ export default {
       collectDetail: [],
       uselessDetail: [],
       searchDetail: [],
+      shops:[
+        {userName:'xxxx商店',
+        products:[
+          {productId:'10562', img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+
+        ]},
+        {userName:'xxxx商店',
+        products:[
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+        ]},
+        {userName:'xxxx商店',
+        products:[
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+        ]},
+      ]
     };
   },
   created() {
@@ -159,9 +246,18 @@ export default {
     },
     gotoProductDetail(id) {
       this.$router.push({
-        path: '/productdetail',
+        path: "/productdetail",
         query: {
-          productId: id
+          productId: id,
+        },
+      });
+    },
+    // 跳转商品详情页
+    gotoDetail(id){
+      this.$router.push({
+        path:'/productdetail',
+        query:{
+          productId:id
         }
       })
     }
@@ -232,4 +328,24 @@ export default {
   font-size: 15px;
   color: #ff5001;
 }
+/* 店铺收藏 */
+.collect .content .productBox{
+  display:flex !important;
+  
+}
+.collect .productOfShop{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.collect .productOfShop:hover{
+  cursor: pointer;
+}
+.collect .productOfShop img{
+ width: 80px;
+ height: 80px;
+}
+
 </style>

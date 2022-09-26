@@ -5,7 +5,7 @@
         <topbar></topbar>
       </div>
       <div class="searchbar">
-        <searchbar></searchbar>
+        <searchbar :shop="user"></searchbar>
       </div>
     </div>
     <div class="middle">
@@ -241,6 +241,7 @@ export default {
       collectEd:false,
       cartId:'',
       collectId:'',
+      user:{},
     };
   },
   created() {
@@ -255,6 +256,15 @@ export default {
       eval(`delete this.product.img.${key}`);
       // console.log(this.product,this.product.img)
     },
+    // 查询商品对应的店铺信息
+    getUserById(id){
+      axios({
+        method:'get',
+        url:'/user/queryId/'+id
+      }).then(res=>{
+        this.user = res.data.data.data
+      })
+    },
     // 查询商品信息
     getProductById() {
       axios({
@@ -268,6 +278,7 @@ export default {
         delete this.product.img.productId;
         delete this.product.img.productName;
         this.queryCollect();
+        this.getUserById(res.data.data.userId)
       });
     },
     // 商品信息改变
