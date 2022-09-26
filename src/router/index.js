@@ -27,21 +27,29 @@ const routes = [
     name: 'me',
     component: () => import("@/views/front/me/me.vue"),
     children:
-      [{
-        path:'',
-        redirect:'order'
-      },
-      {
-        path: "collect",
-        name: "collect",
-        component: () => import("@/views/front/collect/collect.vue")
-      },
-      {
-        path: "order",
-        name: "order",
-        component: () => import("@/views/front/order/order.vue")
-        
-      },]
+      [
+          {
+          path:'',
+          redirect:'order'
+        },
+        {
+          path: "collect",
+          name: "collect",
+          component: () => import("@/views/front/collect/collect.vue")
+        },
+        {
+          path: "order",
+          name: "order",
+          component: () => import("@/views/front/order/order.vue")
+          
+        },
+        {
+          path: "mypay",
+          name: "mypay",
+          component: () => import("@/views/front/me/myPay.vue")
+          
+        },
+      ]
   },
   {
     path:"/cart",
