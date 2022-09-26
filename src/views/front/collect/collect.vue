@@ -124,7 +124,7 @@
               <el-table :data="shops" style="width: 100%" border>
                 <el-table-column
                   fixed
-                  prop="userName"
+                  prop="user.userName"
                   label="店铺名称"
                   width="300"
                 >
@@ -133,7 +133,7 @@
                   <template slot-scope="scope">
                     <div class="productBox">
                       <div class="productOfShop"
-                      v-for="item in scope.row.products"
+                      v-for="item in scope.row.productList"
                       :key="item.key"
                       @click="gotoDetail(item.productId)">
                         <img :src="item.img.img1" alt="">
@@ -168,46 +168,21 @@ export default {
       collectDetail: [],
       uselessDetail: [],
       searchDetail: [],
-      shops:[
-        {userName:'xxxx商店',
-        products:[
-          {productId:'10562', img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-
-        ]},
-        {userName:'xxxx商店',
-        products:[
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-        ]},
-        {userName:'xxxx商店',
-        products:[
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
-        ]},
-      ]
+      shops:[]
     };
   },
   created() {
     this.userId = this.$cookies.get("token");
     this.getMyCollect();
     this.getUseless();
+    this.getMyStore()
   },
   methods: {
     handleChange(value) {
       console.log(value);
     },
     handleClick(tab, event) {
+
       console.log(tab, event);
     },
 
@@ -225,12 +200,23 @@ export default {
         this.searchDetail = res.data.data;
       });
     },
+    getMyStore(){
+      this.$axios({
+        url: "/collect/getMyStore/" + this.userId,
+        method: "get",
+      }).then((res) => {
+        console.log(res);
+        this.shops = res.data.data;
+        console.log(this.shops);
+      });
+    },
     // 获取用户收藏数据
     getMyCollect() {
       this.$axios({
         url: "/collect/getMyCollect/" + this.userId,
         method: "get",
       }).then((res) => {
+        console.log("1",res);
         this.collectDetail = res.data.data;
       });
     },

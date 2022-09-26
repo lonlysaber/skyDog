@@ -155,10 +155,31 @@ export default {
     // 删除商家收藏
     delShopCollect(){
       this.shopCollectEd = false
+      console.log(this.shop);
+      axios({
+        url: "/collect/deleteStore/"+this.$cookies.get("token")+'&&'+this.shop.userId, //请求的后台接口
+        method: "get",
+      }).then((res) => {
+        console.log(res);
+        
+      });
     },
     // 收藏商家
     shopCollect(){
       this.shopCollectEd = true
+      console.log(this.shops);
+      axios({
+        url: "/collect/addStore", //请求的后台接口
+        method: "post",
+        data: {
+          userId:this.$cookies.get("token"),
+          sellerId: this.shop.userId,
+          collectTime:(new Date()).getTime()
+        },
+      }).then((res) => {
+        console.log(res);
+
+      });
     }
   },
   mounted(){
