@@ -17,6 +17,9 @@
                 <el-tab-pane name="待评价">
                     <span slot="label"> 待评价 </span>
                 </el-tab-pane>
+                <el-tab-pane name="已完成">
+                    <span slot="label"> 已完成 </span>
+                </el-tab-pane>
                 <el-tab-pane name="已删除">
                     <span slot="label"><i class="el-icon-delete-solid"></i> 订单回收站 </span>
                 </el-tab-pane>
