@@ -4,17 +4,17 @@
         <SearchBar :sel="select" :ipt="input" @changeInput="hand" />
         <!-- 筛选 -->
         <div class="sift">
-            <el-tabs type="card" v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane name="综合排序">
+            <el-tabs type="card" v-model="sort" @tab-click="handleClick">
+                <el-tab-pane name="0">
                     <span slot="label"> 综合排序</span>
                 </el-tab-pane>
-                <el-tab-pane name="销量">
+                <el-tab-pane name="2">
                     <span slot="label" > 销量</span>
                 </el-tab-pane>
-                <el-tab-pane name="评分">
+                <el-tab-pane name="4">
                     <span slot="label">评分</span>
                 </el-tab-pane>
-                <el-tab-pane name="价格">
+                <el-tab-pane name="6">
                     <span slot="label"> 价格</span>
                 </el-tab-pane>  
             </el-tabs>
@@ -83,7 +83,8 @@ export default {
             pageSize:30,
             select:'商品',
             input:"",
-            count:0     
+            count:0,
+            sort:0     
         };
     },
     created(){
@@ -110,7 +111,9 @@ export default {
         },
 
         handleClick(tab, event) {
-            // console.log(tab, event,this.activeName);
+             console.log(tab, event,this.sort);
+            
+             this.getProduct()
         },
         getProduct(){
             axios({
@@ -121,7 +124,8 @@ export default {
                     highPrice:this.highPrice,
                     currentPage:this.currentPage,
                     pageSize:this.pageSize,
-                    keyword:this.input
+                    keyword:this.input,
+                    sort:this.sort
                 },
             })
             .then(res =>{
