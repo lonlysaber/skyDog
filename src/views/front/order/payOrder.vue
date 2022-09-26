@@ -69,7 +69,7 @@
             </div>
             <div class="fulladd">
               <span>{{ item.fullAddress }}</span>
-              &nbsp;
+            
               <span>{{ item.consigneePhone }}</span>
             </div>
             <div class="choiced" v-if="checked == item.addressId">
@@ -181,7 +181,7 @@
           </div>
           <div class="check">
             <button @click="cancel">取消</button>
-            <button @click="submits"
+            <button @click="submit"
             v-track="{
               triggerType: 'click',
               currentUrl: $route.path,
@@ -192,6 +192,20 @@
           </div>
         </div>
       </div>
+      <el-dialog
+            :visible.sync="flashVisible"
+            width="30%"
+            :before-close="flashClose"
+            center
+          >
+            <span>订单正在生成，请勿重复下单</span>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="flashVisible = false">关 闭</el-button>
+              <el-button type="primary" style="width:110px;" @click="checkPay">
+                查询订单支付状态
+              </el-button>
+            </span>
+          </el-dialog>
     </div>
   </div>
 </template>
@@ -226,13 +240,14 @@ export default {
         priceSum: 0,
         payStatu:1,
       },
+      flashVisible:false,
 
     };
   },
   created() {
     this.products = this.$route.query.productIds ||
       this.$route.query.checkOrder || ["10003", "10004"];
-    console.log(this.products);
+    // console.log(this.products);
     this.scale = this.$route.query.scale;
     this.feature = this.$route.query.feature;
     this.whereFrom();
@@ -254,6 +269,10 @@ export default {
           // console.log(this.products)
         })
       );
+    },
+    // 加载框关闭
+    flashClose(done) {
+      done();
     },
     // 选择地址
     choice(address) {
@@ -306,7 +325,7 @@ export default {
             scaleId: value.scaleId || null,
             productCount: value.num,
             orderStatus: "待支付",
-            createTime: new Date().getTime(),
+            createTime: Date.now(),
           },
         }).then((res) => {
           let cur = res.data;
@@ -317,11 +336,30 @@ export default {
           this.gotoPay(resultSum);
         });
       });
+      this.flashVisible = true;
       this.order.priceSum = this.sum;
     },
     // 验证支付宝支付是否完成
-    checkPay(){
-      return true;
+    checkPay(id = this.order.curId){
+      axios({
+        method:"get",
+        url:'/alipay/requestQuery',
+        params:{
+          outTradeNo:id
+        }
+      }).then(res=>{
+
+        console.log(res)
+        if(res.data == '完成'){
+          this.$message({
+            message:'支付完成',
+            type:'success'
+          })
+
+          return true;
+        }
+      })
+      
     },
     // 支付宝支付
     gotoPay(resultSum) {
@@ -337,10 +375,15 @@ export default {
           },
         }).then((res) => {
           console.log(res, res.data);
-          var win = window.open();
+          let win = window.open();
           win.document.write(res.data);
+          win.onunload = function(e){
+            
+            console.log(e,'关闭窗口')
+          
+          }
           // 验证是否支付完成
-          if(checkPay()){
+          if(this.checkPay(this.order.curId)){
             this.order.payStatu = 2
           }
         });
@@ -454,14 +497,28 @@ hr {
   border: 2px solid black;
   margin: 5px 5px 0 0;
   padding: 5px;
-  height: 70px;
+  height: 80px;
+}
+.payOrder .adddiv .adds .address .zone{
+  display: flex;
+}
+.payOrder .adddiv .adds .address .zone span:nth-of-type(1){
+    width: 175px;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
 }
 .payOrder .adddiv .adds .address:hover {
   cursor: pointer !important;
   border: 2px solid cornflowerblue !important;
 }
-.payOrder .adddiv .adds .address .fulladd {
-  height: 34px;
+.payOrder .adddiv .adds .address .fulladd span:nth-of-type(1){
+  white-space: nowrap;
+  overflow: hidden;
+  width:225px;
+  text-overflow:ellipsis;
+  display: block;
 }
 
 .payOrder .adddiv .adds .address .choiced {
