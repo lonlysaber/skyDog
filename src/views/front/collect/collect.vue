@@ -119,33 +119,34 @@
         </el-tab-pane>
         <el-tab-pane name="2">
           <span slot="label"> 店铺收藏 </span>
-          <el-table :data="products" style="width: 100%" border>
-            <el-table-column
-              fixed
-              prop="productName"
-              label="商品名称"
-              width="300"
-            >
-            </el-table-column>
+          <el-tabs type="border-card">
+            <el-tab-pane label="全部店铺">
+              <el-table :data="shops" style="width: 100%" border>
+                <el-table-column
+                  fixed
+                  prop="userName"
+                  label="店铺名称"
+                  width="300"
+                >
+                </el-table-column>
+                <el-table-column prop="productSale" label="商品" width="700">
+                  <template slot-scope="scope">
+                    <div class="productBox">
+                      <div class="productOfShop"
+                      v-for="item in scope.row.products"
+                      :key="item.key"
+                      @click="gotoDetail(item.productId)">
+                        <img :src="item.img.img1" alt="">
+                        <span>￥{{item.productPrice}}</span>
+                      </div>
 
-            <el-table-column prop="productSale" label="销量(件)" width="120">
-            </el-table-column>
-            <el-table-column prop="productGrade" label="评分" width="120">
-            </el-table-column>
-            <el-table-column prop="clickRate" label="点击量" width="120">
-            </el-table-column>
-            <el-table-column prop="favorRate" label="好评率" width="120">
-            </el-table-column>
-            <el-table-column label="图片" width="120">
-              <template slot-scope="scope">
-                <img
-                  :src="scope.row.img.img1"
-                  style="width: 100%; height: 100%"
-                  alt=""
-                />
-              </template>
-            </el-table-column>
-          </el-table>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+
+            </el-tab-pane>
+          </el-tabs>
         </el-tab-pane>
       </el-tabs>
 
@@ -167,6 +168,34 @@ export default {
       collectDetail: [],
       uselessDetail: [],
       searchDetail: [],
+      shops:[
+        {userName:'xxxx商店',
+        products:[
+          {productId:'10562', img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+
+        ]},
+        {userName:'xxxx商店',
+        products:[
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+        ]},
+        {userName:'xxxx商店',
+        products:[
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+          {img:{img1:'https://wwc.alicdn.com/avatar/getAvatar.do?userNick=tb487578808&_input_charset=UTF-8&width=80&height=80&type=sns'},productPrice:120},
+        ]},
+      ]
     };
   },
   created() {
@@ -223,6 +252,15 @@ export default {
         },
       });
     },
+    // 跳转商品详情页
+    gotoDetail(id){
+      this.$router.push({
+        path:'/productdetail',
+        query:{
+          productId:id
+        }
+      })
+    }
   },
 };
 </script>
@@ -290,4 +328,24 @@ export default {
   font-size: 15px;
   color: #ff5001;
 }
+/* 店铺收藏 */
+.collect .content .productBox{
+  display:flex !important;
+  
+}
+.collect .productOfShop{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.collect .productOfShop:hover{
+  cursor: pointer;
+}
+.collect .productOfShop img{
+ width: 80px;
+ height: 80px;
+}
+
 </style>

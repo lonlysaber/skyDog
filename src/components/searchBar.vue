@@ -73,7 +73,7 @@
           label="图片" 
           width="120"> 
           <template slot-scope="scope">
-            <img :src="scope.row.img.img1" style="width:100%;height:100%;" alt="">
+            <img :src="scope.row.img.img1" style="width:40px;height:40px;" alt="">
           </template>
         </el-table-column>
       </el-table>
