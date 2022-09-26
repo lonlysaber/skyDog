@@ -360,14 +360,14 @@ export default {
     getProducts() {
       axios({
         method: "post",
-        url: "/product/queryByCategory/",
+        url: "/recommend/hotRec/",
         data: {
           currentPage: 1,
-          keyword: this.hotWord,
+          // keyword: this.hotWord,
           pageSize: 30,
         },
       }).then((res) => {
-        this.products = res.data.data.data;
+        this.products = res.data.data;
         // console.log(res);
         this.loading = false;
       });

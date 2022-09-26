@@ -82,31 +82,46 @@ router.beforeEach((to, from, next) => {
 	 console.log('用户由 ', from.path, ' 页面 跳转到 ', to.path, ' 页面，在 ', from.path, ' 页面停留了 ', currentTime - startTime, '毫秒。转换成秒数约为：', parseInt((currentTime - startTime) / 1000))
 	 let params = {
 	 		  // 日期
-         date:Date.now(),
-         // 用户id
-         userId:localStorage.getItem('userId') || null,
-         // 页面地址path
-         currentUrl:from.path || null,
-         // 当前点击时间
-         actionTime:Date.now(),
-         // 上一次点击时间
-         // preTime:preTime,
-         // 页面停留时间
-         duration:currentTime - startTime,
-         // 搜索关键词
-         searchKeyword:null,
-         // 商品id
-         productId:null,
-         // 商品分类
-         categoryName:null,
-         // 订单编号
-         orderId:null,
-         // 订单状态
-         orderStatus:null,
-         // 收藏id
-         collectId:null,
-         // 评论id
-         evaluateId:null,
+        date:Date.now(),
+        // 用户id
+        userId:localStorage.getItem('userId') || null,
+        // 页面地址path
+        currentUrl:from.path || null,
+        // 当前点击时间
+        actionTime:Date.now(),
+        // 上一次点击时间
+        // preTime:preTime,
+        // 页面停留时间
+        duration:currentTime - startTime,
+        searchKeyword:null,
+        // 点击商品id
+        productId1:null,
+        // 商品分类
+        categoryName:null, 
+        // 下单订单编号
+        orderId1:null,
+        // 下单商品id
+        productId2:null,
+        // 支付订单编号
+        orderId2:null,
+        // 支付商品id
+        productId3: null,
+        // 订单状态
+        orderStatus:null,
+        // 收藏id
+        collectId:null,
+        // 收藏商品id
+        productId4: null,
+        // 评论id
+        evaluateId:null,
+        // 发货地址
+        startAddress:null,
+        // 收货地址
+        endAddress:null,
+        // 购物车id
+        cartId:null,
+        // 购物车商品id
+        productId5:null,
 	 }
    console.log(params)
    startTime = Date.now()
@@ -114,9 +129,7 @@ router.beforeEach((to, from, next) => {
     method:'post',
     url:'/spark/saveEventTrack',
     data:params
-  })
-
-	//  axios.post('http://localhost:9000/api/v1/track/saveEventTrack',qs.stringify(params))
+  })  
 	 next()
   }
  

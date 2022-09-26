@@ -9,17 +9,26 @@
             <el-tab-pane label="全部宝贝">
               <div class="all">
                 <el-row :gutter="20">
-                  <el-col :span="4" v-for="item in collectDetail" :key="item.key">
+                  <el-col
+                    :span="4"
+                    v-for="item in collectDetail"
+                    :key="item.key"
+                  >
                     <el-card :body-style="{ padding: '0px' }">
-                      <div :style="
-                        item.product.productStatus == '在售'
-                          ? 'border:1px white solid;'
-                          : 'border:1px red solid;'
-                      ">
+                      <div
+                        :style="
+                          item.product.productStatus == '在售'
+                            ? 'border:1px white solid;'
+                            : 'border:1px red solid;'
+                        "
+                      >
                         <img :src="item.product.img.img1" class="image" />
                         <div class="name">
-                          <span @click="gotoProductDetail(item.product.productId)">
-                            {{ item.product.productName }}</span>
+                          <span
+                            @click="gotoProductDetail(item.product.productId)"
+                          >
+                            {{ item.product.productName }}</span
+                          >
                         </div>
                         <div class="bottom">
                           <span>￥{{ item.product.productPrice }}</span>
@@ -33,17 +42,26 @@
             <el-tab-pane label="失效宝贝">
               <div class="all">
                 <el-row :gutter="20">
-                  <el-col :span="4" v-for="item in uselessDetail" :key="item.index">
+                  <el-col
+                    :span="4"
+                    v-for="item in uselessDetail"
+                    :key="item.index"
+                  >
                     <el-card :body-style="{ padding: '0px' }">
-                      <div :style="
-                        item.product.productStatus == '在售'
-                          ? 'border:1px white solid;'
-                          : 'border:1px red solid;'
-                      ">
+                      <div
+                        :style="
+                          item.product.productStatus == '在售'
+                            ? 'border:1px white solid;'
+                            : 'border:1px red solid;'
+                        "
+                      >
                         <img :src="item.product.img.img1" class="image" />
                         <div class="name">
-                          <span @click="gotoProductDetail(item.product.productId)">
-                            {{ item.product.productName }}</span>
+                          <span
+                            @click="gotoProductDetail(item.product.productId)"
+                          >
+                            {{ item.product.productName }}</span
+                          >
                         </div>
                         <div class="bottom">
                           <span>￥{{ item.product.productPrice }}</span>
@@ -56,23 +74,37 @@
             </el-tab-pane>
             <el-tab-pane label="宝贝搜索">
               <div class="search">
-                <el-input style="" class="input" v-model="input" placeholder="输入内容搜索">
+                <el-input
+                  style=""
+                  class="input"
+                  v-model="input"
+                  placeholder="输入内容搜索"
+                >
                 </el-input>
                 <el-button type="primary" @click="toSearch">搜索</el-button>
               </div>
               <div class="all">
                 <el-row :gutter="20">
-                  <el-col :span="4" v-for="item in searchDetail" :key="item.key">
+                  <el-col
+                    :span="4"
+                    v-for="item in searchDetail"
+                    :key="item.key"
+                  >
                     <el-card :body-style="{ padding: '0px' }">
-                      <div :style="
-                        item.product.productStatus == '在售'
-                          ? 'border:1px white solid;'
-                          : 'border:1px red solid;'
-                      ">
+                      <div
+                        :style="
+                          item.product.productStatus == '在售'
+                            ? 'border:1px white solid;'
+                            : 'border:1px red solid;'
+                        "
+                      >
                         <img :src="item.product.img.img1" class="image" />
                         <div class="name">
-                          <span @click="gotoProductDetail(item.product.productId)">
-                            {{ item.product.productName }}</span>
+                          <span
+                            @click="gotoProductDetail(item.product.productId)"
+                          >
+                            {{ item.product.productName }}</span
+                          >
                         </div>
                         <div class="bottom">
                           <span>￥{{ item.product.productPrice }}</span>
@@ -87,7 +119,33 @@
         </el-tab-pane>
         <el-tab-pane name="2">
           <span slot="label"> 店铺收藏 </span>
-          店铺收藏
+          <el-table :data="products" style="width: 100%" border>
+            <el-table-column
+              fixed
+              prop="productName"
+              label="商品名称"
+              width="300"
+            >
+            </el-table-column>
+
+            <el-table-column prop="productSale" label="销量(件)" width="120">
+            </el-table-column>
+            <el-table-column prop="productGrade" label="评分" width="120">
+            </el-table-column>
+            <el-table-column prop="clickRate" label="点击量" width="120">
+            </el-table-column>
+            <el-table-column prop="favorRate" label="好评率" width="120">
+            </el-table-column>
+            <el-table-column label="图片" width="120">
+              <template slot-scope="scope">
+                <img
+                  :src="scope.row.img.img1"
+                  style="width: 100%; height: 100%"
+                  alt=""
+                />
+              </template>
+            </el-table-column>
+          </el-table>
         </el-tab-pane>
       </el-tabs>
 
@@ -159,12 +217,12 @@ export default {
     },
     gotoProductDetail(id) {
       this.$router.push({
-        path: '/productdetail',
+        path: "/productdetail",
         query: {
-          productId: id
-        }
-      })
-    }
+          productId: id,
+        },
+      });
+    },
   },
 };
 </script>
