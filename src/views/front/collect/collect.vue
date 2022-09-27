@@ -2,7 +2,7 @@
   <div class="collect">
     <div class="content">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane name="1">
+        <el-tab-pane name="product">
           <span slot="label"> 商品收藏 </span>
 
           <el-tabs type="border-card">
@@ -117,7 +117,7 @@
             </el-tab-pane>
           </el-tabs>
         </el-tab-pane>
-        <el-tab-pane name="2">
+        <el-tab-pane name="shop">
           <span slot="label"> 店铺收藏 </span>
           <el-tabs type="border-card">
             <el-tab-pane label="全部店铺">
@@ -163,7 +163,7 @@ export default {
   data() {
     return {
       userId: "10001",
-      activeName: "1",
+      activeName: "product",
       input: "",
       collectDetail: [],
       uselessDetail: [],
@@ -173,6 +173,7 @@ export default {
   },
   created() {
     this.userId = this.$cookies.get("token");
+    this.activeName = this.$route.query.activeName || 'product'
     this.getMyCollect();
     this.getUseless();
     this.getMyStore()

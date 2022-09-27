@@ -69,46 +69,46 @@
               <div class="num">{{ countNum.orderPayNum }}</div>
               <div class="dec">待支付</div>
             </div>
-            <div class="item" @click="gotoOrder('待评价')">
+            <!-- <div class="item" @click="gotoOrder('待评价')">
               <div class="num">{{ countNum.orderDesNum }}</div>
               <div class="dec">待评价</div>
-            </div>
+            </div> -->
           </div>
           <div class="likeInfo">
-            <div class="item">
+            <div class="item" @click="gotoCollect('product')">
               <div class="icon">
                 <img src="@/assets/img/collect.png" alt="" />
               </div>
               <div class="dec">宝贝收藏</div>
             </div>
-            <div class="item">
+            <div class="item" @click="gotoCollect('shop')">
               <div class="icon">
                 <img src="@/assets/img/collectShop.png" alt="" />
               </div>
               <div class="dec">商家收藏</div>
             </div>
-            <div class="item">
+            <div class="item" @click="gotoOrder('已完成')">
               <div class="icon">
                 <img src="@/assets/img/shop.png" alt="" />
               </div>
               <div class="dec">买过的</div>
             </div>
-            <div class="item">
+            <!-- <div class="item">
               <div class="icon">
                 <img src="@/assets/img/mark.png" alt="" />
               </div>
               <div class="dec">我的足迹</div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
-      <!-- 商品展示 -->
+      <!-- 个性推荐 -->
       <div class="bottom">
         <h1>猜你喜欢</h1>
         <div class="list">
           <div
             class="product"
-            v-for="item in products"
+            v-for="item in recommend"
             :key="item.key"
             @click="gotoDetail(item)"
             v-track="{
@@ -119,7 +119,7 @@
               actionType: 'product-click',
             }"
           >
-            <el-skeleton style="width: 350px" :loading="loading" animated>
+            <el-skeleton style="width: 350px" :loading="loading1" animated>
               <template slot="template">
                 <el-skeleton-item
                   variant="image"
@@ -176,7 +176,7 @@
               actionType: 'product-click',
             }"
           >
-            <el-skeleton style="width: 350px" :loading="loading" animated>
+            <el-skeleton style="width: 350px" :loading="loading2" animated>
               <template slot="template">
                 <el-skeleton-item
                   variant="image"
@@ -216,6 +216,13 @@
           </div>
         </div>
       </div>
+      <el-pagination
+            background
+            layout="prev, pager, next"
+            @current-change="handleCurrentChange"
+            :page-size="pageSize"
+            :total="count">
+        </el-pagination>
     </div>
   </div>
 </template>
@@ -295,18 +302,56 @@ export default {
         },
       ],
       num: 1,
-      loading: true,
+      loading1: true,
+      loading2: true,
       hotWord: "食品",
       sortItem: "女装",
       productItem:'',
+      recommend:[
+      {
+          img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
+          dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
+          price: "5.8",
+        },
+        {
+          img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
+          dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
+          price: "5.8",
+        },
+        {
+          img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
+          dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
+          price: "5.8",
+        },
+        {
+          img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
+          dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
+          price: "5.8",
+        },
+        {
+          img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
+          dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
+          price: "5.8",
+        },
+        {
+          img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
+          dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
+          price: "5.8",
+        },
+      ],
+      currentPage:1,
+      pageSize:30,
+      count:0,
     };
   },
   created() {
     // console.log(this.$cookies.isKey('token'))
+    this.getUserRecommend()
     this.getProducts();
     this.getUser();
   },
   methods: {
+    
     // 获取用户信息
     getUser() {
       axios({
@@ -356,21 +401,38 @@ export default {
         }
       });
     },
+    // 热门推荐分页
+    handleCurrentChange(val) {
+            this.currentPage = val
+            this.getProducts()
+    },
     // 主页商品信息
     getProducts() {
       axios({
         method: "post",
         url: "/recommend/hotRec/",
         data: {
-          currentPage: 1,
+          currentPage: this.currentPage,
           // keyword: this.hotWord,
-          pageSize: 30,
+          pageSize: this.pageSize,
         },
       }).then((res) => {
-        this.products = res.data.data;
+        this.products = res.data.data.data;
+        this.count = res.data.data.count
         // console.log(res);
-        this.loading = false;
+        this.loading2 = false;
       });
+    },
+    // 主页个性推荐
+    getUserRecommend(){
+      axios({
+        method:'get',
+        url:'/user/getUserRecommend/'+this.$cookies.get('token')
+      }).then(res=>{
+        // console.log(res)
+        this.loading1 = false;
+        this.recommend = res.data.data.data[0].concat(res.data.data.data[1])
+      })
     },
     serchByName(it) {
       this.sortItem = it;
@@ -425,6 +487,15 @@ export default {
         },
       });
     },
+    // 跳转收藏页面
+    gotoCollect(name){
+      this.$router.push({
+        path: "/me/collect",
+        query: {
+          activeName: name,
+        },
+      });
+    }
   },
 };
 </script>
@@ -551,10 +622,17 @@ export default {
   width: 25px;
 }
 /* 商品展示 */
+.home .bottom{
+  margin:24px;
+}
 .home .bottom .list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+}
+.home .bottom .list .product{
+  margin: 10px;
+
 }
 .home .bottom .list .product > div:first-child {
   display: flex;
