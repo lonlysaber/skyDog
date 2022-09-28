@@ -5,7 +5,7 @@
         <topbar></topbar>
       </div>
       <div class="searchbar">
-        <searchbar :shop="JSON.stringify(user)"></searchbar>
+        <searchbar :shop="user"></searchbar>
       </div>
     </div>
     <div class="middle">

@@ -39,8 +39,11 @@
         <!-- 轮播图 -->
         <div class="carousel">
           <el-carousel trigger="click">
-            <el-carousel-item v-for="item in advert" :key="item">
-              <img :src="item" alt="" />
+            <el-carousel-item v-for="item in advert" :key="item.key">
+              <div @click="gotoDetail(item)" >
+                <img :src="item.img.img1" style="margin: auto;" alt="" />
+
+              </div>
             </el-carousel-item>
           </el-carousel>
         </div>
@@ -253,11 +256,12 @@ export default {
         ["医药", "保健", "进口"],
       ],
       advert: [
-        "https://img.alicdn.com/imgextra/i3/6000000004152/O1CN01NBqTd31gXfF629F6d_!!6000000004152-2-octopus.png",
-        "https://img.alicdn.com/imgextra/i4/6000000000466/O1CN01JrDvz61FJTLKlOknL_!!6000000000466-2-octopus.png",
-        "https://img.alicdn.com/imgextra/i4/6000000001997/O1CN01h6Pl301QcfimQACBD_!!6000000001997-0-octopus.jpg",
-        "https://img.alicdn.com/imgextra/i1/6000000002861/O1CN01F7NW371X0NvBVP99i_!!6000000002861-0-octopus.jpg",
-        "https://img.alicdn.com/imgextra/i1/6000000004570/O1CN01B0jaUp1jd6nWcaZzU_!!6000000004570-2-octopus.png",
+        // "https://img.alicdn.com/imgextra/i3/6000000004152/O1CN01NBqTd31gXfF629F6d_!!6000000004152-2-octopus.png",
+        // "https://img.alicdn.com/imgextra/i4/6000000000466/O1CN01JrDvz61FJTLKlOknL_!!6000000000466-2-octopus.png",
+        // "https://img.alicdn.com/imgextra/i4/6000000001997/O1CN01h6Pl301QcfimQACBD_!!6000000001997-0-octopus.jpg",
+        // "https://img.alicdn.com/imgextra/i1/6000000002861/O1CN01F7NW371X0NvBVP99i_!!6000000002861-0-octopus.jpg",
+        // "https://img.alicdn.com/imgextra/i1/6000000004570/O1CN01B0jaUp1jd6nWcaZzU_!!6000000004570-2-octopus.png",
+      
       ],
       user: {
         avatar:
@@ -419,7 +423,8 @@ export default {
       }).then((res) => {
         this.products = res.data.data.data;
         this.count = res.data.data.count;
-        // console.log(res);
+        console.log(res);
+        this.getAdvate();
         this.loading2 = false;
       });
     },
@@ -431,14 +436,16 @@ export default {
       }).then((res) => {
         // console.log(res)
         this.loading1 = false;
-        this.recommend = [
-          ...res.data.data.data[0],
-          ...res.data.data.data[1],
-          ...res.data.data.data[2],
-          ...res.data.data.data[3],
-        ];
+        this.recommend =res.data.data.data
       });
     },
+    // 轮播图加载
+    getAdvate(){
+      for(let i = 0;i < 5;i++){
+        this.advert.push(this.products[i])
+      }
+    },
+    // 点击分类搜索
     serchByName(it) {
       this.sortItem = it;
       this.$router.push({
@@ -566,12 +573,13 @@ export default {
   margin: 24px;
   display: block;
   visibility: visible;
+  background-color: #f7f9fa
 }
 .home .middle .carousel img {
-  width: 564px;
+  /* width: 564px; */
   height: 314px;
   display: block;
-  border-radius: 12px;
+  /* border-radius: 12px 0 0 12px; */
 }
 .home .el-carousel__container {
   position: relative;
