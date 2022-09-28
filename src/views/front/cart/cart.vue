@@ -132,7 +132,7 @@ export default {
         },
         //跳转订单页
         toOrderPage() {
-            if (this.multipleSelection.length == -1) {
+            if (this.multipleSelection.length == 0) {
                 this.$message({
                     message: '请至少选择一个商品',
                     type: 'error'
