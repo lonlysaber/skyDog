@@ -40,15 +40,18 @@
           actionType: 'product-click',
         }"
       >
-        <el-skeleton style="width: 180px;" :loading="loading" animated>
+        <el-skeleton style="width: 180px" :loading="loading" animated>
           <template slot="template">
             <el-skeleton-item
               variant="image"
-              style="width: 175px;height:  175px;"
+              style="width: 175px; height: 175px"
             />
             <div style="padding: 14px">
-
-              <el-skeleton-item variant="h3" style="width: 40%" />
+              <div style="display: flex; justify-content: space-between">
+                <el-skeleton-item variant="h3" style="width: 40%" />
+                <el-skeleton-item variant="h3" style="width: 40%" />
+              </div>
+              
               <div
                 style="
                   display: flex;
@@ -56,10 +59,12 @@
                   flex-direction: column;
                   justify-items: space-between;
                   justify-content: space-around;
+                  height: 50px;
                 "
               >
                 <el-skeleton-item variant="text" style="margin-right: 16px" />
-                
+                <el-skeleton-item variant="text" style="margin-right: 16px" />
+
                 <el-skeleton-item variant="text" style="width: 40%" />
               </div>
             </div>
@@ -119,7 +124,7 @@ export default {
       input: "",
       count: 0,
       sort: 0,
-      loading:true,
+      loading: true,
     };
   },
   created() {
