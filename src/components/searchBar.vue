@@ -109,7 +109,7 @@ export default {
       ],
       select: this.sel || "商品",
       input: this.ipt,
-      shops: this.shop || "天狗百货",
+      shops: JSON.parse(this.shop) || "天狗百货",
       shopVisible: false,
       products: [],
       shopCollectEd:false,
@@ -117,6 +117,7 @@ export default {
   },
   created() {
     if (this.$route.path == "/productdetail") {
+      this.shops = JSON.parse(this.shop) 
     }
   },
   methods: {

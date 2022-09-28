@@ -26,7 +26,7 @@
                 v-track="{
                   triggerType: 'click',
                   currentUrl: $route.path,
-                  categoryName:sortItem,
+                  categoryName: sortItem,
                   actionType: 'category-click',
                 }"
               >
@@ -121,28 +121,28 @@
           >
             <el-skeleton style="width: 350px" :loading="loading1" animated>
               <template slot="template">
-                <el-skeleton-item
-                  variant="image"
-                  style="width: 100px;height: width: 100px;"
-                />
-                <div style="padding: 14px">
-                  <el-skeleton-item variant="h3" style="width: 40%" />
-                  <div
-                    style="
-                      display: flex;
-                      align-items: center;
-                      justify-items: space-between;
-                      margin-top: 16px;
-                      height: 16px;
-                    "
-                  >
-                    <el-skeleton-item
-                      variant="text"
-                      style="margin-right: 16px"
-                    />
-                    <el-skeleton-item variant="text" style="width: 30%" />
-                  </div>
+                <div style="padding: 14px;display: flex;">
+                  <el-skeleton-item
+                    variant="image"
+                    style="width: 100px; height: 100px"
+                  />
+                
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items:flex-start;
+                    justify-items: space-between;
+                    justify-content: space-around;
+                    margin-left: 10px;
+                    
+                  "
+                >
+                  <el-skeleton-item variant="h3" style="width: 200px;" />
+                  <el-skeleton-item variant="text" style="width: 150px;" />
+                  <el-skeleton-item variant="text" style="width: 100px;" />
                 </div>
+              </div>
               </template>
               <template>
                 <div class="image">
@@ -178,28 +178,28 @@
           >
             <el-skeleton style="width: 350px" :loading="loading2" animated>
               <template slot="template">
-                <el-skeleton-item
-                  variant="image"
-                  style="width: 100px;height: width: 100px;"
-                />
-                <div style="padding: 14px">
-                  <el-skeleton-item variant="h3" style="width: 40%" />
-                  <div
-                    style="
-                      display: flex;
-                      align-items: center;
-                      justify-items: space-between;
-                      margin-top: 16px;
-                      height: 16px;
-                    "
-                  >
-                    <el-skeleton-item
-                      variant="text"
-                      style="margin-right: 16px"
-                    />
-                    <el-skeleton-item variant="text" style="width: 30%" />
-                  </div>
+                <div style="padding: 14px;display: flex;">
+                  <el-skeleton-item
+                    variant="image"
+                    style="width: 100px; height: 100px"
+                  />
+                
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items:flex-start;
+                    justify-items: space-between;
+                    justify-content: space-around;
+                    margin-left: 10px;
+                    
+                  "
+                >
+                  <el-skeleton-item variant="h3" style="width: 200px;" />
+                  <el-skeleton-item variant="text" style="width: 150px;" />
+                  <el-skeleton-item variant="text" style="width: 100px;" />
                 </div>
+              </div>
               </template>
               <template>
                 <div class="image">
@@ -217,12 +217,13 @@
         </div>
       </div>
       <el-pagination
-            background
-            layout="prev, pager, next"
-            @current-change="handleCurrentChange"
-            :page-size="pageSize"
-            :total="count">
-        </el-pagination>
+        background
+        layout="prev, pager, next"
+        @current-change="handleCurrentChange"
+        :page-size="pageSize"
+        :total="count"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -242,7 +243,7 @@ export default {
   data() {
     return {
       sorts: [
-      ["女装", "内衣", "奢品"],
+        ["女装", "内衣", "奢品"],
         ["女鞋", "男鞋", "箱包"],
         ["美妆", "饰品", "洗护"],
         ["男装", "运动", "百货"],
@@ -306,9 +307,9 @@ export default {
       loading2: true,
       hotWord: "食品",
       sortItem: "女装",
-      productItem:'',
-      recommend:[
-      {
+      productItem: "",
+      recommend: [
+        {
           img: "https://gw.alicdn.com/bao/uploaded/i1/179917267/O1CN016Xkm9223YKxfqgeOC_!!179917267.jpg_300x300q90.jpg_.webp",
           dec: "数据线收纳神器魔术贴扎带理线器电脑束线带桌面电线走线固定绑带",
           price: "5.8",
@@ -339,19 +340,18 @@ export default {
           price: "5.8",
         },
       ],
-      currentPage:1,
-      pageSize:30,
-      count:0,
+      currentPage: 1,
+      pageSize: 30,
+      count: 0,
     };
   },
   created() {
     // console.log(this.$cookies.isKey('token'))
-    this.getUserRecommend()
+    this.getUserRecommend();
     this.getProducts();
     this.getUser();
   },
   methods: {
-    
     // 获取用户信息
     getUser() {
       axios({
@@ -403,8 +403,8 @@ export default {
     },
     // 热门推荐分页
     handleCurrentChange(val) {
-            this.currentPage = val
-            this.getProducts()
+      this.currentPage = val;
+      this.getProducts();
     },
     // 主页商品信息
     getProducts() {
@@ -418,21 +418,26 @@ export default {
         },
       }).then((res) => {
         this.products = res.data.data.data;
-        this.count = res.data.data.count
+        this.count = res.data.data.count;
         // console.log(res);
         this.loading2 = false;
       });
     },
     // 主页个性推荐
-    getUserRecommend(){
+    getUserRecommend() {
       axios({
-        method:'get',
-        url:'/user/getUserRecommend/'+this.$cookies.get('token')
-      }).then(res=>{
+        method: "get",
+        url: "/user/getUserRecommend/" + this.$cookies.get("token"),
+      }).then((res) => {
         // console.log(res)
         this.loading1 = false;
-        this.recommend = res.data.data.data[0].concat(res.data.data.data[1])
-      })
+        this.recommend = [
+          ...res.data.data.data[0],
+          ...res.data.data.data[1],
+          ...res.data.data.data[2],
+          ...res.data.data.data[3],
+        ];
+      });
     },
     serchByName(it) {
       this.sortItem = it;
@@ -447,7 +452,7 @@ export default {
     gotoDetail(p) {
       if (this.$cookies.isKey("token")) {
         // console.log(p)
-        this.productItem = p
+        this.productItem = p;
         this.$router.push({
           path: "/productdetail",
           query: {
@@ -488,14 +493,14 @@ export default {
       });
     },
     // 跳转收藏页面
-    gotoCollect(name){
+    gotoCollect(name) {
       this.$router.push({
         path: "/me/collect",
         query: {
           activeName: name,
         },
       });
-    }
+    },
   },
 };
 </script>
@@ -528,7 +533,7 @@ export default {
   padding: 0 24px 0px 24px;
   height: 314px;
   white-space: nowrap;
-  width:230px;
+  width: 230px;
 }
 .home .middle .sort .sName h2 {
   font-size: 18px;
@@ -622,17 +627,16 @@ export default {
   width: 25px;
 }
 /* 商品展示 */
-.home .bottom{
-  margin:24px;
+.home .bottom {
+  margin: 24px;
 }
 .home .bottom .list {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
-.home .bottom .list .product{
+.home .bottom .list .product {
   margin: 10px;
-
 }
 .home .bottom .list .product > div:first-child {
   display: flex;

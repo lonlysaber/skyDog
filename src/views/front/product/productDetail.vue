@@ -5,7 +5,7 @@
         <topbar></topbar>
       </div>
       <div class="searchbar">
-        <searchbar :shop="user"></searchbar>
+        <searchbar :shop="JSON.stringify(user)"></searchbar>
       </div>
     </div>
     <div class="middle">
@@ -315,14 +315,15 @@ export default {
       console.log(products);
 
       this.$router.push({
-        path: "/payorder",
+        path: "payOrder",
         query: {
-          productIds: products,
+          products: JSON.stringify(products) ,
           scale: scale,
           feature: feature,
           num: this.num,
         },
       });
+      
       // console.log(scale,feature)
     },
     // 加入购物车

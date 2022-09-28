@@ -245,8 +245,8 @@ export default {
     };
   },
   created() {
-    this.products = this.$route.query.productIds ||
-      this.$route.query.checkOrder || ["10003", "10004"];
+    this.products = JSON.parse(this.$route.query.products)  ||
+      JSON.parse(this.$route.query.checkOrder)  || ["10003", "10004"];
     // console.log(this.products);
     this.scale = this.$route.query.scale;
     this.feature = this.$route.query.feature;
