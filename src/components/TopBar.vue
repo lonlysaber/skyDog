@@ -23,11 +23,11 @@
         </el-menu-item>
         <el-menu-item index="1-1" @click="loginOut">退出登录</el-menu-item>
       </el-submenu>
-      <el-submenu index="2">
+      <!-- <el-submenu index="2">
         <template slot="title">我的宝贝</template>
         <el-menu-item index="2-1">已买到的宝贝</el-menu-item>
         <el-menu-item index="2-2">我的足迹</el-menu-item>
-      </el-submenu>
+      </el-submenu> -->
       <el-submenu index="3" style="float: right; margin-right: 50px">
         <template slot="title">收藏夹</template>
         <el-menu-item index="3-1" @click="toCollectPage()"

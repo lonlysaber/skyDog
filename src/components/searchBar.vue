@@ -118,6 +118,7 @@ export default {
   created() {
     if (this.$route.path == "/productdetail") {
       this.shops = this.shop 
+
     }
   },
   methods: {
@@ -138,6 +139,7 @@ export default {
         },
       });
     },
+    // 获取店铺信息
     getShopByID() {
       axios({
         url: "/product/getMyProduct", //请求的后台接口
@@ -147,7 +149,23 @@ export default {
         },
       }).then((res) => {
         this.products = res.data.data;
+        this.getShopCollected()
       });
+    },
+    // 查询店铺是否被收藏
+    getShopCollected(){
+      // axios({
+      //   url: "/collect/getMyStore/"+this.$cookies.get('token'), //请求的后台接口
+      //   method: "get",
+        
+      // }).then((res) => {
+        
+      //   let collectedShop = res.data.data;
+      //   console.log(res);
+      //   // for(let i = 0;i < collectedShop.length;i++){
+      //   //   if(collectedShop[i].product.productDec == this.p)
+      //   // }
+      // });
     },
     // 关闭弹框
     handleClose(done) {
@@ -178,6 +196,13 @@ export default {
           collectTime:(new Date()).getTime()
         },
       }).then((res) => {
+        if(res.data.code == 202){
+          this.$message({
+          message:'添加成功',
+          type:'success'
+        })
+        }
+        
         console.log(res);
 
       });

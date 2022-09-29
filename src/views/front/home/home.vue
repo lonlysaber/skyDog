@@ -581,6 +581,9 @@ export default {
   display: block;
   /* border-radius: 12px 0 0 12px; */
 }
+.home .middle .carousel img:hover{
+  cursor: pointer;
+}
 .home .el-carousel__container {
   position: relative;
   height: 314px;

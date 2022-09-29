@@ -10,39 +10,58 @@
         </div>
         <div class="step">
           <div class="one">
-            <div class="item"
-            :style="order.payStatu>=1?
-            'background-color: cornflowerblue;color: white;border: 1px cornflowerblue solid;':
-            'background-color: white;color: black;border: 1px black solid;'
-            "
-            >1</div>
+            <div
+              class="item"
+              :style="
+                order.payStatu >= 1
+                  ? 'background-color: cornflowerblue;color: white;border: 1px cornflowerblue solid;'
+                  : 'background-color: white;color: black;border: 1px black solid;'
+              "
+            >
+              1
+            </div>
             <div class="stepItem">拍下商品</div>
           </div>
           <div class="line"></div>
           <div class="two">
-            <div class="item"
-            :style="order.payStatu>=2?
-            'background-color: cornflowerblue;color: white;border: 1px cornflowerblue solid;':
-            'background-color: white;color: black;border: 1px black solid;'
-            ">2</div>
+            <div
+              class="item"
+              :style="
+                order.payStatu >= 2
+                  ? 'background-color: cornflowerblue;color: white;border: 1px cornflowerblue solid;'
+                  : 'background-color: white;color: black;border: 1px black solid;'
+              "
+            >
+              2
+            </div>
             <div class="stepItem">付款到支付宝</div>
           </div>
           <div class="line"></div>
           <div class="thr">
-            <div class="item"
-            :style="order.payStatu>=3?
-            'background-color: cornflowerblue;color: white;border: 1px cornflowerblue solid;':
-            'background-color: white;color: black;border: 1px black solid;'
-            ">3</div>
+            <div
+              class="item"
+              :style="
+                order.payStatu >= 3
+                  ? 'background-color: cornflowerblue;color: white;border: 1px cornflowerblue solid;'
+                  : 'background-color: white;color: black;border: 1px black solid;'
+              "
+            >
+              3
+            </div>
             <div class="stepItem">确认收货</div>
           </div>
           <div class="line"></div>
           <div class="four">
-            <div class="item"
-            :style="order.payStatu>=4?
-            'background-color: cornflowerblue;color: white;border: 1px cornflowerblue solid;':
-            'background-color: white;color: black;border: 1px black solid;'
-            ">4</div>
+            <div
+              class="item"
+              :style="
+                order.payStatu >= 4
+                  ? 'background-color: cornflowerblue;color: white;border: 1px cornflowerblue solid;'
+                  : 'background-color: white;color: black;border: 1px black solid;'
+              "
+            >
+              4
+            </div>
             <div class="stepItem">评价</div>
           </div>
         </div>
@@ -69,7 +88,7 @@
             </div>
             <div class="fulladd">
               <span>{{ item.fullAddress }}</span>
-            
+
               <span>{{ item.consigneePhone }}</span>
             </div>
             <div class="choiced" v-if="checked == item.addressId">
@@ -181,31 +200,34 @@
           </div>
           <div class="check">
             <button @click="cancel">取消</button>
-            <button @click="submit"
-            v-track="{
-              triggerType: 'click',
-              currentUrl: $route.path,
-              productId2: products,
-              actionType: 'buy-click',
-            }"
-            >提交订单</button>
+            <button
+              @click="submit"
+              v-track="{
+                triggerType: 'click',
+                currentUrl: $route.path,
+                productId2: products,
+                actionType: 'buy-click',
+              }"
+            >
+              提交订单
+            </button>
           </div>
         </div>
       </div>
       <el-dialog
-            :visible.sync="flashVisible"
-            width="30%"
-            :before-close="flashClose"
-            center
-          >
-            <span>订单正在生成，请勿重复下单</span>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="flashVisible = false">关 闭</el-button>
-              <el-button type="primary" style="width:110px;" @click="checkPay">
-                查询订单支付状态
-              </el-button>
-            </span>
-          </el-dialog>
+        :visible.sync="flashVisible"
+        width="30%"
+        :before-close="flashClose"
+        center
+      >
+        <span>订单正在生成，请勿重复下单</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="flashVisible = false">关 闭</el-button>
+          <el-button type="primary" style="width: 110px" @click="checkPay">
+            查询订单支付状态
+          </el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -238,15 +260,16 @@ export default {
       order: {
         curId: "",
         priceSum: 0,
-        payStatu:1,
+        payStatu: 1,
       },
-      flashVisible:false,
-
+      flashVisible: false,
+      orderIds: [],
+      finishNum: 0,
     };
   },
   created() {
-    this.products = JSON.parse(this.$route.query.products)  ||
-      JSON.parse(this.$route.query.checkOrder)  || ["10003", "10004"];
+    this.products = this.$route.query.products || this.$route.query.checkOrder;
+    this.products = JSON.parse(this.products);
     // console.log(this.products);
     this.scale = this.$route.query.scale;
     this.feature = this.$route.query.feature;
@@ -257,7 +280,7 @@ export default {
     // console.log(this.productIds, this.scale, this.feature);
   },
   methods: {
-    submits(){},
+    submits() {},
     getProductById() {
       console.log(this.productIds);
       this.productIds.forEach((product) =>
@@ -313,6 +336,7 @@ export default {
     // 提交支付
     submit() {
       let resultSum = 0;
+      this.finishNum = 0;
       this.products.forEach((value) => {
         axios({
           method: "post",
@@ -324,12 +348,12 @@ export default {
             productId: value.productId,
             scaleId: value.scaleId || null,
             productCount: value.num,
-            orderStatus: "待支付",
+            orderStatus: "finished",
             createTime: Date.now(),
           },
         }).then((res) => {
-          let cur = res.data;
-          this.order.curId = cur;
+          this.orderIds.push(res.data);
+          this.order.curId = this.orderIds[0].data;
           resultSum++;
           console.log(this.order);
 
@@ -340,26 +364,67 @@ export default {
       this.order.priceSum = this.sum;
     },
     // 验证支付宝支付是否完成
-    checkPay(id = this.order.curId){
+    checkPay(id = this.order.curId) {
       axios({
-        method:"get",
-        url:'/alipay/requestQuery',
-        params:{
-          outTradeNo:id
-        }
-      }).then(res=>{
-
-        console.log(res)
-        if(res.data == '完成'){
+        method: "get",
+        url: "/alipay/requestQuery",
+        params: {
+          outTradeNo: this.order.curId,
+        },
+      }).then((res) => {
+        console.log(res);
+        if (res.data == "【查询返回交易状态】TRADE_SUCCESS") {
           this.$message({
-            message:'支付完成',
-            type:'success'
-          })
+            message: "支付完成",
+            type: "success",
+          });
+          this.order.payStatu = 2;
 
+          this.$message({
+              message: "支付完成，即将跳转到订单页面",
+              type: "success",
+          });
+          setTimeout(
+            this.$router.push({
+              path: "/me/order",
+              query: {
+                activeName: "已完成",
+              },
+            })  
+          ,3000)
+            
           return true;
         }
+        if (res.data == "【查询返回交易状态】WAIT_BUYER_PAY") {
+          this.$message({
+            message: "等待支付",
+            type: "success",
+          });
+        }
+        if (res.data == "【查询返回交易状态】null") {
+          this.$message({
+            message: "请先扫码",
+            type: "success",
+          });
+        }
+      });
+    },
+    // 改变订单状态
+    modifyOrderStatus(){
+      this.orderIds.forEach(id=>{
+        axios({
+          method:'post',
+          url:'/order/update',
+          params:{
+            orderId:id,
+            orderStatus:'已完成',
+            paryTime:Date.now(),
+            userId:this.$cookies.get('token')
+          }
+        }).then(res=>{
+          console.log(res)
+        })
       })
-      
     },
     // 支付宝支付
     gotoPay(resultSum) {
@@ -377,14 +442,10 @@ export default {
           console.log(res, res.data);
           let win = window.open();
           win.document.write(res.data);
-          win.onunload = function(e){
-            
-            console.log(e,'关闭窗口')
           
-          }
           // 验证是否支付完成
-          if(this.checkPay(this.order.curId)){
-            this.order.payStatu = 2
+          if (this.checkPay(this.order.curId)) {
+            
           }
         });
       } else {
@@ -499,25 +560,25 @@ hr {
   padding: 5px;
   height: 80px;
 }
-.payOrder .adddiv .adds .address .zone{
+.payOrder .adddiv .adds .address .zone {
   display: flex;
 }
-.payOrder .adddiv .adds .address .zone span:nth-of-type(1){
-    width: 175px;
-    white-space: nowrap;
-    overflow: hidden;
-    display: block;
-    text-overflow: ellipsis;
+.payOrder .adddiv .adds .address .zone span:nth-of-type(1) {
+  width: 175px;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+  text-overflow: ellipsis;
 }
 .payOrder .adddiv .adds .address:hover {
   cursor: pointer !important;
   border: 2px solid cornflowerblue !important;
 }
-.payOrder .adddiv .adds .address .fulladd span:nth-of-type(1){
+.payOrder .adddiv .adds .address .fulladd span:nth-of-type(1) {
   white-space: nowrap;
   overflow: hidden;
-  width:225px;
-  text-overflow:ellipsis;
+  width: 225px;
+  text-overflow: ellipsis;
   display: block;
 }
 

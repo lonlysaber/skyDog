@@ -126,10 +126,10 @@
                   fixed
                   prop="user.userName"
                   label="店铺名称"
-                  width="300"
+                  min-width="20%"
                 >
                 </el-table-column>
-                <el-table-column prop="productSale" label="商品" width="700">
+                <el-table-column prop="productSale" label="商品" min-width="80%">
                   <template slot-scope="scope">
                     <div class="productBox">
                       <div class="productOfShop"

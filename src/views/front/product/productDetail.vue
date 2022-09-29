@@ -245,6 +245,7 @@ export default {
     };
   },
   created() {
+    console.log(this.$route.query.productId)
     this.productId = this.$route.query.productId || "10004";
     this.getProductById();
     

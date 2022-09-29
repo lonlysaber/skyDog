@@ -17,7 +17,7 @@
                 <el-tab-pane name="待评价">
                     <span slot="label"> 待评价 </span>
                 </el-tab-pane>
-                <el-tab-pane name="已完成">
+                <el-tab-pane name="finished">
                     <span slot="label"> 已完成 </span>
                 </el-tab-pane>
                 <el-tab-pane name="已删除">
